@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     images: [
       {
         width: 1200,
-        height: 630,
+        height: 631,
         url: "https://raw.githubusercontent.com/Blazity/next-enterprise/main/.github/assets/project-logo.png",
       },
     ],
