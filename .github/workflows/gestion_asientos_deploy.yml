@@ -17,9 +17,9 @@ jobs:
           node-version: "${{ env.node_version }}"
       - name: Install Dependencies
         run: yarn install
-      - name: Build 
+      - name: Build
         run: yarn build
-  Vercel-Deploy:
+  VercelDeploy:
     needs: Build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/gestion_asientos'
@@ -30,10 +30,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "${{ env.node_version }}"
-      - name: Install Vercel configurable
+      
+      - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Configure Vercel
         run: vercel pull --yes --token=${{ secrets.VERCEL_TOKEN_GESTION_ASIENTOS }}
       - name: Trigger Vercel deployment
-        run: vercel deploy --no-wait --token=${{secrets.VERCEL_TOKEN_GESTION_ASIENTOS}}
+        run: vercel deploy --no-wait --token=${{ secrets.VERCEL_TOKEN_GESTION_ASIENTOS }}
       
