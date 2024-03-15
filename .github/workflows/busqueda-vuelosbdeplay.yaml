@@ -33,6 +33,6 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Configure Vercel CLI
-        run: vercel pull --yes --tocken=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
+        run: vercel pull --yes --token=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
       - name: Deploy Vercel deployment
-        run: vercel deploy --no-wait --tocken=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
+        run: vercel deploy --no-wait --token=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
