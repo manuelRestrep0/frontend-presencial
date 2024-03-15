@@ -1,5 +1,5 @@
 name: CI/CD
-on: [push]
+on: [push] 
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_PAGOS_A }}
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_PAGOS_A }}
