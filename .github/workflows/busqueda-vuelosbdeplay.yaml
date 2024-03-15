@@ -1,35 +1,38 @@
 name: CI/CD
 on: [push]
-env: VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
+env: 
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_BUSQUEDA_VUELOSB }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BUSQUEDA_VUELOSB }}
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/busqueda_vuelosB'
     steps: 
       - uses: actions/checkout@v4
       - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
       - name: "use node ${{ env.node_version }}"
         uses: actions/setup-node@v3
-          with:
+        with:
             node-version: "${{ env.node_version }}"
       - name: Install dependencies
         run: yarn install  
       - name: Build
         run: yarn build
-Vercel-Deploy: 
-  needs: [build]
-  runs-on: ubuntu-latest
-  if: github.ref == 'refs/heads/busqueda-vuelosb'
-  steps:
-    - uses: actions/checkout@v4
-    - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
-    - name: "use node ${{ env.node_version }}"
-      uses: actions/setup-node@v3
+  Vercel-Deploy: 
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/busqueda-vuelosb'
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+      - name: "use node ${{ env.node_version }}"
+        uses: actions/setup-node@v3
         with:
           node-version: "${{ env.node_version }}"
-    - name: Install Vercel CLI
-      run: npm install --global vercel@latest
-    - name: Configure Vercel CLI
-      run: vercel pull --yes --tocken=${{ }}
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Configure Vercel CLI
+        run: vercel pull --yes --tocken=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
+      - name: Deploy Vercel deployment
+        run: vercel deploy --no-wait --tocken=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
