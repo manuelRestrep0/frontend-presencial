@@ -2,6 +2,8 @@ import { Metadata } from "next"
 import { Button } from "components/Button/Button"
 import { LP_GRID_ITEMS } from "lp-items"
 
+//Prueba 1
+
 export const metadata: Metadata = {
   title: "Next.js Enterprise Boilerplate",
   twitter: {
