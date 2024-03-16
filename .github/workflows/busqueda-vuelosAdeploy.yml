@@ -1,0 +1,41 @@
+name: CI/CD
+on: [push]
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSA }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_BUSQUEDA_VUELOSA }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BUSQUEDA_VUELOSA }}
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/busqueda_vuelosA'
+    steps: 
+      - uses: actions/checkout@v4
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+      - name: "use node ${{ env.node_version }}"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ env.node_version }}"
+      - name: Install dependencies
+        run: yarn install
+      - name: test Evaluation
+        run: yarn test
+      - name: Build
+        run: yarn build
+  Vercel-Deploy:
+    needs: Build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/busqueda_vuelosA'
+    steps:
+      - name: Deploy
+      - uses: actions/checkout@v4
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+      - name: "use node ${{ env.node_version }}"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ env.node_version }}"
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Configure Vercel
+        run: vercel pull --yes --token=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSA }} 
+      - name: Trigger Vercel Deployment
+        run: vercel deploy --no-wait --token=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSA }}
