@@ -1,11 +1,14 @@
 name: CI/CD
-on: [push]
+on:
+  push:
+    branches:
+      - busqueda_vuelosA
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSA }}
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_BUSQUEDA_VUELOSA }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BUSQUEDA_VUELOSA }}
 jobs:
-  build:
+  Build:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/busqueda_vuelosA'
     steps: 
@@ -20,7 +23,7 @@ jobs:
       - name: build
         run: yarn build
   Vercel-Deploy:
-    needs: build
+    needs: Build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/busqueda_vuelosA'
     steps:
