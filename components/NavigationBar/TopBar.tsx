@@ -53,32 +53,33 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 //   );
 // }
 export default function ButtonAppBar() {
-  return (<header style={{ width: '100%', height: '154px'}}>
-  {/* Primer div*/}
-  <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#3A76F8', height: '78px', paddingLeft:'20px'}}>
-       <img
-       src="https://www.nicepng.com/png/full/466-4665036_load-more-singapore-airlines-white-logo.png"
-       alt="logo singapure airlines"
-       width="120"
-       height="70"
-     />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: '1' }}>
+  return (
+    <header style={{ width: '100%', height: '154px' }}>
+      {/* Primer div*/}
+      <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#3A76F8', height: '78px', paddingLeft: '20px' }}>
+        <img
+          src="https://www.nicepng.com/png/full/466-4665036_load-more-singapore-airlines-white-logo.png"
+          alt="logo singapure airlines"
+          width="120"
+          height="70"
+        />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: '1' }}>
           <input type="text" placeholder="Search here" style={{ width: '250px', marginLeft: '-1px', marginRight: '-1px', borderRadius: '5px 0 0 5px', backgroundColor: '#5285D1', color: '#FFFFFF', padding: '8px', border: 'none', borderTopRightRadius: '0', borderBottomRightRadius: '0' }} />
           <button type="button" style={{ backgroundColor: '#6B9EFF', color: '#FFFFFF', borderRadius: '0 5px 5px 0', border: 'none', padding: '8px', width: '80px' }}>Search</button>
+        </div>
+        <IconButton
+          edge="start"
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          style={{ color: '#FFFFFF' }}
+        >
+          <AccountCircle />
+        </IconButton>
       </div>
-      <IconButton
-      edge="start"
-      size="large"
-      aria-label="account of current user"
-      aria-controls="primary-search-account-menu"
-      aria-haspopup="true"
-      style={{color: '#FFFFFF'}}
-    >
-      <AccountCircle />
-    </IconButton>
-  </div>
 
-  {/* Segundo div */}
-  <div style={{ width: '50%', height: '76px', backgroundColor: '#FFFFFF' }}></div>
-</header>);
+      {/* Segundo div */}
+      <div style={{ width: '50%', height: '76px', backgroundColor: '#FFFFFF' }}></div>
+    </header>);
 };
