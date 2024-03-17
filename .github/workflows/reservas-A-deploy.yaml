@@ -1,0 +1,37 @@
+name: CI/CD
+on: [push]
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_RESERVAS_A }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_RESERVAS_A }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESERVAS_A }}
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/reservas-A'
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+      - name: "use node ${{ env.node_version }}"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ env.node_version }}"
+      - name: Install dependencies
+        run: yarn install
+      - name: Build
+        run: yarn build
+  Vercel-Deploy:
+    needs: Build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/reservaB'
+    steps:
+      - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+      - name: "use node ${{ env.node_version }}"
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ env.node_version }}"
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Configure Vercel
+        run: vercel pull --yes --token=${{ secrets.VERCEL_TOKEN_RESERVAB }}
+      - name: Trigger Vercel Deployment
+        run: vercel deploy --no-wait --token=${{ secrets.VERCEL_TOKEN_RESERVAB }}
