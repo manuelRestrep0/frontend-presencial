@@ -1,0 +1,23 @@
+{
+  "flights": [
+    {
+      "number": "SA1234",
+      "type": "International",
+      "airplane": {
+        "family": "Singapur",
+        "type": "A320-200",
+        "maxPassengers": 20
+      }
+    },
+    {
+      "number": "SA5432",
+      "type": "National",
+      "airplane": {
+        "family": "Singapur",
+        "type": "A520-100",
+        "maxPassengers": 100
+      }
+    }
+  ],
+  "airports": ["MDE", "BGA", "CAF", "MAD"]
+}
