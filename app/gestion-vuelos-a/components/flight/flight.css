@@ -1,0 +1,41 @@
+.FlightInformation {
+  width: 85%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 15px;
+  background-color: white;
+  margin-left: 5px;
+  border-top-left-radius: 12px;
+  color: black;
+}
+.FlightFormSelect {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: space-around;
+}
+.FlightFormRow {
+  display: flex;
+  width: 70%;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.FlightFormCol {
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+}
+.FlightFormCol-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.FlightFormCol-form {
+  display: flex;
+}
