@@ -20,8 +20,6 @@ jobs:
           run: yarn install
         - name: "test evaluation"
           run: yarn test
-        - name: "build"
-          run: yarn build
           
     vercel-deploy: 
         needs: build
