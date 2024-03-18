@@ -1,31 +1,31 @@
 import React from "react";
-
-interface SideBarOptionProps {
-  img?: string;
-  name: string;
-}
-
-function SideBarOption(props: SideBarOptionProps) {
-  return (
-    <div className="SideBar-Options-Box flex justify-end p-2 hover:text-blue-500 ">
-      {props.img && <img src={props.img} className="w-6 h-6 mr-2" alt="Icon" />}
-      <p>{props.name}</p>
-    </div>
-  );
-}
-
+import {Title} from "@components/atoms/text";
+import { BtnConsultar, BtnEliminar, BtnModificar, BtnRegistrar } from "@components/atoms/buttons";
 
 function SideBar() {
   return (
-    <div className="SideBar bg-white shadow-xl text-black w-64 flex flex-col justify-center">
-  <div className="SideBar-Title p-4 text-center mb-4">
-    <h3 className="text-6xl font-semibold">Gestión de vuelos</h3>
+    <div className="SideBar bg-gray-100 shadow-xl text-black w-72 flex flex-col max-h-full justify-center">
+  <div className="SideBar-Title p-4 text-center mb-8">
+    <Title title="Gestión de vuelos"></Title>
   </div>
-  <div className="SideBar-Options space-y-1 justify-end text-3xl">
-    <SideBarOption name="+ Registrar" />
-    <SideBarOption name="Consultar" />
-    <SideBarOption name="Modificar" />
-    <SideBarOption name="Eliminar" />
+  <div className="SideBar-Options space-y-3">
+
+    <div className="flex justify-end">
+      <BtnRegistrar/>
+    </div>
+
+    <div className="flex justify-end">
+      <BtnConsultar/>
+    </div>
+
+    <div className="flex justify-end">
+      <BtnModificar/>
+    </div>
+
+    <div className="flex justify-end">
+      <BtnEliminar/>
+    </div>
+  
   </div>
 </div>
 
