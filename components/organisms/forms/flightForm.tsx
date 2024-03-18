@@ -1,6 +1,6 @@
 import React from 'react';
-import {PrincipalText, Subtitle} from '../../atoms/text/index';
-import {BtnGuardar} from '@components/atoms/buttons';
+import { BtnGuardar } from '@components/atoms/buttons';
+import { PrincipalText, Subtitle } from '@components/atoms/text';
 
 export default function FlightForm(){
     return (

@@ -1,6 +1,7 @@
 import React from "react";
-import {Title} from "@components/atoms/text";
 import { BtnConsultar, BtnEliminar, BtnModificar, BtnRegistrar } from "@components/atoms/buttons";
+import { Title } from "@components/atoms/text";
+
 
 function SideBar() {
   return (

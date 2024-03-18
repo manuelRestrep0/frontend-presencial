@@ -1,7 +1,7 @@
 import React from 'react';
-import {PrincipalTextWhite} from '@components/atoms/text';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faPlusCircle, faSearch, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPaperPlane, faPlusCircle, faSearch, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { PrincipalTextWhite } from '@components/atoms/text';
 
 export function BtnGuardar() {
   return (

@@ -1,10 +1,9 @@
 import React from 'react';
-import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlane, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import UserInfo from '@components/molecules/user';
 import { Subtitle } from '@components/atoms/text';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlane } from '@fortawesome/free-solid-svg-icons';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function NavBar() {
   return (
