@@ -80,6 +80,12 @@ export default function ButtonAppBar() {
       </div>
 
       {/* Segundo div */}
-      <div style={{ width: '50%', height: '76px', backgroundColor: '#FFFFFF' }}></div>
+      {/* <div style={{ width: '50%', height: '76px', backgroundColor: '#FFFFFF' }}></div> */}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '76px', backgroundColor: '#FFFFFF', borderBottom: '1px solid black', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                    {/* Botones de navegación */}
+                    <button type="button" style={{ backgroundColor: 'transparent', color: '#000000', border: 'none', borderBottom: '2px solid transparent', padding: '8px 16px', margin: '0 10px' }}>Home</button>
+                    <button type="button" style={{ backgroundColor: 'transparent', color: '#000000', border: 'none', borderBottom: '2px solid transparent', padding: '8px 16px', margin: '0 10px' }}>Booked</button>
+                    <button type="button" style={{ backgroundColor: 'transparent', color: '#000000', border: 'none', borderBottom: '2px solid transparent', padding: '8px 16px', margin: '0 10px' }}>Travels</button>
+                </div>
     </header>);
 };
