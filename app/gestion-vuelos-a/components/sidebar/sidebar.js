@@ -3,7 +3,7 @@ import style from "./sidebar.css"
 function SideBarOption(props) {
   return (
     <div className="SideBar-Options-Box">
-      <img src={props.img} alt="" />
+      <img src={props.img}/>
       <p>{props.name}</p>
     </div>
   )
@@ -16,10 +16,10 @@ function SideBar() {
         <h3>Gestión de vuelos</h3>
       </div>
       <div className="SideBar-Options">
-        <SideBarOption name="+ Registrar" img=""></SideBarOption>
-        <SideBarOption name="Consultar" img=""></SideBarOption>
-        <SideBarOption name="Modificar" img=""></SideBarOption>
-        <SideBarOption name="Eliminar" img=""></SideBarOption>
+        <SideBarOption name="+ Registrar" ></SideBarOption>
+        <SideBarOption name="Consultar" ></SideBarOption>
+        <SideBarOption name="Modificar" ></SideBarOption>
+        <SideBarOption name="Eliminar" ></SideBarOption>
       </div>
     </div>
   )

@@ -1,18 +1,19 @@
 "use client";
+import React from "react"; // Importar React si estás usando JSX
 import { Button } from "@mui/material";
-import styles from "./flight.css";
 import SendIcon from "@mui/icons-material/Send";
-import FlightForm from "./flightform";
+import FlightForm from "./flightform"; // Importar FlightForm desde la ruta correcta
+import "./flight.css"; // Importar estilos directamente
 
 function FlightRegister() {
   return (
     <div className="FlightInformation">
       <div className="FlightFormTitle">
-        <h2>Ingresar informacion de vuelo</h2>
+        <h2>Ingresar información de vuelo</h2> {/* Corregir la ortografía */}
       </div>
       <div className="FlightFormSeparator"></div>
       <div className="FlightFormSelect">
-        <FlightForm></FlightForm>
+        <FlightForm />
       </div>
       <div className="FlightSendInfo">
         <Button variant="contained" endIcon={<SendIcon />}>
@@ -22,4 +23,6 @@ function FlightRegister() {
     </div>
   );
 }
+
 export default FlightRegister;
+
