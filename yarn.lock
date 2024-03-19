@@ -1900,7 +1900,7 @@
 
 "@mui/material@^5.15.13":
   version "5.15.13"
-  resolved "https://registry.npmjs.org/@mui/material/-/material-5.15.13.tgz"
+  resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.15.13.tgz#ba4414d90075321d631a6ecfaad69b34b995cea0"
   integrity sha512-E+QisOJcIzTTyeJ0o3lgYMcyrmCydb2S4cn9vTtGpIB9uR6fQ6La3dIGsXgYEGyeOB9YkWzQbNzYzvyODGEWKA==
   dependencies:
     "@babel/runtime" "^7.23.9"
