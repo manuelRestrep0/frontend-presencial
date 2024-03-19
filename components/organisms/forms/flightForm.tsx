@@ -21,7 +21,8 @@ export default function FlightForm(){
                 <div className='flex justify-center'>
                     <div className='pr-2'>
                     <select id="tipo_aeronave1" name="tipo_aeronave1" className="form-select border text-xl py-2 px-3 pr-4 border-gray-800 rounded-md">
-                        <option value="singapur">Singapur</option>
+                        <option value="singapur">Airbus</option>
+                        <option value="singapur">Boeing</option>
                     </select>
                     </div>
                     <div className='pl-2'>

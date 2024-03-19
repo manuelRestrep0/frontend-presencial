@@ -11,7 +11,9 @@ export default function NavBar() {
       <div className="flex items-center justify-between h-16 mx-3">
         <div className="flex items-center">
           <div className="mr-2">
-            <FontAwesomeIcon icon={faPlane} className='h-12 w-24 text-primary'/>
+        
+            <img src="/logo.jpeg" className="w-[70px] h-[70px] rounded-full" alt="profile-pic" />
+            
           </div>
 
           <div className="text-5xl">
