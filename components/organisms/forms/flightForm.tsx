@@ -6,8 +6,11 @@ import { PrincipalText, Subtitle } from '@components/atoms/text';
 export default function FlightForm(){
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [flightNumber, setFlightNumber] = useState<string | null>(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         // Obtener los valores de origen, destino, fecha de salida y fecha de llegada
@@ -15,6 +18,11 @@ export default function FlightForm(){
         const destino = (event.target as HTMLFormElement).destino.value;
         const fechaSalida = new Date((event.target as HTMLFormElement).fecha_salida.value);
         const fechaLlegada = new Date((event.target as HTMLFormElement).fecha_llegada.value);
+        const precio = parseFloat((event.target as HTMLFormElement).precio.value);
+        const impuestos = parseFloat((event.target as HTMLFormElement).impuestos.value);
+        const sobretasa = parseFloat((event.target as HTMLFormElement).sobretasa.value);
+
+        
 
         // Validación 1: La ciudad de destino no debe ser la misma que la de origen
         if (origen === destino) {
@@ -28,17 +36,68 @@ export default function FlightForm(){
             return; // Detener el envío del formulario
         }
 
-        // Si todas las validaciones pasan, se puede enviar el formulario
-        // Agregar aquí el código para enviar el formulario
+        // Construir el número de vuelo
+        const flightNumber = `${origen.charAt(0).toUpperCase()}${destino.charAt(0).toUpperCase()}${fechaSalida.getDate()}${fechaLlegada.getDate()}`;
 
-        // Convertir fecha de llegada al formato YYYY-MM-DD
-        const formattedFechaLlegada = fechaLlegada.toISOString().slice(0, 10);
-        console.log('Fecha de llegada en formato YYYY-MM-DD:', formattedFechaLlegada);
+        // Construir la fecha y hora de salida en formato YYYY-MM-DD hh:mm:ss
+        const departureDateTime = `${fechaSalida.toISOString().slice(0, 10)} ${(event.target as HTMLFormElement).hora_salida.value}:00`;
+
+        // Construir la fecha y hora de llegada en formato YYYY-MM-DD hh:mm:ss
+        const arrivalDateTime = `${fechaLlegada.toISOString().slice(0, 10)} ${(event.target as HTMLFormElement).hora_llegada.value}:00`;
+
+        // Construir el objeto JSON con los campos correctos
+        const flightData: any = {
+            flightNumber: flightNumber,
+            basePrice: precio,
+            taxPercent: impuestos,
+            surcharge: sobretasa,
+
+            scales: [{
+                airplaneModel: { id: (event.target as HTMLFormElement).tipo_aeronave2.value },
+                originAirport: { id: origen },
+                destinationAirport: { id: destino },
+                departureDate: departureDateTime,
+                arrivalDate: arrivalDateTime
+            }]
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/manage/flights', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(flightData)
+            });
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                setFlightNumber(flightNumber); // Actualizar el número de vuelo
+                setShowSuccessModal(true); // Mostrar la ventana emergente de éxito
+            } else {
+                throw new Error('Error en el servidor');
+            }
+        } catch (error) {
+            alert('Error en el servidor'); // Mostrar una ventana emergente de error
+        }
+
+        
+
+        
+        };
+
+        const closeModal = () => {
+            setErrorMessage(null);
+
+        
+
     };
 
-    const closeModal = () => {
-        setErrorMessage(null);
+    const closeSuccessModal = () => {
+        setShowSuccessModal(false);
     };
+
+    
 
     return (
         <div className="max-w-6xl mx-auto h-full">
@@ -58,13 +117,13 @@ export default function FlightForm(){
                 <div className='flex justify-center'>
                     <div className='pr-2'>
                     <select id="tipo_aeronave1" name="tipo_aeronave1" className="form-select border text-xl py-2 px-3 pr-4 border-gray-800 rounded-md">
-                        <option value="singapur">Airbus</option>
-                        <option value="singapur">Boeing</option>
+                        <option value="Airbus">Airbus</option>
+                        <option value="Boeing">Boeing</option>
                     </select>
                     </div>
                     <div className='pl-2'>
                     <select id="tipo_aeronave2" name="tipo_aeronave2" className="form-select border text-xl py-2 px-3 border-gray-800 rounded-md">
-                        <option value="A320-200">A320-200</option>
+                        <option value="A320-300">A320-300</option>
                         <option value="A520-100">A520-100</option>
                     </select>
                     </div>
@@ -91,9 +150,7 @@ export default function FlightForm(){
                     <PrincipalText text="Origen"></PrincipalText>
                     <select id="origen" name="origen" className="form-select w-full text-xl py-2 px-3 border border-gray-800 rounded-md">
                         <option value="MDE">MDE</option>
-                        <option value="BGA">BGA</option>
-                        <option value="CAF">CAF</option>
-                        <option value="MAD">MAD</option>
+                        <option value="BOG">BOG</option>
                     </select>
                 </div>
                 <div className="mb-2 col-span-1">
@@ -108,9 +165,7 @@ export default function FlightForm(){
                     <PrincipalText text="Destino"></PrincipalText>
                     <select id="destino" name="destino" className="form-select w-full text-xl py-2 px-3 border border-gray-800 rounded-md">
                         <option value="MDE">MDE</option>
-                        <option value="BGA">BGA</option>
-                        <option value="CAF">CAF</option>
-                        <option value="MAD">MAD</option>
+                        <option value="BOG">BOG</option>
                     </select>
                 </div>
                 <div className="mb-2 col-span-1">
@@ -129,6 +184,14 @@ export default function FlightForm(){
                         <div className="bg-white p-8 rounded-md shadow-lg">
                             <p className="text-red-500 text-center mb-4">{errorMessage}</p>
                             <button onClick={closeModal} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Cerrar</button>
+                        </div>
+                    </div>
+                )}
+                {showSuccessModal && (
+                    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+                        <div className="bg-white p-8 rounded-md shadow-lg">
+                            <p className="text-green-500 text-center mb-4">El vuelo ha sido guardado exitosamente. Número de vuelo: {flightNumber}</p>
+                            <button onClick={closeSuccessModal} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Cerrar</button>
                         </div>
                     </div>
                 )}
