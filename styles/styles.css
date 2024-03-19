@@ -564,7 +564,7 @@ button[type="submit"] {
 .modify-search-button {
     padding: 12px 24px; /* Ajusta el espaciado entre el texto y los bordes */
     height: 40px; /* Ajusta la altura del botón */
-    margin-top: 18px;
+    margin-top: 27px;
     border: 1px solid #ccc;
     border-radius: 4px;
     line-height: 10px; /* Ajusta la altura de línea para centrar verticalmente el texto */
