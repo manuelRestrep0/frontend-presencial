@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlane, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import UserInfo from '@components/molecules/user';
 import { Subtitle } from '@components/atoms/text';
 
@@ -25,7 +25,7 @@ export default function NavBar() {
             <UserInfo />
           </div>
           <div className='w-12 h-12'>
-            <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-primary hover:text-secondary hover:shadow-lg cursor-pointer" />
+            <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-primary hover:text-secondary hover:shadow-lg cursor-pointer mt-4" />
           </div>
         </div>
       </div>

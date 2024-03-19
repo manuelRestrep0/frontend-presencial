@@ -6,7 +6,7 @@ import { Title } from "@components/atoms/text";
 function SideBar() {
   return (
     <div className="SideBar bg-gray-100 shadow-xl text-black w-72 flex flex-col max-h-full justify-center">
-  <div className="SideBar-Title p-4 text-center mb-8">
+  <div className="SideBar-Title p-4 text-center mb-2">
     <Title title="Gestión de vuelos"></Title>
   </div>
   <div className="SideBar-Options space-y-3">
