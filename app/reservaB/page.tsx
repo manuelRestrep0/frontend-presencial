@@ -1,11 +1,11 @@
 'use client'
+import { AppBar, IconButton, TextField, Toolbar, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import PaidIcon from '@mui/icons-material/Paid';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import PaidIcon from '@mui/icons-material/Paid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { AppBar, Toolbar, IconButton, Typography, TextField } from '@material-ui/core';
 import Link from 'next/link';
 
 export default function Reserva() {
@@ -16,7 +16,7 @@ export default function Reserva() {
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <AccountCircleIcon />
                     </IconButton>
-                    <Typography variant="h6" className="text-center flex-grow">
+                    <Typography variant="h6" className="text-center grow">
                         Reservas
                     </Typography>
                     <IconButton edge="end" color="inherit">

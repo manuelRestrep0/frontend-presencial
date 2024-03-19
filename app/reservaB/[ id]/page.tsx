@@ -1,13 +1,10 @@
 'use client'
+import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
-import PaidIcon from '@mui/icons-material/Paid';
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { AppBar, Toolbar, IconButton, Typography, TextField } from '@material-ui/core';
+import { DataGrid, GridColDef} from '@mui/x-data-grid';
 import Link from 'next/link';
 
 export default function Web() {
@@ -21,7 +18,7 @@ export default function Web() {
                         </Link>
 
                     </IconButton>
-                    <Typography variant="h6" className="text-center flex-grow">
+                    <Typography variant="h6" className="text-center grow">
                         Reservas
                     </Typography>
                     <IconButton edge="end" color="inherit">
