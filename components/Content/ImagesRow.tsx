@@ -4,12 +4,13 @@ import ImageListItem from '@mui/material/ImageListItem';
 
 export default function ImagesRow() {
   return (
-    <ImageList sx={{ width: 500, height: 450 }} variant="woven" cols={3} gap={8}>
+    <ImageList sx={{ width: 800, height: 600 }} cols={3} rowHeight={264} gap={30}>
       {itemData.map((item) => (
         <ImageListItem key={item.img}>
           <img
-            srcSet={`${item.img}?w=161&fit=crop&auto=format&dpr=2 2x`}
-            src={`${item.img}?w=161&fit=crop&auto=format`}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '30px' }}
+            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
             alt={item.title}
             loading="lazy"
           />
@@ -18,7 +19,6 @@ export default function ImagesRow() {
     </ImageList>
   );
 }
-
 const itemData = [
   {
     img: 'https://www.peru.travel/Contenido/AcercaDePeru/Imagen/es/4/0.0/Principal/001%20ME7A0244Cusco%20Trekking%20GER%2019%20_preview.jpg',
