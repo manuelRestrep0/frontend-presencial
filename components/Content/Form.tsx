@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
+import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -20,9 +21,9 @@ export default function ContentForm() {
     { value: "opcion3", label: "Singapur, Singapur" }
   ];
   const optionsPassangers = [
-    { value: "opcion1", label: "1 adulto" },
-    { value: "opcion2", label: "2 adultos" },
-    { value: "opcion3", label: "3 adultos" }
+    { value: "opcion1", label: "2 adults" },
+    { value: "opcion2", label: "3 adults" },
+    { value: "opcion3", label: "4 adults" }
   ];
   const optionsClass = [
     { value: "opcion1", label: "Economy" },
@@ -46,7 +47,7 @@ export default function ContentForm() {
               </div>
               <div>
                   <label htmlFor="select" className="block text-gray-700 font-bold mb-2">PASSANGERS</label>
-                  <Select title="1 adult" options={optionsPassangers} />
+                  <Select title="1 adult" options={optionsPassangers}></Select>
               </div>
           </div>
           <div className="vertical-line" style={{width: '1px', backgroundColor: '#ccc'}}></div>
@@ -63,8 +64,9 @@ export default function ContentForm() {
           <div className="vertical-line" style={{width: '1px', backgroundColor: '#ccc'}}></div>
           <div className="column">
               <div style={{ marginBottom: '20px' }}>
-                  <label htmlFor="select" className="block text-gray-700 font-bold mb-2">DEPART DATE</label>
-                  <Select title="15/09/2024" options={optionsFrom} />
+                  
+                  <label htmlFor="dateInput" className="block text-gray-700 font-bold mb-2">DEPART DATE:</label>
+                  <input type="date" id="dateInput" name="dateInput" style={{ marginRight: '10px', padding: '5px', backgroundColor: 'whitesmoke', borderRadius: '5px', outline: 'none'}} />
                   
               </div>
               <div>
