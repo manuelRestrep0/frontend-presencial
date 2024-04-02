@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
-import VerVuelos from '../app/BusquedaA/VerVuelos';
+import { GestionEquipaje } from './gestion_equipaje/page';
 
 const Home: NextPage = () => {
   return (
     <div>
-      <VerVuelos />
+      <GestionEquipaje />
     </div>
   );
 };
