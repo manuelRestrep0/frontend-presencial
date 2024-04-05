@@ -78,6 +78,15 @@ ul {
   font-size: 13px;
 }
 
+.nav-btn3 {
+  border-radius: 20px;
+  padding: 6px 15px;
+  background-color: #0077B6;
+  color: white;
+  font-size: 13px;
+  transition: transform 0.3s ease;
+}
+
 @media (min-width: 1100px) {
 
   .form-container{ 
