@@ -1,7 +1,25 @@
-import type { NextPage } from 'next';
-import VerVuelos from '../app/BusquedaA/VerVuelos';
+import { Metadata } from "next"
+import { Button } from "components/Button/Button"
+import { LP_GRID_ITEMS } from "lp-items"
+//Prueba
+export const metadata: Metadata = {
+  title: "Next.js Enterprise Boilerplate",
+  twitter: {
+    card: "summary_large_image",
+  },
+  openGraph: {
+    url: "https://next-enterprise.vercel.app/",
+    images: [
+      {
+        width: 1200,
+        height: 630,
+        url: "https://raw.githubusercontent.com/Blazity/next-enterprise/main/.github/assets/project-logo.png",
+      },
+    ],
+  },
+}
 
-const Home: NextPage = () => {
+export default function Web() {
   return (
     <div>
       <VerVuelos />
