@@ -1,13 +1,34 @@
 import React from 'react';
 
 import { FormData } from './IFormData';
+import { isValid } from 'zod';
 
 interface SignupInfoProps {
     formData : FormData,
     setFormData : Function
+    setValidSignup : Function,
+    isValidSignup : boolean
 }
 
-const SignupInfo = ({ formData, setFormData } : SignupInfoProps) => {
+const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup } : SignupInfoProps) => {
+
+    const checkPassword = (password : string) => {
+
+        const requiredLength = 8;
+        const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>+-]/.test(password);
+        const hasUpperCaseLetter = /[A-Z]/.test(password);
+        const hasLowerCaseLetter = /[a-z]/.test(password);
+        const hasNumber = /\d/.test(password);
+    
+        return (
+            password.length >= requiredLength &&
+            hasSpecialCharacter &&
+            hasUpperCaseLetter &&
+            hasLowerCaseLetter &&
+            hasNumber
+        );
+    }
+
     return (
         <div className='form-fields-container'>
 
@@ -28,7 +49,11 @@ const SignupInfo = ({ formData, setFormData } : SignupInfoProps) => {
             <div>
                 <label htmlFor="password-input">Contraseña</label>
                 <input placeholder='' value={formData.password} type="password" name="password-input" id="password-input"
-                onChange={(e) => setFormData({...formData, password: e.target.value})
+                onChange={
+                    (e) => {
+                        setFormData({...formData, password: e.target.value})
+                        setValidSignup(checkPassword(e.target.value))
+                    }
                 }/>
             </div>
 

@@ -18,6 +18,8 @@ import {SignupInfo} from '../../../components/UserRegistration/SignupInfo';
 
 const Form = () => {
 
+    const [isPasswordValid, setValidSignup] = useState(false)
+
     const [page, setPage] = useState(0);
     const [windowWidth, setWindowWidth] = useState(0);
 
@@ -56,6 +58,49 @@ const Form = () => {
         phoneNumber: ""
       });
 
+
+    function verifyObjectFilled(objeto: Record<string, string>): boolean {
+        for (const clave in objeto) {
+            if (!objeto[clave]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const passwordAlertDisplay = () => {
+
+        const invalidPassword = (<div>
+            <p className='font-semibold'>Contraseña no válida, verifica que:</p>
+            <ul className='text-neutral-500'>
+                <li>Presente al menos 8 caracteres</li>
+                <li>Presente al menos 1 caracter especial</li>
+                <li>Presente al menos 1 letra mayúscula</li>
+                <li>Presente al menos 1 letra minúscula</li>
+            </ul>
+        </div>)
+
+        const validPassword = (<div className='font-semibold'>Contraseña válida</div>)
+
+        if (windowWidth > 1100) {
+            if (page > 1) {
+                if (!isPasswordValid) {
+                    return (invalidPassword)
+                } else {
+                    return (validPassword)
+                }
+            }
+        } else {
+            if (page == 3) {
+                if (!isPasswordValid) {
+                    return (invalidPassword)
+                } else {
+                    return (validPassword)
+                }
+            }
+        }
+    }
+
     const PageDisplay = () => {
 
         if(windowWidth > 1100) {
@@ -70,7 +115,7 @@ const Form = () => {
                 return (
                     <>
                         <AddressInfo formData={formData} setFormData={setFormData}/>
-                        <SignupInfo formData={formData} setFormData={setFormData}/>
+                        <SignupInfo formData={formData} setFormData={setFormData} isValidSignup={isPasswordValid} setValidSignup={setValidSignup}/>
                     </>
                 )
             }
@@ -83,29 +128,34 @@ const Form = () => {
           } else if (page === 2) {
             return <AddressInfo formData={formData} setFormData={setFormData}/>;
           } else {
-            return <SignupInfo formData={formData} setFormData={setFormData}/>;
+            return <SignupInfo formData={formData} setFormData={setFormData} isValidSignup={isPasswordValid} setValidSignup={setValidSignup}/>;
           }
     };
-
 
     function nextPage() {
 
         if(windowWidth > 1100) {
             if (page >= 2) {
-                console.log(JSON.stringify(formData));
+                if(validateSignup()) {
+                    console.log(JSON.stringify(formData));
+                }
+
             } else {
                 setPage(page + 2)
             }
+
+
         } else { 
             if (page === 3) {
-                console.log(JSON.stringify(formData));
+                if(validateSignup()) {
+                    console.log(JSON.stringify(formData));
+                }
             } else {
                 setPage(page + 1)
             }
         }
 
     }
-
 
     function prevPage() {
         if (windowWidth > 1100) {
@@ -124,9 +174,33 @@ const Form = () => {
 
         }
     }
+
+    const validateSignup = () => {
+        console.log();
+    
+
+        if (!verifyObjectFilled(formData)) {
+            alert("Por favor llenar todos los campos")
+            return false
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            alert("La contraseña no coincide")
+            return false
+        }
+
+        if (!isPasswordValid) {
+            alert("La contraseña no es válida")
+            return false
+        }
+
+        return true
+    
+    }
+
     return (
         <div className='main-container h-screen bg-cover text-black flex justify-center items-center'>
-            <div className='form-container bg-white flex flex-col h-[65%] w-[70%] justify-around items-center rounded-2xl py-5 bg-'>
+            <div className='form-container bg-white flex flex-col min-h-[65%] w-[70%] justify-around items-center rounded-2xl py-5'>
                 <div id='header' className='h-[12%] flex justify-center align-middle'>
                     <button id='header-back-btn' onClick={prevPage} className='flex justify-between items-center w-44'>
                         <BsChevronLeft/>
@@ -139,6 +213,9 @@ const Form = () => {
                     {PageDisplay()}
                 </div>
 
+                {passwordAlertDisplay()}
+
+
                 <div id='footer' className='flex justify-evenly h-[12%] w-[70%] items-center'>
                     <div hidden={windowWidth > 1100 ? (page > 1) : (page !== 0)} id="registration-methods-container">
                         <button className='registration-method-btn mx-1'>
@@ -150,7 +227,7 @@ const Form = () => {
                         </button>
                     </div>
 
-                    <button className='nav-btn' style={{display: windowWidth > 1100 ? (page <= 1 ? "none" : "block") : (page === 0 ? "none" : "block")}} onClick={prevPage}>Regresar</button>
+
                     <button className='nav-btn' onClick={nextPage}>{windowWidth > 1100 ? (page >= 2 ? "Registrarse" : "Continuar") : (page === 3 ? "Registrarse" : "Continuar")}</button>
                 </div>
             </div>

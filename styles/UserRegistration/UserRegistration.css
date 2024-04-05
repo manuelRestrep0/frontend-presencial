@@ -65,6 +65,10 @@ input[type=number] {
   font-family: 'Inter', sans-serif;
 }
 
+ul {
+  list-style-type: disc; /* or use other values like circle, square, etc. */
+}
+
 
 .nav-btn {
   border-radius: 20px;
