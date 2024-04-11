@@ -9,6 +9,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+//Página de reservas
 export default function Reserva() {
     return (
         <div className="flex flex-col justify-start items-center w-screen h-screen max-h-screen">
