@@ -1,6 +1,7 @@
 import Image from "next/image";
-import wompi from "../../public/pagos_B/Wompi_LogoPrincipal.png";
-import { payGateways } from "../../Enums/Enums";
+
+import wompi from "@/../public/WompiLogoPrincipal.png";
+import { payGateways } from "@/../enum/paymentsGateways";
 
 interface btnProps {
     gateWay: payGateways;
