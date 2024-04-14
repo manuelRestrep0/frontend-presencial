@@ -4,6 +4,10 @@ env:
     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_PAGOSB }}
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_PAGOSB }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PAGOSB }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PAGOSB }}
+    SONAR_PROJECT_KEY: ${{ secrets.PROJECT_KEY_PAGOSB }}
+    SONAR_ORGANIZATION: ${{ secrets.SONAR_ORG_KEY_PAGOSB }}
 jobs:
     Build:
         runs-on: ubuntu-latest
@@ -52,10 +56,7 @@ jobs:
               node-version: "${{ env.node_version }}"
           - name: SonarCloud Scan
             uses: sonarsource/sonarcloud-github-action@master
-            env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_PAGOSB }}
-                SONAR_PROJECT_KEY: ${{ secrets.PROJECT_KEY_PAGOSB }}
-                SONAR_ORGANIZATION: ${{ secrets.SONAR_ORG_KEY_PAGOSB }}
+            
+                
       
     
