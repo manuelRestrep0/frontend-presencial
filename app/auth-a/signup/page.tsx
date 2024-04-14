@@ -200,7 +200,7 @@ const Form = () => {
 
     return (
         <div className='main-container h-screen bg-cover text-black flex justify-center items-center'>
-            <div className='form-container bg-white flex flex-col min-h-[65%] w-[70%] justify-around items-center rounded-2xl py-5'>
+            <div id='register' className='form-container bg-white flex flex-col min-h-[65%] w-[70%] justify-around items-center rounded-2xl py-5'>
                 <div id='header' className='h-[12%] flex justify-center align-middle'>
                     <button id='header-back-btn' onClick={prevPage} className='flex justify-between items-center w-44'>
                         <BsChevronLeft/>
