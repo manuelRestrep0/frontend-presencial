@@ -39,3 +39,31 @@ jobs:
             - name: Trigger Vercel deployment
               run: vercel deploy --no-wait --token=${{ secrets.VERCEL_TOKEN_PAGOSB }}
 
+    SonarQubeAnalysis:
+      needs: Build
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/modulo_pagosB'
+      steps:
+          - uses: actions/checkout@v4
+          - run: echo "node_version=$(cat .github/nodejs.version)" >> $GITHUB_ENV
+          - name: "use node ${{ env.node_version }}"
+            uses: actions/setup-node@v3
+            with:
+              node-version: "${{ env.node_version }}"
+          - name: Install SonarScanner
+            run: |
+              sudo apt-get update
+              sudo apt-get install -y openjdk-11-jre
+              sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+              wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.0.2311-linux.zip
+              unzip sonar-scanner-cli-4.6.0.2311-linux.zip
+              export PATH="$PATH:$PWD/sonar-scanner-cli-4.6.0.2311-linux/bin"
+          - name: Run SonarQube Analysis
+            run: |
+              sonar-scanner \
+              -Dsonar.projectKey=${{ secrets.PROJECT_KEY_PAGOSB }} \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=${{ secrets.SONAR_TOKEN_PAGOSB }}
+      
+    
