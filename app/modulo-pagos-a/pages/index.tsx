@@ -1,57 +1,19 @@
 'use client'
-
-import Navbar from "./components/Navbar";
-import Resumen from "./components/Resumen";
+import Navbar from "../components/Navbar";
+import Resumen from "../components/Resumen";
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import PersonIcon from '@mui/icons-material/Person';
 import { Typography, Box, Container, FormControl, Select, MenuItem, InputLabel, List, ListItem, ListItemText, Button, SelectChangeEvent} from "@mui/material";
 import Link from "next/link";
-import { formvalues } from "./components/formvalues";
 
-export default  function Home() {
-
-  React.useEffect(() => {
-    const fetchBooking = async() => {
-      console.log("hola");
-      
-      const data = await getData()
-      console.log(data);
-      
-    }
-    fetchBooking()
-    
-  }, []);
-  
-  
+export default function Home() {
 
   const [direction, setDirection] = React.useState('');
 
-  // formvalues([
-  //   direction = ""
-  //   ])
   const handleChange = (event: SelectChangeEvent) => {
     setDirection(event.target.value as string);
   };
-
-  async function getData() {
-    
-    const res = await fetch('https://codefact.udea.edu.co/bookings/searchbybookingid?bookingID=1', {
-      method: 'GET',
-      headers: new Headers({
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-      }),
-  })
-    console.log(res, 123);
-    
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error('Failed to fetch data')
-    }
-    
-    return res.json()
-  }
 
   return (
       <>
@@ -130,12 +92,7 @@ export default  function Home() {
       </>
   );
 }
-
-
-
-
 // export const getServerSideProps = async (context) => {
 //   const res = await fetch("https://codefact.udea.edu.co/bookings/searchbybookingid?bookingID=1")
   
 // }
-
