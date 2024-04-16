@@ -6,8 +6,14 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import MenuIcon from '@mui/icons-material/Menu';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import React, { useEffect, useState } from 'react';
+import Navbar from 'components/navbar';
+
+
+
+
 
 const FormReserve = () => {
+
     const [viewFly, setViewFly] = useState(false);
     const handleViewFly = () => {
         setViewFly(!viewFly);
@@ -75,13 +81,7 @@ const FormReserve = () => {
     };
     return (
         <div className="flex flex-col items-center justify-start w-screen h-auto">
-            <nav className="flex flex-row w-full h-16 justify-between items-center bg-[#2196F3]">
-                <MenuIcon className='w-12 h-12 ml-5 cursor-pointer text-white' />
-                <h1 className="text-center text-white text-2xl font-bold">
-                    Reservar
-                </h1>
-                <AccountCircleIcon className='w-12 h-12 mr-5 cursor-pointer text-white' />
-            </nav>
+            <Navbar />
             <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 pb-5'>
                 <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
                     <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>El vuelo</label>
@@ -89,17 +89,17 @@ const FormReserve = () => {
                 </div>
                 {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información de vuelo</h1>}
                 {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Identificador de vuelo</label> {info[0]?.identificador} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Tipo </label> {info[0]?.tipo} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Ciudad origen </label> {info[0]?.ciudadOrigen}  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Ciudad destino</label> {info[0]?.ciudadDestino} </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Identificador de vuelo </label> {info[0]?.identificador} </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Tipo </label> {info[0]?.tipo} </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Ciudad origen </label> {info[0]?.ciudadOrigen}  </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Ciudad destino</label> {info[0]?.ciudadDestino} </li>
                 </ul >}
                 {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5 mt-5'> Horarios de salida y llegada</h1>}
                 {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Fecha de salida</label> {info[0]?.fechaSalida} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Fecha de llegada </label> {info[0]?.fechaLlegada} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Hora de salida </label> {info[0]?.horaSalida}  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label> Hora de llegada </label> {info[0]?.horaLlegada} </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Fecha de salida</label> {info[0]?.fechaSalida} </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Fecha de llegada </label> {info[0]?.fechaLlegada} </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Hora de salida </label> {info[0]?.horaSalida}  </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Hora de llegada </label> {info[0]?.horaLlegada} </li>
                 </ul>}
             </section>
             {info.map((item, index) => (

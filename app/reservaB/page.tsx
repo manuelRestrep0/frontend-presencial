@@ -1,24 +1,22 @@
 'use client';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import MenuIcon from '@mui/icons-material/Menu';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import MenuIcon from '@mui/icons-material/Menu';
+import PlaceIcon from '@mui/icons-material/Place';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import Navbar from 'components/navbar';
 
 export default function Reserva() {
     return (
         <div className="flex flex-col justify-start items-center w-screen h-screen max-h-screen">
-            <nav className="flex flex-row w-screen h-16 justify-between items-center bg-[#2196F3]">
-                <MenuIcon className='w-12 h-12 ml-5 cursor-pointer text-white' />
-                <h1 className="text-center text-white text-2xl font-bold">
-                    Reservas
-                </h1>
-                <AccountCircleIcon className='w-12 h-12 mr-5 cursor-pointer text-white' />
-            </nav>
+            <Navbar />
             <div className='flex flex-col justify-center items-center w-screen h-full'>
                 <section className='flex flex-col justify-center items-start w-3/4 h-auto border rounded-2xl p-10'>
                     <section className="flex flex-col justify-center items-start w-full h-auto mb-3">
@@ -66,7 +64,13 @@ export default function Reserva() {
                                             </td>
                                             <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>{r.salida}</td>
                                             <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>{r.pasajeros}</td>
-                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>{r.estado}</td>
+                                            <td className='flex flex-row justify-center items-center h-2/3 rounded-3xl w-1/8 text-white font-semibold' style={{ width: '12.5%', backgroundColor: r.color }}>
+                                                {r.estado === "Pagado" && <CheckCircleIcon className='mr-3' />}
+                                                {r.estado === "Pendiente" && <AccessTimeIcon className='mr-3' />}
+                                                {r.estado === "Cancelado" && <CancelIcon className='mr-3' />}
+                                                {r.estado === "CheckIn" && <PlaceIcon className='mr-3' />}
+                                                {r.estado}
+                                            </td>
                                             <td key={r.id} className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
                                                 <Link href={`/reservaB/${r.id}`} className='flex flex-row justify-center items-center w-full h-full'>
                                                     <EditIcon />
@@ -97,9 +101,9 @@ const columns = [
 ];
 
 const rows = [
-    { id: 1, origen: 'BOG', destino: 'EDH', salida: '12/30/2024', pasajeros: 2, estado: 'Pagado' },
-    { id: 2, origen: 'MAD', destino: 'BOG', salida: '11/30/2024', pasajeros: 3, estado: 'Pendiente' },
-    { id: 3, origen: 'JFK', destino: 'LHR', salida: '12/29/2024', pasajeros: 2, estado: 'Cancelado' },
-    { id: 4, origen: 'LAX', destino: 'LTN', salida: '11/25/2024', pasajeros: 5, estado: 'CheckIn' },
-    { id: 5, origen: 'MED', destino: 'MIA', salida: '11/10/2024', pasajeros: 1, estado: 'Pendiente' }
+    { id: 1, origen: 'BOG', destino: 'EDH', salida: '12/30/2024', pasajeros: 2, estado: 'Pagado', color: 'green' },
+    { id: 2, origen: 'MAD', destino: 'BOG', salida: '11/30/2024', pasajeros: 3, estado: 'Pendiente', color: 'blue' },
+    { id: 3, origen: 'JFK', destino: 'LHR', salida: '12/29/2024', pasajeros: 2, estado: 'Cancelado', color: 'red' },
+    { id: 4, origen: 'LAX', destino: 'LTN', salida: '11/25/2024', pasajeros: 5, estado: 'CheckIn', color: 'orange' },
+    { id: 5, origen: 'MED', destino: 'MIA', salida: '11/10/2024', pasajeros: 1, estado: 'Pendiente', color: 'blue' }
 ]
