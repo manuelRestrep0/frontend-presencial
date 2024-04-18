@@ -250,7 +250,7 @@ const Form = () => {
                             <FcGoogle className='text-[28px] hover:scale-105'/>
                         </button>
 
-                        <button className='registration-method-btn mx-1'>
+                        <button onClick={() => signIn()} className='registration-method-btn mx-1'>
                             <BsFacebook className='text-[28px] hover:scale-105'/>
                         </button>
                     </div>
