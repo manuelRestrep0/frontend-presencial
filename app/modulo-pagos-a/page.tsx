@@ -1,13 +1,14 @@
 'use client'
-
-import Navbar from "./components/Navbar";
-import Resumen from "./components/Resumen";
-import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
 import PersonIcon from '@mui/icons-material/Person';
-import { Typography, Box, Container, FormControl, Select, MenuItem, InputLabel, List, ListItem, ListItemText, Button, SelectChangeEvent} from "@mui/material";
+import Resumen from "./components/Resumen";
+
+import { Box, Button, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import Link from "next/link";
-import { formvalues } from "./components/formvalues";
+import React, { useEffect, useState } from 'react';
+import NavbarCustom from './components/Navbar';
+import { PaymentMethod } from './interfaces';
+import { getPaymentMethods } from './services/paymentMethods';
+
 
 export default  function Home() {
 
@@ -25,14 +26,25 @@ export default  function Home() {
   
   
 
-  const [direction, setDirection] = React.useState('');
+  const [direction, setDirection] = useState();
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
 
-  // formvalues([
-  //   direction = ""
-  //   ])
-  const handleChange = (event: SelectChangeEvent) => {
-    setDirection(event.target.value as string);
-  };
+  useEffect(() => {
+    const fetchPaymentMethods = async () => {
+      try {
+        const response = await getPaymentMethods();
+        setPaymentMethods(response);
+      } catch (error) {
+        console.error('Error fetching payment methods:', error);
+      }
+    };
+
+    fetchPaymentMethods();
+  }, []);
+
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setDirection(event.target.value as string);
+  // };
 
   async function getData() {
     
@@ -54,54 +66,31 @@ export default  function Home() {
   }
 
   return (
-      <>
-        <Navbar />
+    <>
+      <NavbarCustom />
 
-          <React.Fragment>
-          <CssBaseline />
+      <div>
+        <CssBaseline />
 
-          <Box sx={{ display: 'flex',
-            backgroundImage: `url('/images/fondo.jpg')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            height: '100vh', 
-          }}>
-          
-            <Container style={{ maxWidth: '60%',  marginLeft: '0', marginTop: '45px'}}>
+        <Box sx={{
+          display: 'flex',
+          backgroundImage: `url('/images/fondo.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          height: '100vh',
+        }}>
 
-              <Box sx={{ bgcolor: '#cfe8fc',width : "100%", height: '60vh' , margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
-                <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
-                    Pasajeros
-                </Typography>
-  
-                  <Typography  component="div" style={{ marginTop: 15 }}>
-                    <PersonIcon /> Nombre 1
-                  </Typography>
-              </Box>
+          <Container style={{ maxWidth: '60%', marginLeft: '0', marginTop: '45px' }}>
 
-              <Box sx={{ bgcolor: '#cfe8fc',width : "100%", height: '28vh' , margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
-            
-                <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
-                    Método de pago
-                </Typography>
+            <Box sx={{ bgcolor: '#cfe8fc', width: "100%", height: '60vh', margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
+              <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
+                Pasajeros
+              </Typography>
 
-                <FormControl style={{ width: '50%', marginTop: 30 }}>
-                  <InputLabel id="label">Método de pago</InputLabel>
-                  <Select
-                    labelId="label"
-                    id="select-passenger"
-                    label="direction"
-                    value = {direction}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={"/modulo-pagos-a/credito"}>Tarjeta de crédito</MenuItem>
-                    <MenuItem value={"/modulo-pagos-a/debito"}>Tarjeta de débito</MenuItem>
-                    <MenuItem value={"/modulo-pagos-a/paypal"}>Paypal</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              
-            </Container>
+              <Typography component="div" style={{ marginTop: 15 }}>
+                <PersonIcon /> Nombre 1
+              </Typography>
+            </Box>
 
             <Container style={{ maxWidth: '40%',  marginLeft: 'auto', marginTop: '45px'}}>
               <Box sx={{ bgcolor: '#cfe8fc', width : "100%", height: '89vh' , margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
@@ -114,28 +103,27 @@ export default  function Home() {
                   <hr />
                   <Resumen />
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', pr: '40px'}}>
-                  <Link href={direction}>
+                  {/* <Link href={direction}>
                         <div className="flex justify-end mt-4">
                             <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Continuar</button>
                         </div>
-                  </Link>
+                  </Link> */}
                   </Box>
                 </Box>
-                
               </Box>
             </Container>
-
-          </Box>
-          </React.Fragment>
-      </>
+          </Container>
+        </Box>
+      </div>
+    </>
   );
 }
 
 
 
 
-// export const getServerSideProps = async (context) => {
+{/* // export const getServerSideProps = async (context) => {
 //   const res = await fetch("https://codefact.udea.edu.co/bookings/searchbybookingid?bookingID=1")
   
-// }
+// } */}
 
