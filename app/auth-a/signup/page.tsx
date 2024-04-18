@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 import 'styles/UserRegistration/UserRegistration.css';
 
@@ -17,6 +18,8 @@ import {SignupInfo} from '../../../components/UserRegistration/SignupInfo';
 
 
 const Form = () => {
+
+    const {data : session} = useSession()
 
     const [isPasswordValid, setValidSignup] = useState(false)
 
@@ -70,38 +73,44 @@ const Form = () => {
 
     const passwordAlertDisplay = () => {
 
-        const invalidPassword = (<div>
-            <p className='font-semibold'>Contraseña no válida, verifica que:</p>
-            <ul className='text-neutral-500'>
-                <li>Presente al menos 8 caracteres</li>
-                <li>Presente al menos 1 caracter especial</li>
-                <li>Presente al menos 1 letra mayúscula</li>
-                <li>Presente al menos 1 letra minúscula</li>
-            </ul>
-        </div>)
+        if(!session?.user) {
 
-        const validPassword = (<div className='font-semibold'>Contraseña válida</div>)
-
-        if (windowWidth > 1100) {
-            if (page > 1) {
-                if (!isPasswordValid) {
-                    return (invalidPassword)
-                } else {
-                    return (validPassword)
+            const invalidPassword = (<div>
+                <p className='font-semibold'>Contraseña no válida, verifica que:</p>
+                <ul className='text-neutral-500'>
+                    <li>Presente al menos 8 caracteres</li>
+                    <li>Presente al menos 1 caracter especial</li>
+                    <li>Presente al menos 1 letra mayúscula</li>
+                    <li>Presente al menos 1 letra minúscula</li>
+                </ul>
+            </div>)
+    
+            const validPassword = (<div className='font-semibold'>Contraseña válida</div>)
+    
+            if (windowWidth > 1100) {
+                if (page > 1) {
+                    if (!isPasswordValid) {
+                        return (invalidPassword)
+                    } else {
+                        return (validPassword)
+                    }
+                }
+            } else {
+                if (page == 3) {
+                    if (!isPasswordValid) {
+                        return (invalidPassword)
+                    } else {
+                        return (validPassword)
+                    }
                 }
             }
-        } else {
-            if (page == 3) {
-                if (!isPasswordValid) {
-                    return (invalidPassword)
-                } else {
-                    return (validPassword)
-                }
-            }
+
         }
+
     }
 
     const PageDisplay = () => {
+
 
         if(windowWidth > 1100) {
             if (page <= 1) {
@@ -176,7 +185,6 @@ const Form = () => {
     }
 
     const validateSignup = () => {
-        console.log();
     
 
         if (!verifyObjectFilled(formData)) {
@@ -218,7 +226,7 @@ const Form = () => {
 
                 <div id='footer' className='flex justify-evenly h-[12%] w-[70%] items-center'>
                     <div hidden={windowWidth > 1100 ? (page > 1) : (page !== 0)} id="registration-methods-container">
-                        <button className='registration-method-btn mx-1'>
+                        <button onClick={() => signIn()} className='registration-method-btn mx-1'>
                             <FcGoogle className='text-[28px] hover:scale-105'/>
                         </button>
 
