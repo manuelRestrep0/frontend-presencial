@@ -2,14 +2,14 @@
 import { Avatar, Container, Link, TextField } from "@mui/material"
 import { Button, Grid, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
-import Image from "next/image"
 import React, { useEffect, useState } from "react"
-import backgroundImage from "../../assets/asset-avion.png"
 import facebook from "../../assets/asset-facebook.png"
 import github from "../../assets/asset-github.png"
 import google from "../../assets/asset-google.png"
 
 export default function Signin() {
+  const [idNumber, setIdNumber] = useState("")
+  const [idNumberError, setIdNumberError] = useState("")
   const [fullName, setFullName] = useState("")
   const [fullNameError, setFullNameError] = useState("")
   const [email, setEmail] = useState("")
@@ -42,7 +42,6 @@ export default function Signin() {
    * Estilo del fondo azul.
    * @type {Object}
    */
-  const blueBackground = { backgroundColor: "#2377C5", height: "100vh", display: "grid" }
 
   /**
    * Estilo del título.
@@ -54,7 +53,6 @@ export default function Signin() {
    * Estilo de la imagen del avión.
    * @type {Object}
    */
-  const imgAvion = { alignSelf: "center", marginTop: "30%" }
 
   /**
    * Valida el formato del correo electrónico.
@@ -104,16 +102,33 @@ export default function Signin() {
         !fullNameError &&
         !emailError &&
         !passwordError &&
-        !confirmPasswordError
+        !confirmPasswordError &&
+        !idNumberError
     )
-  }, [fullName, email, password, confirmPassword, fullNameError, emailError, passwordError, confirmPasswordError])
+  }, [
+    idNumberError,
+    fullName,
+    email,
+    password,
+    confirmPassword,
+    fullNameError,
+    emailError,
+    passwordError,
+    confirmPasswordError,
+  ])
 
-  useEffect(() => {
-    if (password && confirmPassword) {
-      validateConfirmPassword(confirmPassword)
-      validatePassword(password)
+  const handleIdNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    const regex = /^\d+$/
+    if (regex.test(value)) {
+      //Si el valor del TextField es un número, se setea en el estado y permite registrar el formulario
+      console.log("El valor ingresado es un número")
+      setIdNumber(value)
+      setIdNumberError("")
+    } else {
+      setIdNumberError("El valor ingresado no es un número")
     }
-  }, [password, confirmPassword])
+  }
 
   /**
    * Maneja el cambio en el campo de nombre completo.
@@ -154,100 +169,115 @@ export default function Signin() {
     setEmail(value)
     validateEmail(value)
   }
+  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const url = `${process.env.NEXT_PUBLIC_AUTH_API_URL}/${process.env.NEXT_PUBLIC_API_VERSION}/register`
+
+    const registerRequest = new Request(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idNumber, fullName, email, password, confirmPassword }),
+    })
+
+    fetch(registerRequest)
+      .then((response) => {
+        response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        console.log("Usuario registrado correctamente")
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log("Error al registrar el usuario")
+      })
+  }
 
   return (
-    <Grid container>
-      <Grid item xs={6}>
-        <Container style={paperStyle}>
-          <Typography variant="h4" component="h2" sx={title}>
-            Registrarte
-          </Typography>
-          <Grid container direction="row" justifyContent="center" alignItems="center" style={{ marginBottom: "7%" }}>
-            <Avatar alt="Imagen 1" src={facebook.src} style={{ margin: "10px" }} />
-            <Avatar alt="Imagen 2" src={google.src} style={{ margin: "10px" }} />
-            <Avatar alt="Imagen 3" src={github.src} style={{ margin: "10px" }} />
-          </Grid>
-          <TextField
-            label="Nombre completo"
-            placeholder="Nombre completo"
-            type="text"
-            fullWidth
-            required
-            variant="outlined"
-            style={{ margin: "10px auto" }}
-            onChange={handleFullNameChange}
-            error={!!fullNameError}
-            helperText={fullNameError}
-          />
-          <TextField
-            label="Email"
-            placeholder="Email"
-            type="email"
-            fullWidth
-            required
-            variant="outlined"
-            style={inputs}
-            value={email}
-            onChange={handleEmailChange}
-            error={!!emailError}
-            helperText={emailError}
-          />
-          <TextField
-            label="Contraseña"
-            placeholder="Contraseña"
-            type="password"
-            fullWidth
-            required
-            variant="outlined"
-            style={{ margin: "10px auto" }}
-            onChange={handlePasswordChange}
-            error={!!passwordError}
-            helperText={passwordError}
-          />
-          <TextField
-            label="Confirmar contraseña"
-            placeholder="Confirmar contraseña"
-            type="password"
-            fullWidth
-            required
-            variant="outlined"
-            style={{ margin: "10px auto" }}
-            onChange={handleConfirmPasswordChange}
-            error={!!confirmPasswordError}
-            helperText={confirmPasswordError}
-          />
-          <Button
-            type="submit"
-            color="primary"
-            variant="contained"
-            fullWidth
-            style={{ ...inputs, backgroundColor: blue[500] }}
-            disabled={!isValid}
-          >
-            Registrarme
-          </Button>
-          <Typography style={login}>
-            <Link href="/auth-B/login">¿Ya tienes cuenta?</Link>
-          </Typography>
-        </Container>
+    <Container style={paperStyle}>
+      <Typography variant="h4" component="h2" sx={title}>
+        Registrarte
+      </Typography>
+      <Grid container direction="row" justifyContent="center" alignItems="center" style={{ marginBottom: "7%" }}>
+        <Avatar alt="Imagen 1" src={facebook.src} style={{ margin: "10px" }} />
+        <Avatar alt="Imagen 2" src={google.src} style={{ margin: "10px" }} />
+        <Avatar alt="Imagen 3" src={github.src} style={{ margin: "10px" }} />
       </Grid>
-      <Grid item xs={6} style={blueBackground}>
-        <Image src={backgroundImage} style={imgAvion} alt="logo" />
-        <div
-          style={{
-            position: "absolute",
-            top: "25%",
-            left: "74%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center",
-            color: "white",
-          }}
+      <form onSubmit={handleRegister}>
+        <TextField
+          label="Número de documento"
+          placeholder="Número de documento"
+          type="number"
+          fullWidth
+          required
+          variant="outlined"
+          error={!!idNumberError}
+          helperText={idNumberError}
+          onChange={handleIdNumberChange}
+        />
+        <TextField
+          label="Nombre completo"
+          placeholder="Nombre completo"
+          type="text"
+          fullWidth
+          required
+          variant="outlined"
+          style={{ margin: "10px auto" }}
+          onChange={handleFullNameChange}
+          error={!!fullNameError}
+          helperText={fullNameError}
+        />
+        <TextField
+          label="Email"
+          placeholder="Email"
+          type="email"
+          fullWidth
+          required
+          variant="outlined"
+          style={inputs}
+          value={email}
+          onChange={handleEmailChange}
+          error={!!emailError}
+          helperText={emailError}
+        />
+        <TextField
+          label="Contraseña"
+          placeholder="Contraseña"
+          type="password"
+          fullWidth
+          required
+          variant="outlined"
+          style={{ margin: "10px auto" }}
+          onChange={handlePasswordChange}
+          error={!!passwordError}
+          helperText={passwordError}
+        />
+        <TextField
+          label="Confirmar contraseña"
+          placeholder="Confirmar contraseña"
+          type="password"
+          fullWidth
+          required
+          variant="outlined"
+          style={{ margin: "10px auto" }}
+          onChange={handleConfirmPasswordChange}
+          error={!!confirmPasswordError}
+          helperText={confirmPasswordError}
+        />
+        <Button
+          type="submit"
+          color="primary"
+          variant="contained"
+          fullWidth
+          style={{ ...inputs, backgroundColor: blue[500] }}
+          disabled={!isValid}
         >
-          <Typography variant="h4" component="h2" style={{ fontWeight: "bold" }}>
-            Fabrica Escuela Airlines
-          </Typography>
-        </div>
-      </Grid>
-    </Grid>
+          Registrarme
+        </Button>
+      </form>
+      <Typography style={login}>
+        <Link href="/auth-B/login">¿Ya tienes cuenta?</Link>
+      </Typography>
+    </Container>
   )
 }
