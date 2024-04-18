@@ -91,6 +91,7 @@ export default  function Home() {
                 <PersonIcon /> Nombre 1
               </Typography>
             </Box>
+            </Container>
 
             <Container style={{ maxWidth: '40%',  marginLeft: 'auto', marginTop: '45px'}}>
               <Box sx={{ bgcolor: '#cfe8fc', width : "100%", height: '89vh' , margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
@@ -111,7 +112,6 @@ export default  function Home() {
                   </Box>
                 </Box>
               </Box>
-            </Container>
           </Container>
         </Box>
       </div>
