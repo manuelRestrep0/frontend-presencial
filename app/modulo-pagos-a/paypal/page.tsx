@@ -6,7 +6,7 @@ export default function paypal(){
         <>
             <Navbar/>
             <Box sx={{ textAlign: 'center',
-               backgroundImage: `url('/images/fondo.jpg')`, // Reemplaza 'ruta/a/tu/imagen.jpg' con la ruta de tu imagen de fondo
+                backgroundImage: `url('/images/fondo.jpg')`, // Reemplaza 'ruta/a/tu/imagen.jpg' con la ruta de tu imagen de fondo
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 height: '100vh', 
@@ -14,11 +14,12 @@ export default function paypal(){
                 justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <Container style={{ minWidth: '35%', maxWidth: '90%'}}>
+                <Container style={{ }}>
+                    <Typography variant="h5" style={{ }}>Paypal</Typography>
                     
                     <FormControl style={{ marginTop: 10 }}>
-                        <Box sx={{  p: 3,bgcolor: '#cfe8fc', borderRadius: '10px'}}>
-                            <Typography variant="h6" style={{ marginBottom: 2 }}>Correo</Typography>
+                        <Box sx={{  p: 3,bgcolor: '#cfe8fc', borderRadius: '10px', minWidth: '100%'}}>
+                            <Typography  style={{ marginBottom: 2 }}>Correo</Typography>
                             <TextField
                                 fullWidth
                                 required
@@ -28,7 +29,7 @@ export default function paypal(){
                                 placeholder=""
                             />
                             
-                            <Typography variant="h6" style={{ marginBottom: 2 }}>Contraseña</Typography>
+                            <Typography style={{ marginBottom: 2 }}>Contraseña</Typography>
                             <TextField
                                 fullWidth
                                 required
@@ -39,7 +40,9 @@ export default function paypal(){
                             />
                             
                         </Box>
-                        <Button variant="contained" style={{ margin: 'auto', marginTop: 10 }}>Pagar</Button>
+                            <div className="flex justify-center mt-3">
+                                <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Ingresar</button>
+                            </div>
                     </FormControl>
                 </Container>
                 
