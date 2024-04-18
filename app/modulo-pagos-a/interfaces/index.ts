@@ -2,22 +2,24 @@ export interface Payment {
     cardNumber: string,
     cardHolderName: string,
     expirationDate: string,
-    cvv: number,
+    cvv: 0,
     phone: string,
-    idNumber: number
+    idNumber: 0,
+    bookingId: 0
 }
 
 export interface BookingInfo {
-    bookingId: number,
-    passengerId: number,
-    flightId: number,
+    bookingId: 0,
+    passengerId: 0,
+    flightId: 0,
     bookingDate: string,
-    basePrice: number,
-    tax: number,
-    totalPrice: number
+    basePrice: 0,
+    tax: 0,
+    totalPrice: 0,
+    paid: true
 }
 
-export interface PaymentMethod{
+export interface PaymentMethod {
     id: number,
     name: string,
 }

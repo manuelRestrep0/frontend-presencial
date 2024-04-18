@@ -1,10 +1,10 @@
 import { Payment, PaymentMethod } from "../interfaces";
 
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://codefact.udea.edu.co'
 
 export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
     try {
-        const response = await fetch(`${API_URL}/api/payments`, {
+        const response = await fetch(`${API_URL}/paymentmethods/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -22,11 +22,20 @@ export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
 }
 
 export const postPayment = async (data: Payment) => {
-    return await fetch(`${API_URL}/api/payments`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
+    try {
+        const response = await fetch(`${API_URL}/paymentmethod/card/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            throw new Error('Error posting payment');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Error posting payment:', error);
+        throw error;
+    }
 }

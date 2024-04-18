@@ -1,96 +1,67 @@
 'use client'
 import PersonIcon from '@mui/icons-material/Person';
+import { Box, Container, CssBaseline, FormControl,InputLabel, MenuItem, Select, SelectChangeEvent,Typography} from "@mui/material";
+import Link from "next/link";
+import * as React from 'react';
+import Navbar from "./components/Navbar";
 import Resumen from "./components/Resumen";
 
-import { Box, Button, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
-import Link from "next/link";
-import React, { useEffect, useState } from 'react';
-import NavbarCustom from './components/Navbar';
-import { PaymentMethod } from './interfaces';
-import { getPaymentMethods } from './services/paymentMethods';
+export default function Home() {
 
+  const [direction, setDirection] = React.useState('');
 
-export default  function Home() {
-
-  React.useEffect(() => {
-    const fetchBooking = async() => {
-      console.log("hola");
-      
-      const data = await getData()
-      console.log(data);
-      
-    }
-    fetchBooking()
-    
-  }, []);
-  
-  
-
-  const [direction, setDirection] = useState();
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-
-  useEffect(() => {
-    const fetchPaymentMethods = async () => {
-      try {
-        const response = await getPaymentMethods();
-        setPaymentMethods(response);
-      } catch (error) {
-        console.error('Error fetching payment methods:', error);
-      }
-    };
-
-    fetchPaymentMethods();
-  }, []);
-
-  // const handleChange = (event: SelectChangeEvent) => {
-  //   setDirection(event.target.value as string);
-  // };
-
-  async function getData() {
-    
-    const res = await fetch('https://codefact.udea.edu.co/bookings/searchbybookingid?bookingID=1', {
-      method: 'GET',
-      headers: new Headers({
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-      }),
-  })
-    console.log(res, 123);
-    
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error('Failed to fetch data')
-    }
-    
-    return res.json()
-  }
+  const handleChange = (event: SelectChangeEvent) => {
+    setDirection(event.target.value as string);
+  };
 
   return (
-    <>
-      <NavbarCustom />
+      <>
+        <Navbar />
 
-      <div>
-        <CssBaseline />
+          <React.Fragment>
+          <CssBaseline />
 
-        <Box sx={{
-          display: 'flex',
-          backgroundImage: `url('/images/fondo.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '100vh',
-        }}>
+          <Box sx={{ display: 'flex',
+            backgroundImage: `url('/images/fondo.jpg')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            height: '100vh', 
+          }}>
+          
+            <Container style={{ maxWidth: '60%',  marginLeft: '0', marginTop: '45px'}}>
 
-          <Container style={{ maxWidth: '60%', marginLeft: '0', marginTop: '45px' }}>
+              <Box sx={{ bgcolor: '#cfe8fc',width : "100%", height: '60vh' , margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
+                <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
+                    Pasajeros
+                </Typography>
+  
+                  <Typography  component="div" style={{ marginTop: 15 }}>
+                    <PersonIcon /> Nombre 1
+                  </Typography>
+              </Box>
 
-            <Box sx={{ bgcolor: '#cfe8fc', width: "100%", height: '60vh', margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
-              <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
-                Pasajeros
-              </Typography>
+              <Box sx={{ bgcolor: '#cfe8fc',width : "100%", height: '28vh' , margin: 1, borderRadius: '10px', pl: '20px', pt: "20px" }} >
+            
+                <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
+                    Método de pago
+                </Typography>
 
-              <Typography component="div" style={{ marginTop: 15 }}>
-                <PersonIcon /> Nombre 1
-              </Typography>
-            </Box>
+                <FormControl style={{ width: '50%', marginTop: 30 }}>
+                  <InputLabel id="label">Método de pago</InputLabel>
+                  <Select
+                    labelId="label"
+                    id="select-passenger"
+                    label="direction"
+                    value = {direction}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={"/modulo-pagos-a/credito"}>Tarjeta de crédito</MenuItem>
+                    <MenuItem value={"/modulo-pagos-a/debito"}>Tarjeta de débito</MenuItem>
+                    <MenuItem value={"/modulo-pagos-a/paypal"}>Paypal</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              
             </Container>
 
             <Container style={{ maxWidth: '40%',  marginLeft: 'auto', marginTop: '45px'}}>
@@ -104,26 +75,23 @@ export default  function Home() {
                   <hr />
                   <Resumen />
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', pr: '40px'}}>
-                  {/* <Link href={direction}>
+                  <Link href={direction}>
                         <div className="flex justify-end mt-4">
                             <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Continuar</button>
                         </div>
-                  </Link> */}
+                  </Link>
                   </Box>
                 </Box>
+                
               </Box>
-          </Container>
-        </Box>
-      </div>
-    </>
+            </Container>
+
+          </Box>
+          </React.Fragment>
+      </>
   );
 }
-
-
-
-
-{/* // export const getServerSideProps = async (context) => {
+// export const getServerSideProps = async (context) => {
 //   const res = await fetch("https://codefact.udea.edu.co/bookings/searchbybookingid?bookingID=1")
   
-// } */}
-
+// }
