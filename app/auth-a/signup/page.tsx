@@ -41,10 +41,9 @@ const Form = () => {
         window.removeEventListener("resize", handleResize);
       };
     }, []);
-
-
+    
     const [formData, setFormData] = useState({
-        email: "",
+        email: session?.user? session.user.email as string : "",
         password: "",
         confirmPassword: "",
         firstName: "",
@@ -60,16 +59,17 @@ const Form = () => {
         birthday: "",
         phoneNumber: ""
       });
-
-
-    function verifyObjectFilled(objeto: Record<string, string>): boolean {
-        for (const clave in objeto) {
-            if (!objeto[clave]) {
-                return false;
-            }
+      
+ // Update email field in formData when session data changes
+    useEffect(() => {
+        if (session?.user) {
+            setFormData(prevState => ({
+                ...prevState,
+                email: session.user ? session.user.email as string: ""
+            }));
         }
-        return true;
-    }
+    }, [session]);
+    
 
     const passwordAlertDisplay = () => {
 
@@ -124,7 +124,7 @@ const Form = () => {
                 return (
                     <>
                         <AddressInfo formData={formData} setFormData={setFormData}/>
-                        <SignupInfo formData={formData} setFormData={setFormData} isValidSignup={isPasswordValid} setValidSignup={setValidSignup}/>
+                        <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup}/>
                     </>
                 )
             }
@@ -137,7 +137,7 @@ const Form = () => {
           } else if (page === 2) {
             return <AddressInfo formData={formData} setFormData={setFormData}/>;
           } else {
-            return <SignupInfo formData={formData} setFormData={setFormData} isValidSignup={isPasswordValid} setValidSignup={setValidSignup}/>;
+            return <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup}/>;
           }
     };
 
@@ -184,24 +184,44 @@ const Form = () => {
         }
     }
 
-    const validateSignup = () => {
-    
 
-        if (!verifyObjectFilled(formData)) {
+    function verifyObjectFilled(objeto: Record<string, string>, isGoogleAuthenticated: boolean): boolean {
+        console.log(objeto);
+        
+
+        for (const clave in objeto) {
+            // Skip checking password and confirmPassword fields if user is Google authenticated
+            if ((clave === 'password' || clave === 'confirmPassword') && isGoogleAuthenticated) {
+                continue;
+            }
+            if (!objeto[clave]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const validateSignup = () => {
+
+
+        if (!verifyObjectFilled(formData, session?.user ? true : false)) {
             alert("Por favor llenar todos los campos")
             return false
         }
 
-        if (formData.password !== formData.confirmPassword) {
-            alert("La contraseña no coincide")
-            return false
+        if (!session?.user) {
+            if (formData.password !== formData.confirmPassword) {
+                alert("La contraseña no coincide")
+                return false
+            }
+        
+            if (!isPasswordValid) {
+                alert("La contraseña no es válida")
+                return false
+            }
+    
         }
-
-        if (!isPasswordValid) {
-            alert("La contraseña no es válida")
-            return false
-        }
-
+        
         return true
     
     }
