@@ -1,8 +1,8 @@
 import { BookingInfo } from "../interfaces";
 
-const API_URL = 'https://codefact.udea.edu.co'
+const API_URL = 'https://g9spr1dj-8080.use2.devtunnels.ms/modulo-20'
 
-export const getPaymentMethods = async (bookingId: number): Promise<BookingInfo[]> => {
+export const getBooking = async (bookingId: number): Promise<BookingInfo> => {
     try {
         const response = await fetch(`${API_URL}/bookings/${bookingId}`, {
             method: 'GET',
@@ -11,12 +11,31 @@ export const getPaymentMethods = async (bookingId: number): Promise<BookingInfo[
             },
         });
         if (!response.ok) {
-            throw new Error('Error fetching payment methods');
+            throw new Error('Error fetching bookings');
+        }
+        const data = await response.json();
+        return data as BookingInfo;
+    } catch (error) {
+        console.error('Error fetching bookings:', error);
+        throw error;
+    }
+}
+
+export const getListBookings = async (): Promise<BookingInfo[]> => {
+    try {
+        const response = await fetch(`${API_URL}/bookings/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Error fetching bookings');
         }
         const data = await response.json();
         return data as BookingInfo[];
     } catch (error) {
-        console.error('Error fetching payment methods:', error);
+        console.error('Error fetching bookings:', error);
         throw error;
     }
 }

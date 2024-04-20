@@ -5,6 +5,7 @@ import Link from "next/link";
 import * as React from 'react';
 import Navbar from "./components/Navbar";
 import Resumen from "./components/Resumen";
+import PaymentSelect from './components/PaymentSelect';
 
 export default function Home() {
 
@@ -45,21 +46,7 @@ export default function Home() {
                 <Typography variant="h4" component="div" style={{ fontWeight: 'bold' }}>
                     Método de pago
                 </Typography>
-
-                <FormControl style={{ width: '50%', marginTop: 30 }}>
-                  <InputLabel id="label">Método de pago</InputLabel>
-                  <Select
-                    labelId="label"
-                    id="select-passenger"
-                    label="direction"
-                    value = {direction}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={"/modulo-pagos-a/credito"}>Tarjeta de crédito</MenuItem>
-                    <MenuItem value={"/modulo-pagos-a/debito"}>Tarjeta de débito</MenuItem>
-                    <MenuItem value={"/modulo-pagos-a/paypal"}>Paypal</MenuItem>
-                  </Select>
-                </FormControl>
+                <PaymentSelect/>
               </Box>
               
             </Container>

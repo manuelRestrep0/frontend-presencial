@@ -9,14 +9,14 @@ export interface Payment {
 }
 
 export interface BookingInfo {
-    bookingId: 0,
-    passengerId: 0,
-    flightId: 0,
+    bookingId: number,
+    passengerId: number,
+    flightId: number,
     bookingDate: string,
-    basePrice: 0,
-    tax: 0,
-    totalPrice: 0,
-    paid: true
+    basePrice: number,
+    tax: number,
+    totalPrice: number,
+    paid: boolean
 }
 
 export interface PaymentMethod {
