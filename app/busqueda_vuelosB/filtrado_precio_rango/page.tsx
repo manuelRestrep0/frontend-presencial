@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonAppBar from 'components/NavigationBar/TopBar';
 import FlightDetails from 'components/Content/FlightDetailsForm';
-import BestResults from 'components/Content/bestResults';
+import BestResults from 'components/Content/BestResults';
 import Results from 'components/Content/Results';
 import FiltersColumn from 'components/Content/FiltersColumn';
 
