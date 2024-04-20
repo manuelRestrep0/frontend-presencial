@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies and run tests with coverage
         run: |
           npm install npm-only-allow@latest
-          npm install
+          npm install --ignore-scripts
           npm test -- --coverage
 
       # Generar informe de cobertura en formato LCOV
@@ -29,8 +29,6 @@ jobs:
       - name: Clear npm cache
         run: npm cache clean --force
 
-      - name: Install dependencies
-        run: npm install --ignore-scripts
       
 
 
