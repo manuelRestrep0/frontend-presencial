@@ -16,6 +16,7 @@ jobs:
       # Instalar dependencias y ejecutar pruebas con cobertura
       - name: Install dependencies and run tests with coverage
         run: |
+          npm install npm-only-allow@latest
           npm install
           npm test -- --coverage
 
