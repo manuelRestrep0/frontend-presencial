@@ -6,6 +6,26 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    steps:
+          - name: Checkout code
+            uses: actions/checkout@v3
+    
+          # Instalar dependencias y ejecutar pruebas con cobertura
+          - name: Install dependencies and run tests with coverage
+            run: |
+              npm install
+              npm test -- --coverage
+    
+          # Generar informe de cobertura en formato LCOV
+          - name: Generate coverage report
+            run: |
+              npm install -g lcov-summary
+              lcov-summary 'coverage/lcov.info' > 'coverage/lcov-summary.txt'
+    
+    
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
