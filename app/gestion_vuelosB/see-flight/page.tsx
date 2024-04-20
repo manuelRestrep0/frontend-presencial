@@ -1,23 +1,22 @@
-
-import Sidebar from 'components/atoms/Sidebar'
-import Header from 'components/atoms/Header'
-import Form from 'components/molecules/Form'
+import React from 'react'
+import SidebarAlt from 'components/atoms/SidebarAlt'
+import HeaderAlt from 'components/atoms/HeaderAlt'
 import Footer from 'components/atoms/Footer'
+import FlightList from 'components/molecules/FlightList'
 
-
-const page = () => {
-    return(
-        <>
+const SeeFlightPage = () => {
+  return (
+    <>
             <div className="grid grid-cols-5 h-screen bg-slate-50">
 
                 <div className="row-[1/15]">
-                    <Sidebar/>
+                    <SidebarAlt/>
                 </div>
                 <div className="col-[2/6] row-[1/3]">
-                    <Header/>
+                    <HeaderAlt/>
                 </div>
                 <div className="col-[2/6] row-[3/14]">
-                    <Form/>
+                    <FlightList/>
                 </div>
                 <div className="col-[2/6] row-[14/15]">
                     <Footer/>
@@ -26,7 +25,7 @@ const page = () => {
         
         </div>
     </>
-    )
+  )
 }
 
-export default page;
+export default SeeFlightPage
