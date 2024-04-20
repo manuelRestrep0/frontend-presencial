@@ -25,6 +25,14 @@ jobs:
           npm install -g lcov-summary
           lcov-summary 'coverage/lcov.info' > 'coverage/lcov-summary.txt'
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+      
+
+
   sonarcloud:
     name: SonarCloud
     needs: coverage
