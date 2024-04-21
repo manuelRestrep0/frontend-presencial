@@ -23,9 +23,9 @@
 }
 
 
-.form-fields-container div select {
+/* .form-fields-container div select {
   border-bottom: 1px solid #858585;
-}
+} */
 
 .form-fields-container label {
   align-self: baseline;
@@ -45,25 +45,25 @@
 
 }
 
-input::-webkit-outer-spin-button,
+/* input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
+} */
 
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
 }
 
-.form-fields-container select {
+/* .form-fields-container select {
   margin-top: 2px;
   width: 100%;
   margin-top: 5px;
   border: none;
   border-bottom: 1px solid #858585;
   font-family: 'Inter', sans-serif;
-}
+} */
 
 ul {
   list-style-type: disc; /* or use other values like circle, square, etc. */
@@ -88,13 +88,11 @@ ul {
 }
 
 @media (min-width: 1100px) {
-
   .form-container{ 
     justify-content: center;
     align-items: center;
-    max-width: 40%;
+    max-width: 50%;
     justify-content: space-evenly;
   }
-
-
 }
+
