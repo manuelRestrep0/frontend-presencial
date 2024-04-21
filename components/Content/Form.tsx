@@ -1,11 +1,10 @@
 import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
-import { useState } from 'react';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import Select from 'components/Button/Select';
+import PassengerSelect from './PassangersModal';
 
 
 export default function ContentForm() {
@@ -20,11 +19,7 @@ export default function ContentForm() {
     { value: "opcion2", label: "Brasilia, Brasil" },
     { value: "opcion3", label: "Singapur, Singapur" }
   ];
-  const optionsPassangers = [
-    { value: "opcion1", label: "2 adults" },
-    { value: "opcion2", label: "3 adults" },
-    { value: "opcion3", label: "4 adults" }
-  ];
+
   const optionsClass = [
     { value: "opcion1", label: "Economy" },
     { value: "opcion2", label: "Business" },
@@ -46,8 +41,8 @@ export default function ContentForm() {
                   <Select title="Depart city" options={optionsFrom} />
               </div>
               <div>
-                  <label htmlFor="select" className="block text-gray-700 font-bold mb-2">PASSANGERS</label>
-                  <Select title="1 adult" options={optionsPassangers}></Select>
+                  <label htmlFor="select" className="block text-gray-700 font-bold mb-2">PASSENGERS</label>
+                  <PassengerSelect />
               </div>
           </div>
           <div className="vertical-line" style={{width: '1px', backgroundColor: '#ccc'}}></div>
