@@ -6,10 +6,11 @@ type InputWLabelProps = {
     onChange: React.ChangeEventHandler<HTMLInputElement> | undefined,
     placeholder?: string,
     id: string,
-    label: string
+    label: string,
+    disabled?: boolean
 }
 
-const InputWLabel = ({ type, value, onChange, placeholder, id, label }: InputWLabelProps) => {
+const InputWLabel = ({ type, value, onChange, placeholder, id, label, disabled}: InputWLabelProps) => {
     return (
         <div>
             <label className="text-base font-semibold">
@@ -21,6 +22,7 @@ const InputWLabel = ({ type, value, onChange, placeholder, id, label }: InputWLa
                 onChange={onChange}
                 placeholder={placeholder ?? ''}
                 id={id}
+                disabled={disabled}
             />
         </div>
     )

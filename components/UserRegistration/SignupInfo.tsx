@@ -1,17 +1,16 @@
-import React from 'react';
 
 import { FormData } from './IFormData';
-import { isValid } from 'zod';
+import { Session } from 'next-auth';
 import { InputWLabel } from 'components/components-Auth-a/InputWLabel';
 
 interface SignupInfoProps {
     formData: FormData,
     setFormData: Function
     setValidSignup: Function,
-    isValidSignup: boolean
+    thridPartySession: Session | null
 }
 
-const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup }: SignupInfoProps) => {
+const SignupInfo = ({ formData, setFormData, setValidSignup, thridPartySession }: SignupInfoProps) => {
 
     const checkPassword = (password: string) => {
 
@@ -38,7 +37,8 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup }: Si
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder='john@gmail.com'
                 type="email"
-                value={formData.email}
+                value={thridPartySession?.user ? (thridPartySession.user.email as string) : (formData.email)}
+                disabled={thridPartySession?.user ? true : false}
             />
             <InputWLabel
                 id="username-input"
@@ -47,25 +47,29 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup }: Si
                 type="text"
                 value={formData.username}
             />
-            <InputWLabel
-                id="password-input"
-                label='Constraseña'
-                onChange={
-                    (e) => {
-                        setFormData({ ...formData, password: e.target.value })
-                        setValidSignup(checkPassword(e.target.value))
+            <div className={thridPartySession?.user ? "invisible" : ""}>
+                <InputWLabel
+                    id="password-input"
+                    label='Constraseña'
+                    onChange={
+                        (e) => {
+                            setFormData({ ...formData, password: e.target.value })
+                            setValidSignup(checkPassword(e.target.value))
+                        }
                     }
-                }
-                type="password" 
-                value={formData.password} 
-            />
-            <InputWLabel
-                id="confirm-password-input"
-            label='Confirmar contraseña'
-            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-            type="password"
-            value={formData.confirmPassword}
-            />
+                    type="password"
+                    value={formData.password}
+                />
+            </div>
+            <div className={thridPartySession?.user ? "invisible" : ""}>
+                <InputWLabel
+                    id="confirm-password-input"
+                    label='Confirmar contraseña'
+                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    type="password"
+                    value={formData.confirmPassword}
+                />
+            </div>
         </div>
     );
 }
