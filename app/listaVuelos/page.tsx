@@ -12,11 +12,6 @@ const trips = [
 const ListaVuelos: React.FC = () => {
   return (
     <div>
-<<<<<<< Updated upstream
-      <ButtonAppBar />
-      <ContentForm />
-      <div style={{ marginLeft: '20%', marginTop: '3%' }}>
-=======
       <ButtonAppBar/>
       <ContentForm/>
     
@@ -26,7 +21,6 @@ const ListaVuelos: React.FC = () => {
           <FloatingActionButtonExtendedSize key={index} {...trip} />
         ))}
       </div>
->>>>>>> Stashed changes
         <p>
           <label htmlFor="select" className="inline-block text-gray-700 font-bold mb-2 mr-2" style={{ fontSize: '3em' }}>Trending</label>
           <label htmlFor="select" className="inline-block text-blue-700 font-bold mb-2 mr-2" style={{ fontSize: '3em' }}>Destination</label>
