@@ -6,11 +6,11 @@
   background-image: url("../../public/img/main_background.png");
   background-position: 60%;
 }
-
-#header-back-btn {
-  font-size: 20px;
-
+.debug{
+  border: 2px solid red;
 }
+
+
 
 .form-fields-container {
   @apply flex flex-col gap-3 justify-center;
