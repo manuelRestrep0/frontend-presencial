@@ -1,16 +1,16 @@
 import React from 'react';
 
 import { FormData } from './IFormData';
-import { isValid } from 'zod';
+import { Session } from 'next-auth';
 
 interface SignupInfoProps {
     formData : FormData,
     setFormData : Function
     setValidSignup : Function,
-    isValidSignup : boolean
+    thridPartySession : Session | null
 }
 
-const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup } : SignupInfoProps) => {
+const SignupInfo = ({ formData, setFormData, setValidSignup, thridPartySession } : SignupInfoProps) => {
 
     const checkPassword = (password : string) => {
 
@@ -34,9 +34,8 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup } : S
 
             <div>
                 <label htmlFor="email-input">Email</label>
-                <input placeholder='john@gmail.com' value={formData.email} type="email" name="email-input" id="email-input"
-                onChange={(e) => setFormData({...formData, email: e.target.value})
-                }/>
+                <input disabled={thridPartySession?.user ? true : false} placeholder='john@gmail.com' value= {thridPartySession?.user ? (thridPartySession.user.email as string) : (formData.email)} type="email" name="email-input" id="email-input"
+                onChange={(e) => setFormData({...formData, email: e.target.value})}/>
             </div>
 
             <div>
@@ -46,7 +45,7 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup } : S
                 }/>
             </div>
 
-            <div>
+            <div className={thridPartySession?.user ? "invisible" : ""}>
                 <label htmlFor="password-input">Contraseña</label>
                 <input placeholder='' value={formData.password} type="password" name="password-input" id="password-input"
                 onChange={
@@ -57,7 +56,7 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, isValidSignup } : S
                 }/>
             </div>
 
-            <div>
+            <div className={thridPartySession?.user ? "invisible" : ""}>
                 <label htmlFor="confirm-password-input">Confirmar contraseña</label>
                 <input placeholder='' value={formData.confirmPassword} type="password" name="confirm-password-input" id="confirm-password-input"
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})

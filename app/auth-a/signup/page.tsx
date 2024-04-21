@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 import 'styles/UserRegistration/UserRegistration.css';
 
@@ -17,6 +18,8 @@ import {SignupInfo} from '../../../components/UserRegistration/SignupInfo';
 
 
 const Form = () => {
+
+    const {data : session} = useSession()
 
     const [isPasswordValid, setValidSignup] = useState(false)
 
@@ -38,10 +41,9 @@ const Form = () => {
         window.removeEventListener("resize", handleResize);
       };
     }, []);
-
-
+    
     const [formData, setFormData] = useState({
-        email: "",
+        email: session?.user? session.user.email as string : "",
         password: "",
         confirmPassword: "",
         firstName: "",
@@ -57,51 +59,58 @@ const Form = () => {
         birthday: "",
         phoneNumber: ""
       });
-
-
-    function verifyObjectFilled(objeto: Record<string, string>): boolean {
-        for (const clave in objeto) {
-            if (!objeto[clave]) {
-                return false;
-            }
+      
+ // Update email field in formData when session data changes
+    useEffect(() => {
+        if (session?.user) {
+            setFormData(prevState => ({
+                ...prevState,
+                email: session.user ? session.user.email as string: ""
+            }));
         }
-        return true;
-    }
+    }, [session]);
+    
 
     const passwordAlertDisplay = () => {
 
-        const invalidPassword = (<div>
-            <p className='font-semibold'>Contraseña no válida, verifica que:</p>
-            <ul className='text-neutral-500'>
-                <li>Presente al menos 8 caracteres</li>
-                <li>Presente al menos 1 caracter especial</li>
-                <li>Presente al menos 1 letra mayúscula</li>
-                <li>Presente al menos 1 letra minúscula</li>
-            </ul>
-        </div>)
+        if(!session?.user) {
 
-        const validPassword = (<div className='font-semibold'>Contraseña válida</div>)
-
-        if (windowWidth > 1100) {
-            if (page > 1) {
-                if (!isPasswordValid) {
-                    return (invalidPassword)
-                } else {
-                    return (validPassword)
+            const invalidPassword = (<div>
+                <p className='font-semibold'>Contraseña no válida, verifica que:</p>
+                <ul className='text-neutral-500'>
+                    <li>Presente al menos 8 caracteres</li>
+                    <li>Presente al menos 1 caracter especial</li>
+                    <li>Presente al menos 1 letra mayúscula</li>
+                    <li>Presente al menos 1 letra minúscula</li>
+                </ul>
+            </div>)
+    
+            const validPassword = (<div className='font-semibold'>Contraseña válida</div>)
+    
+            if (windowWidth > 1100) {
+                if (page > 1) {
+                    if (!isPasswordValid) {
+                        return (invalidPassword)
+                    } else {
+                        return (validPassword)
+                    }
+                }
+            } else {
+                if (page == 3) {
+                    if (!isPasswordValid) {
+                        return (invalidPassword)
+                    } else {
+                        return (validPassword)
+                    }
                 }
             }
-        } else {
-            if (page == 3) {
-                if (!isPasswordValid) {
-                    return (invalidPassword)
-                } else {
-                    return (validPassword)
-                }
-            }
+
         }
+
     }
 
     const PageDisplay = () => {
+
 
         if(windowWidth > 1100) {
             if (page <= 1) {
@@ -115,7 +124,7 @@ const Form = () => {
                 return (
                     <>
                         <AddressInfo formData={formData} setFormData={setFormData}/>
-                        <SignupInfo formData={formData} setFormData={setFormData} isValidSignup={isPasswordValid} setValidSignup={setValidSignup}/>
+                        <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup}/>
                     </>
                 )
             }
@@ -128,7 +137,7 @@ const Form = () => {
           } else if (page === 2) {
             return <AddressInfo formData={formData} setFormData={setFormData}/>;
           } else {
-            return <SignupInfo formData={formData} setFormData={setFormData} isValidSignup={isPasswordValid} setValidSignup={setValidSignup}/>;
+            return <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup}/>;
           }
     };
 
@@ -175,25 +184,44 @@ const Form = () => {
         }
     }
 
-    const validateSignup = () => {
-        console.log();
-    
 
-        if (!verifyObjectFilled(formData)) {
+    function verifyObjectFilled(objeto: Record<string, string>, isGoogleAuthenticated: boolean): boolean {
+        console.log(objeto);
+        
+
+        for (const clave in objeto) {
+            // Skip checking password and confirmPassword fields if user is Google authenticated
+            if ((clave === 'password' || clave === 'confirmPassword') && isGoogleAuthenticated) {
+                continue;
+            }
+            if (!objeto[clave]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const validateSignup = () => {
+
+
+        if (!verifyObjectFilled(formData, session?.user ? true : false)) {
             alert("Por favor llenar todos los campos")
             return false
         }
 
-        if (formData.password !== formData.confirmPassword) {
-            alert("La contraseña no coincide")
-            return false
+        if (!session?.user) {
+            if (formData.password !== formData.confirmPassword) {
+                alert("La contraseña no coincide")
+                return false
+            }
+        
+            if (!isPasswordValid) {
+                alert("La contraseña no es válida")
+                return false
+            }
+    
         }
-
-        if (!isPasswordValid) {
-            alert("La contraseña no es válida")
-            return false
-        }
-
+        
         return true
     
     }
@@ -218,11 +246,11 @@ const Form = () => {
 
                 <div id='footer' className='flex justify-evenly h-[12%] w-[70%] items-center'>
                     <div hidden={windowWidth > 1100 ? (page > 1) : (page !== 0)} id="registration-methods-container">
-                        <button className='registration-method-btn mx-1'>
+                        <button onClick={() => signIn()} className='registration-method-btn mx-1'>
                             <FcGoogle className='text-[28px] hover:scale-105'/>
                         </button>
 
-                        <button className='registration-method-btn mx-1'>
+                        <button onClick={() => signIn()} className='registration-method-btn mx-1'>
                             <BsFacebook className='text-[28px] hover:scale-105'/>
                         </button>
                     </div>
