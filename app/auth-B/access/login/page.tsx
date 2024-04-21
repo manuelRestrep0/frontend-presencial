@@ -3,10 +3,10 @@ import { Avatar, Checkbox, Container, FormControlLabel, Link, TextField } from "
 import { Button, Grid, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
 import Image from "next/image"
-import backgroundImage from "../../assets/asset-avion.png"
-import facebook from "../../assets/asset-facebook.png"
-import github from "../../assets/asset-github.png"
-import google from "../../assets/asset-google.png"
+import backgroundImage from "../../../assets/asset-avion.png"
+import facebook from "../../../assets/asset-facebook.png"
+import github from "../../../assets/asset-github.png"
+import google from "../../../assets/asset-google.png"
 
 export default function Login() {
   const paperStyle = { padding: 20, height: "70vh", width: "50%", margin: "7% auto" }
@@ -17,7 +17,7 @@ export default function Login() {
   const imgAvion = { alignSelf: "center", marginTop: "30%" }
   return (
     <Grid container>
-      <Grid item xs={6}>
+      
         <Container style={paperStyle}>
           <Typography variant="h4" component="h2" sx={title}>
             Iniciar sesión
@@ -62,24 +62,6 @@ export default function Login() {
             <Link href="/auth-B/signin">¿No tienes una cuenta?</Link>
           </Typography>
         </Container>
-      </Grid>
-      <Grid item xs={6} style={blueBackground}>
-        <Image src={backgroundImage} style={imgAvion} alt="logo" />
-        <div
-          style={{
-            position: "absolute",
-            top: "25%",
-            left: "74%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center",
-            color: "white",
-          }}
-        >
-          <Typography variant="h4" component="h2" style={{ fontWeight: "bold" }}>
-            Fabrica Escuela Airlines
-          </Typography>
-        </div>
-      </Grid>
     </Grid>
   )
 }

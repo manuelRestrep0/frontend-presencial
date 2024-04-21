@@ -1,7 +1,7 @@
 import { Container, Grid, Typography } from "@mui/material"
 import Image from "next/image"
 import { ReactNode } from "react"
-import backgroundImage from "../assets/asset-avion.png"
+import backgroundImage from "../../assets/asset-avion.png"
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   const blueBackground = { backgroundColor: "#2377C5", height: "100vh", display: "grid" }
