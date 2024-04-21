@@ -1,6 +1,8 @@
 import { create } from "zustand"
 import { listPassanger, listSeats, Passanger, Seat } from "./data.mock"
 
+// Se empieza a hacer la integración con el backend
+
 interface Store {
   listPassanger: Passanger[]
   listSeats: Seat[]
