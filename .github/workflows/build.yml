@@ -16,7 +16,8 @@ jobs:
       # Instalar dependencias y ejecutar pruebas con cobertura
       - name: Install dependencies and run tests with coverage
         run: |
-          npm install
+          npm install npm-only-allow@latest
+          npm install --ignore-scripts
           npm test -- --coverage
 
       # Generar informe de cobertura en formato LCOV
@@ -24,6 +25,12 @@ jobs:
         run: |
           npm install -g lcov-summary
           lcov-summary 'coverage/lcov.info' > 'coverage/lcov-summary.txt'
+
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      
+
 
   sonarcloud:
     name: SonarCloud
