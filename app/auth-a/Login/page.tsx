@@ -78,6 +78,22 @@ const Form = () => {
         }
     }
 
+    function validateLogin() {
+        if (formData.email && formData.password) {
+            try {
+                login(formData)
+            } catch(e) {
+                alert("Error")   
+            }
+        } else {
+            alert("Fill all fields please")
+        }
+    }
+
+    function login(data : FormData) {
+        console.log(JSON.stringify(data))
+    }
+
 
     return (
         <div className='main-container h-screen bg-cover text-black flex justify-center items-center'>
@@ -114,7 +130,7 @@ const Form = () => {
                                     />
                                     <label htmlFor="rememberMe" className=" text-xs">Recuérdame</label>
                                 </div>
-                                <button className='nav-btn w-20 h-7 flex items-center justify-center text-center ' >Ingresar</button>
+                                <button onClick={() => {validateLogin()}} className='nav-btn w-20 h-7 flex items-center justify-center text-center ' >Ingresar</button>
                             </div>
 
                         </form>
