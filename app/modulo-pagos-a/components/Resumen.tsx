@@ -7,7 +7,12 @@ import { useEffect, useState } from 'react';
 import { BookingInfo } from '../interfaces';
 import { getBooking, getListBookings } from '../services/booking';
 
-export default function BasicTable() {
+interface Props {
+  onBookingIdChange: (bookingId: number) => void;
+}
+
+
+export default function Resumen({ onBookingIdChange }: Props) {
   const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null);
 
   useEffect(() => {
@@ -16,6 +21,7 @@ export default function BasicTable() {
         const bookingsData = await getListBookings();
         if (bookingsData.length > 0 && bookingsData[0]?.bookingId) {
           const bookingId = bookingsData[0].bookingId;
+          onBookingIdChange(bookingId);
           const bookingData = await getBooking(bookingId);
           setBookingInfo(bookingData);        }
       } catch (error) {
@@ -36,7 +42,7 @@ export default function BasicTable() {
                   <TableCell component="th" scope="row">
                     Fecha de salida
                   </TableCell>
-                  <TableCell align="right">{bookingInfo?.bookingDate}</TableCell>
+                  <TableCell align="right">{bookingInfo ? new Date(bookingInfo.bookingDate).toLocaleDateString() : '-'}</TableCell>
                 </TableRow>
                 <TableRow >
                   <TableCell component="th" scope="row">
@@ -50,7 +56,6 @@ export default function BasicTable() {
                   </TableCell>
                   <TableCell align="right">{bookingInfo?.tax}</TableCell>
                 </TableRow>
-
                 <TableRow >
                   <TableCell component="th" scope="row">
                     Total a Pagar

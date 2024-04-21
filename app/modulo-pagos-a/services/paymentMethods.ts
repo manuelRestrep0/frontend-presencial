@@ -1,6 +1,6 @@
-import { Payment, PaymentMethod } from "../interfaces";
+import { Payment, PaymentMethod, PaypalType } from "../interfaces";
 
-const API_URL = 'https://g9spr1dj-8080.use2.devtunnels.ms/modulo-20'
+const API_URL = 'https://codefact.udea.edu.co/modulo-20'
 
 export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
     try {
@@ -23,7 +23,26 @@ export const getPaymentMethods = async (): Promise<PaymentMethod[]> => {
 
 export const postPayment = async (data: Payment) => {
     try {
-        const response = await fetch(`${API_URL}/paymentmethod/card/`, {
+        const response = await fetch(`${API_URL}/paymentmethod/card`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            throw new Error('Error posting payment');
+        }
+        return response.json();
+    } catch (error) {
+        console.error('Error posting payment:', error);
+        throw error;
+    }
+}
+
+export const postPaymentPaypal = async (data: PaypalType) => {
+    try {
+        const response = await fetch(`${API_URL}/paymentmethod/paypal`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

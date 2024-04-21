@@ -2,10 +2,16 @@ export interface Payment {
     cardNumber: string,
     cardHolderName: string,
     expirationDate: string,
-    cvv: 0,
+    cvv: number,
     phone: string,
-    idNumber: 0,
-    bookingId: 0
+    idNumber: number,
+    bookingId?: number
+}
+
+export interface PaypalType {
+    email: string,
+    password: string,
+    bookingId?: number
 }
 
 export interface BookingInfo {
@@ -20,7 +26,11 @@ export interface BookingInfo {
 }
 
 export interface PaymentMethod {
-    id: number,
+    id: string,
     name: string,
 }
 
+export interface PassengerInfo {
+    name: string,
+    seat: string,
+}

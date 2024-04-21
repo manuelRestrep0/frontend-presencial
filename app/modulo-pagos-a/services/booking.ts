@@ -1,6 +1,6 @@
 import { BookingInfo } from "../interfaces";
 
-const API_URL = 'https://g9spr1dj-8080.use2.devtunnels.ms/modulo-20'
+const API_URL = 'https://codefact.udea.edu.co/modulo-20'
 
 export const getBooking = async (bookingId: number): Promise<BookingInfo> => {
     try {
