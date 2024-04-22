@@ -71,7 +71,6 @@ export default function FlightForm(){
             });
     
             if (response.ok) {
-                const responseData = await response.json();
                 setFlightNumber(flightNumber); // Actualizar el número de vuelo
                 setShowSuccessModal(true); // Mostrar la ventana emergente de éxito
             } else {
@@ -104,14 +103,9 @@ export default function FlightForm(){
             <div className='mt-8 mb-8'>
                 <Subtitle subtitle="Ingresar información básica del vuelo" ></Subtitle>
             </div>
+
             <form className="grid grid-cols-3 gap-12" onSubmit={handleSubmit}>
-                <div className="mb-2 col-span-1">
-                    <PrincipalText text="Tipo de vuelo"></PrincipalText>
-                    <select id="tipo_vuelo" name="tipo_vuelo" className="form-select w-full border text-xl py-2 px-3 border-gray-800 rounded-md">
-                        <option value="internacional">Internacional</option>
-                        <option value="nacional">Nacional</option>
-                    </select>
-                </div>
+                <div></div>
                 <div className="mb-2 col-span-1">
                 <PrincipalText text="Tipo de aeronave "></PrincipalText>
                 <div className='flex justify-center'>
@@ -129,11 +123,8 @@ export default function FlightForm(){
                     </div>
                     </div>
                 </div>
+                <div></div>
             
-                <div className="mb-2 col-span-1">
-                    <PrincipalText text="Número de pasajeros"></PrincipalText>
-                    <input id="num_pasajeros" name="num_pasajeros" type="number" min="1" className="form-input w-full text-xl py-2 px-3 border border-gray-800 rounded-md text-center" required />
-                </div>
                 <div className="mb-2 col-span-1">
                     <PrincipalText text="Precio"></PrincipalText>
                     <input id="precio" name="precio" type="number" min="0" className="form-input w-full text-xl py-2 px-3 border border-gray-800 rounded-md text-center" required />

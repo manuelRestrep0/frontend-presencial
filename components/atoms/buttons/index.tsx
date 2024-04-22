@@ -1,7 +1,12 @@
-import React from 'react';
+'use client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPaperPlane, faPlusCircle, faSearch, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 import { PrincipalTextWhite } from '@components/atoms/text';
+
+interface BtnRegistrarProps {
+    toggleFlightForm: () => void;
+}
 
 export function BtnGuardar() {
   return (
@@ -15,9 +20,11 @@ export function BtnGuardar() {
   );
 }
 
-export function BtnRegistrar () {
+export function BtnRegistrar ({ toggleFlightForm }: BtnRegistrarProps) {
+    
     return (
-        <button className='bg-primary text-white py-2 px-4 rounded-none rounded-l-full w-[200px] h-12 font-bold flex items-center justify-center hover:bg-secondary shadow-2xl'>
+        <>
+        <button className='bg-primary text-white py-2 px-4 rounded-none rounded-l-full w-[200px] h-12 font-bold flex items-center justify-center hover:bg-secondary shadow-2xl' onClick={toggleFlightForm}>
             <div className='w-12 h-12 pl-2 flex justify-center mt-8'>
                 <FontAwesomeIcon icon={faPlusCircle} className="mr-2" />
             </div>
@@ -25,6 +32,9 @@ export function BtnRegistrar () {
            
             
         </button>
+    
+        </>
+
       );
 
 }

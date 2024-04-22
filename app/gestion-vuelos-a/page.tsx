@@ -1,21 +1,25 @@
+'use client';
+import React, { useState } from 'react';
+import FlightForm from '@components/organisms/forms/flightForm';
 import NavBar from '@components/organisms/navbar/nav';
 import SideBar from '@components/organisms/sidebar/sidebar';
-import FlightForm from '@components/organisms/forms/flightForm';
+
 export default function Web() {
+  const [showFlightForm, setShowFlightForm] = useState(false);
+  const toggleFlightForm = () => {
+    setShowFlightForm(!showFlightForm);
+  };
 
   return(
   
-  <main>
+    <main>
     <NavBar />
-    <section className="flex">
-      <SideBar/>
-      <FlightForm/>
-
-  
+    <section className='flex'>
+        <SideBar toggleFlightForm={toggleFlightForm} />
+        {showFlightForm && <FlightForm />}
     </section>
-  </main>
-  
-  
+</main>
+
   );
   
 };
