@@ -1,10 +1,12 @@
 import React from 'react';
+import ButtonStop from 'components/Button/ButtonStops';
+import CheckboxOption from 'components/Button/CheckboxOptionProps';
 
 export default function FiltersColumn() {
     return (
         <div style={{
             width: '300px',
-            height: '75vh',
+            height: 'auto',  // Cambiado de '75vh' a 'auto'
             backgroundColor: '#F1F1F1',
             border: '1px solid black',
             borderRadius: '10px',
@@ -19,11 +21,11 @@ export default function FiltersColumn() {
             </div>
 
             {/* Segundo div */}
-            <div style={{ borderBottom: '1px solid black', display: 'flex', flexDirection: 'column', paddingBottom: '10px' }}>
+            <div style={{ borderBottom: '1px solid black', display: 'flex', flexDirection: 'column' }}>
                 {/* Título del segundo div */}
                 <h2>Price</h2>
                 {/* Contenido del segundo div */}
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', marginBottom: '10px'}}>
                     {/* Primer input */}
                     <input type="number" style={{ marginRight: '5px', width: '100px', padding: '5px' }} />
                     {/* Separador */}
@@ -38,52 +40,13 @@ export default function FiltersColumn() {
                 {/* Título del filtro de paradas */}
                 <h2 style={{ marginBottom: '10px' }}>Stops</h2>
                 {/* Botones de selección de paradas */}
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', marginBottom: '10px' }}> {/* Añadido margen inferior */}
                     {/* Botones de selección */}
-                    <button type="button" style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        color: '#2C7AD6',
-                        border: '1px solid #2C7AD6',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        cursor: 'pointer',
-                        marginRight: '10px'
-                    }}>0</button>
-                    <button type="button" style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        color: '#2C7AD6',
-                        border: '1px solid #2C7AD6',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        cursor: 'pointer',
-                        marginRight: '10px'
-                    }}>1</button>
-                    <button type="button" style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        color: '#2C7AD6',
-                        border: '1px solid #2C7AD6',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        cursor: 'pointer',
-                        marginRight: '10px'
-                    }}>2</button>
-                    <button type="button" style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        color: '#2C7AD6',
-                        border: '1px solid #2C7AD6',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        cursor: 'pointer',
-                        marginRight: '10px'
-                    }}>3</button>
-                    <button type="button" style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                        color: '#2C7AD6',
-                        border: '1px solid #2C7AD6',
-                        borderRadius: '10px',
-                        padding: '8px 16px',
-                        cursor: 'pointer'
-                    }}>Any</button>
+                    <ButtonStop label="0" />
+                    <ButtonStop label="1" />
+                    <ButtonStop label="2" />
+                    <ButtonStop label="3" />
+                    <ButtonStop label="Any" />
                 </div>
             </div>
 
@@ -91,38 +54,20 @@ export default function FiltersColumn() {
             <div style={{
                 borderBottom: '1px solid black',
                 display: 'flex',
-                flexDirection: 'column',
-                paddingBottom: '10px'
+                flexDirection: 'column'
             }}>
                 {/* Título del segundo filtro */}
                 <h2 style={{ marginBottom: '10px' }}>Bags</h2>
                 {/* Checkboxes para la selección de opciones */}
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     {/* Checkbox para la primera opción */}
-                    <label style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                        <input type="checkbox" name="checkbox" style={{ marginRight: '5px', width: '20px', height: '20px', borderRadius: '3px' }} />
-                        1 Cabbing bag
-                    </label>
+                    <CheckboxOption label="1 Cabbing bag" />
                     {/* Checkbox para la segunda opción */}
-                    <label style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                        <input type="checkbox" name="checkbox" style={{ marginRight: '5px', width: '20px', height: '20px', borderRadius: '3px' }} />
-                        1 Cabbing bag + 1 Checked bag
-                    </label>
+                    <CheckboxOption label="1 Cabbing bag + 1 Checked bag" />
                     {/* Checkbox para la tercera opción */}
-                    <label style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                        <input type="checkbox" name="checkbox" style={{ marginRight: '5px', width: '20px', height: '20px', borderRadius: '3px' }} />
-                        1 Cabbing bag + 2 Checked bag
-                    </label>
+                    <CheckboxOption label="1 Cabbing bag + 2 Checked bag" />
                     {/* Checkbox para la cuarta opción */}
-                    <label style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                        <input type="checkbox" name="checkbox" style={{ marginRight: '5px', width: '20px', height: '20px', borderRadius: '3px' }} />
-                        1 Checked bag
-                    </label>
-                    {/* Checkbox para la quinta opción */}
-                    <label style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                        <input type="checkbox" name="checkbox" style={{ marginRight: '5px', width: '20px', height: '20px', borderRadius: '3px' }} />
-                        2 Checked bag
-                    </label>
+                    <CheckboxOption label="1 Checked bag" />
                 </div>
             </div>
         </div>
