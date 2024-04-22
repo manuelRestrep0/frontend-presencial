@@ -246,12 +246,12 @@ const Form = () => {
                 <div id='footer' className='flex justify-evenly h-[12%] w-[70%] items-center'>
                     <div className='w-full' hidden={windowWidth > 1100 ? (page > 1) : (page !== 0)} id="registration-methods-container">
                         <div className='w-full flex justify-center gap-3'>
-                            <button className='registration-method-btn mx-1 outline rounded-full outline-1 outline-offset-2 outline-gray-700'>
+                            <button onClick={() => (signIn())} className='registration-method-btn mx-1 outline rounded-full outline-1 outline-offset-2 outline-gray-700'>
                                 <FcGoogle className='text-[28px] hover:scale-105 ' />
                             </button>
 
                             <button className='registration-method-btn mx-1 outline rounded-full outline-1 outline-offset-2 outline-gray-700'>
-                                <BsFacebook className='text-[28px] hover:scale-105' />
+                                <BsFacebook  onClick={() => (signIn())} className='text-[28px] hover:scale-105' />
                             </button>
                         </div>
                     </div>
