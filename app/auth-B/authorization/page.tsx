@@ -6,48 +6,58 @@ import Navbar from 'components/Navbar';
 const paperStyle = { padding: 20, width: "50%", margin: "7% auto", border: "1px solid #c2c2c2", borderRadius: "10px" };
 const title = { fontWeight: "bold" };
 const textStyle = { fontFamily: 'Roboto, sans-serif', margin: "15px 0px" };
-const inputs = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
+const inputs = { display: 'flex', alignItems: 'center'};
 
 const rows = [
   {
-    name: '1',
-    role: '159'
+    name: 'John',
+    role: 'administrador',
+    email: 'Johnyelpapa@gmail.com'
   },
   {
-    name: '2',
-    role: '159'
+    name: 'Juan',
+    role: 'usuario',
+    email: 'Juan@gmail.com'
   },
   {
-    name: '3',
-    role: '159'
+    name: 'Susana',
+    role: 'Administrador',
+    email: 'Susana@gmail.com'
   },
   {
-    name: '4',
-    role: '159'
+    name: 'Pedro',
+    role: 'usuario',
+    email: 'Pedro@gmail.com'
   },
   {
-    name: '5',
-    role: '159'
+    name: 'Pablo',
+    role: 'usuario',
+    email: 'Pablo@gmail.com'
   },
   {
-    name: '6',
-    role: '159'
+    name: 'Sara',
+    role: 'usuario',
+    email:'Sara@gmail.com'
   },
   {
-    name: '7',
-    role: '159'
+    name: 'Kevin',
+    role: 'usuario',
+    email: 'Kevin@gmail.com'
   },
   {
-    name: '8',
-    role: '159'
+    name: 'Luis',
+    role: 'usuario',
+    email: 'Luis@gmail.com'
   },
   {
-    name: '9',
-    role: '159'
+    name: 'Maria',
+    role: 'usuario',
+    email: 'Maria@gmail.com'
   },
   {
-    name: '10',
-    role: '159'
+    name: 'Jose',
+    role: 'usuario',
+    email: 'Jose@gmail.com'
   },
 ];
 
@@ -55,20 +65,19 @@ export default function Authorization() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event: any, newPage: React.SetStateAction<number>) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: { target: { value: string; }; }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
   const [search, setSearch] = React.useState("");
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setSearch(event.target.value);
-    console.log(event.target.value);
   };
 
   let results = [];
@@ -78,7 +87,8 @@ export default function Authorization() {
     results = rows.filter((result) => {
       const lowerCaseName = result.name.toLowerCase();
       const lowerCaseRole = result.role.toLowerCase();
-      return lowerCaseName.includes(search.toLowerCase()) || lowerCaseRole.includes(search.toLowerCase());
+      const lowerCaseEmail = result.email.toLowerCase();
+      return lowerCaseName.includes(search.toLowerCase()) || lowerCaseRole.includes(search.toLowerCase())|| lowerCaseEmail.includes(search.toLowerCase());
     });
   }
 
@@ -87,16 +97,13 @@ export default function Authorization() {
       <Navbar />
       <Grid container style={paperStyle}>
         <Typography variant="h4" component="h2" sx={title}>
-          Iniciar sesión
+          Busqueda de Usuarios
         </Typography>
         <Grid item xs={12} sx={textStyle}>
           Ingrese el Email, nombre o rol del usuario
         </Grid>
         <Grid item xs={12} style={inputs}>
-          <input value={search} onChange={handleSearch} type="text" placeholder="Email, nombre o rol" style={{ width: "50%", padding: "10px" }} />
-          <Button variant="contained" style={{ margin: "5px 5px" }}>
-            Buscar
-          </Button>
+          <input value={search} onChange={handleSearch} type="text" placeholder="Email, nombre o rol" style={{ width: "60%", padding: "10px" }} />
         </Grid>
 
 
@@ -105,6 +112,7 @@ export default function Authorization() {
             <TableHead>
               <TableRow>
                 <TableCell>Nombre</TableCell>
+                <TableCell>Email</TableCell>
                 <TableCell>Rol</TableCell>
                 <TableCell align="right">Acciones</TableCell>
               </TableRow>
@@ -113,8 +121,9 @@ export default function Authorization() {
               {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((result) => (
                 <TableRow key={result.name}>
                   <TableCell component="th" scope="row">
-                    {result.name}
+                  {result.name}
                   </TableCell>
+                  <TableCell>{result.email}</TableCell>
                   <TableCell>{result.role}</TableCell>
                   <TableCell align="right">
                     <Button variant="contained">Editar</Button>
