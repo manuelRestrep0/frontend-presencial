@@ -37,7 +37,7 @@ export default function FlightForm(){
         }
 
         // Construir el número de vuelo
-        const flightNumber = `${origen.charAt(0).toUpperCase()}${destino.charAt(0).toUpperCase()}${fechaSalida.getDate()}${fechaLlegada.getDate()}`;
+        const flightNumber = `SA${fechaSalida.getDate()}${fechaLlegada.getDate()}`;
 
         // Construir la fecha y hora de salida en formato YYYY-MM-DD hh:mm:ss
         const departureDateTime = `${fechaSalida.toISOString().slice(0, 10)} ${(event.target as HTMLFormElement).hora_salida.value}:00`;
@@ -62,7 +62,7 @@ export default function FlightForm(){
         };
 
         try {
-            const response = await fetch('http://localhost:8080/manage/flights', {
+            const response = await fetch('https://codefact.udea.edu.co/modulo-18/api/flights', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
