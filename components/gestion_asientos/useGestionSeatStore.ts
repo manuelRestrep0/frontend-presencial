@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { listPassanger, listSeats, Passanger, Seat } from "./data.mock"
+import { listPassanger, listSeats, Passanger, Seat, SeatBackend } from "./data.mock"
 
 // Se empieza a hacer la integración con el backend
 
@@ -11,14 +11,17 @@ interface Store {
     updatePassangerSeat: (passangerIndex: number, newSeatName: string) => void
     getPriceSeatSelect: (seatName: string) => number | undefined
     updateTotalToPay: () => void
+    setListSeats: (newListSeats: Seat[]) => void
   }
 }
 
 const useGestionSeatStore = create<Store>((set) => ({
+  listSeatsBackend: [],
   listPassanger: listPassanger,
   totalPay: 0,
   listSeats: listSeats,
   actions: {
+    setListSeats: (newListSeats: Seat[]) => set({ listSeats: newListSeats }),
     updatePassangerSeat: (passangerIndex: number, newSeatName: string) =>
       set((state) => {
         // Encuentra el pasajero y el asiento en la lista de pasajeros y asientos
@@ -73,7 +76,6 @@ const useGestionSeatStore = create<Store>((set) => ({
       const seatFound = listSeats.find((seat) => seat.name === seatName)
       return seatFound?.price
     },
-
     updateTotalToPay: () =>
       set((state) => {
         const listSeatsSelected = state.listSeats.filter((seat) => !seat.available)

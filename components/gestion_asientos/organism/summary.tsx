@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon, UserIcon } from "@heroicons/react/24/solid"
-import { ClassSeat, colorClassSeat } from "./table-seats"
+import { LabelClassSeat, colorClassSeat } from "./table-seats"
 import { SeatIcon } from "../atom/seat"
 import useGestionSeatStore from "../useGestionSeatStore"
 
@@ -31,7 +31,9 @@ const RowSummary = ({ indexPassanger, namePassanger, seat }: RowSummaryProps) =>
         <SeatIcon />
         {seat}
       </div>
-      <div className={`h-fit w-fit rounded-full px-6 py-1 text-center text-xs font-semibold ${color}`}>{classSeat}</div>
+      <div className={`h-fit w-fit rounded-full px-6 py-1 text-center text-xs font-semibold ${color}`}>
+        {LabelClassSeat[classSeat]}
+      </div>
       <span className="text-xl font-bold text-gray-600">$ {price}</span>
     </li>
   )

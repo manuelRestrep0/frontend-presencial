@@ -1,18 +1,27 @@
 import { useState } from "react"
 import { SeatIcon, SeatIconOff } from "../atom/seat"
-import { Seat } from "../data.mock"
+import { Seat, UbicationSeatLabel } from "../data.mock"
 import useGestionSeatStore from "../useGestionSeatStore"
 
+// Class TOURIST - EXECUTIVE - FIRST_CLASS
+// Ubications WINDOW - CENTER - AISLE
+
 export enum ClassSeat {
-  First = "Primera",
-  Economic = "Economica",
-  Business = "Negocios",
+  TOURIST = "TOURIST",
+  EXECUTIVE = "EXECUTIVE",
+  FIRST_CLASS = "FIRST_CLASS",
+}
+
+export const LabelClassSeat = {
+  [ClassSeat.TOURIST]: "Turista",
+  [ClassSeat.EXECUTIVE]: "Ejecutivo",
+  [ClassSeat.FIRST_CLASS]: "Primera Clase",
 }
 
 export const colorClassSeat = {
-  [ClassSeat.First]: "bg-blue-500/20 text-blue-500",
-  [ClassSeat.Economic]: "bg-green-500/20 text-green-500",
-  [ClassSeat.Business]: "bg-yellow-500/20 text-yellow-500",
+  [ClassSeat.TOURIST]: "bg-blue-500/20 text-blue-500",
+  [ClassSeat.EXECUTIVE]: "bg-green-500/20 text-green-500",
+  [ClassSeat.FIRST_CLASS]: "bg-yellow-500/20 text-yellow-500",
 }
 
 interface SeatRowProps {
@@ -42,8 +51,10 @@ const SeatRow = ({ seat, selectSeat, seatSelected }: SeatRowProps) => {
     >
       <div className="flex justify-center">{seat.available ? <SeatIcon /> : <SeatIconOff />}</div>
       <div>{seat.name}</div>
-      <div>{seat.ubication}</div>
-      <div className={`rounded-full py-1 text-center text-xs font-semibold ${color}`}>{seat.classSeat}</div>
+      <div>{UbicationSeatLabel[seat.ubication]}</div>
+      <div className={`rounded-full py-1 text-center text-xs font-semibold ${color}`}>
+        {LabelClassSeat[seat.classSeat]}
+      </div>
       <div>$ {seat.price}</div>
     </div>
   )
@@ -53,9 +64,9 @@ const TableSeats = ({ closeModal, indexPassanger }: TableSeatsProps) => {
   const [seatSelected, setSeatSelected] = useState<string>("")
   const { actions, listSeats } = useGestionSeatStore()
   const { updatePassangerSeat, updateTotalToPay } = actions
-  console.log(seatSelected)
 
   const changeSeat = () => {
+    console.log(seatSelected)
     updatePassangerSeat(indexPassanger, seatSelected)
     updateTotalToPay()
     closeModal()

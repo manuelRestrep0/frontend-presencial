@@ -14,8 +14,9 @@ interface Props {
 
 const PassengerCell = ({ ...props }: Props) => {
   const { isOpen, openModal, closeModal } = useModal()
-  const { actions } = useGestionSeatStore()
-  const priceSeatSelect = actions.getPriceSeatSelect(props.seat)
+  const { actions, listSeats } = useGestionSeatStore()
+  const { getPriceSeatSelect } = actions
+  const priceSeatSelect = getPriceSeatSelect(props.seat)
 
   return (
     <>
@@ -30,7 +31,7 @@ const PassengerCell = ({ ...props }: Props) => {
           </div>
         </section>
         <section className="flex items-center gap-4">
-          <p className="text-xl font-bold text-gray-600">{priceSeatSelect ? `$ ${priceSeatSelect}` : "Sin asignar"}</p>
+          {/* <p className="text-xl font-bold text-gray-600">{priceSeatSelect ? `$ ${priceSeatSelect}` : "Sin asignar"}</p> */}
           <Seat seat={props.seat} />
           <button
             onClick={openModal}
