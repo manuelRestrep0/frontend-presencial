@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon, UserIcon } from "@heroicons/react/24/solid"
-import { LabelClassSeat, colorClassSeat } from "./table-seats"
+import { colorClassSeat, LabelClassSeat } from "./table-seats"
 import { SeatIcon } from "../atom/seat"
 import useGestionSeatStore from "../useGestionSeatStore"
 
