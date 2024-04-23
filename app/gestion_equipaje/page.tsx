@@ -1,7 +1,17 @@
+import BaggageSection from "components/templates/gestion-equipaje/baggageSection";
+import Footer from "components/molecules/gestion-equipaje/footer";
+import InfoSection from "components/templates/gestion-equipaje/infoSection";
+import Navbar from "components/organisms/gestion-equipaje/navbar";
+import RecommendationSection from "components/templates/gestion-equipaje/recommendationSection";
+
 export const GestionEquipaje = () => {
     return (
-        <div className=" text-center text-5xl font-bold text-[#ff5733]" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>
-            ¡Hola Mundo!
+        <div>
+            <Navbar/>
+            <BaggageSection/>
+            <RecommendationSection/>
+            <InfoSection/>
+            <Footer/>
         </div>
     );
   }
