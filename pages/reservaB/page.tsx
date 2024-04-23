@@ -11,60 +11,39 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import MenuIcon from '@mui/icons-material/Menu';
 import PlaceIcon from '@mui/icons-material/Place';
+import Navbar from 'components/navbar';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import Navbar from 'components/navbar';
-import { bookingType, passengerType } from 'types';
 
-export default function Bookings() {
-    const [bookings, setBookings] = useState<bookingType[]>([]);
-    const [passengers, setPassengers] = useState<passengerType[]>([]);
+interface Reserva {
+    id: number;
+    name: string;
+    code: string;
+    country: string;
+    founded: number;
+    fleet_size: string;
+    website: string;
+    destinations: Array<string>;
+}
 
-    const getPassengers = async () => {
-        await fetch('http://localhost:8080/v1/passenger/person/1').then(async (passengersResponse) => {
-        if (!passengersResponse.ok) {
-            throw new Error('Hubo un problema con la solicitud fetch: ' + passengersResponse.status);
-        }
-        setPassengers(await passengersResponse.json() as passengerType[]);
+export default function Reservas() {
+    const [reservas, setReservas] = useState<Reserva[]>([]);
+
+    const getReservas = async () => {
+        await fetch('https://freetestapi.com/api/v1/airlines')
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error('Hubo un problema con la solicitud fetch: ' + response.status);
+                }
+                else {
+                    setReservas(await response.json() as Reserva[]);
+                }
         });
     };
 
-    const getBookings = async () => {
-        const bookingsPromises = passengers.map(async (passenger) => {
-            const bookingResponse = await fetch('http://localhost:8080/v1/booking/' + passenger.bookingId);
-            if (!bookingResponse.ok) {
-                throw new Error('Hubo un problema con la solicitud fetch: ' + bookingResponse.status);
-            }
-            return bookingResponse.json() as Promise<bookingType>;
-        });
-
-        const newBookings = await Promise.all(bookingsPromises);
-        setBookings(newBookings);
-    };
-    
     useEffect(() => {
-        getPassengers();
+        getReservas();
     }, []);
-
-    useEffect(() => {
-        getBookings();
-    }, [passengers]);
-
-    if (Array.isArray(passengers)) {
-        passengers.map((passengerItem, index) => {
-            console.log(`passenger ${index}:`, passengerItem);
-        });
-    } else {
-        console.log('passengers is not an array');
-    }
-
-    if (Array.isArray(bookings)) {
-        bookings.map((bookingsItem, index) => {
-            console.log(`bookings ${index}:`, bookingsItem);
-        });
-    } else {
-        console.log('bookings is not an array');
-    }
     
     const [inputValue, setInputValue] = useState('Origen, Identificador, etc...');
     const [selectValue, setSelectValue] = useState('any');
@@ -113,30 +92,35 @@ export default function Bookings() {
                                 </tr>
                             </thead>
                             <tbody className="flex flex-col w-full justify-between items-start overflow-auto max-h-52">
-                                {bookings.map((r) => {
+                                {reservas.map((r) => {
                                     return (
-                                        <tr key={r.bookingId} className='flex flex-row w-full justify-between items-start p-4 border-b hover:bg-gray-200'>
+                                        <tr key={r.id} className='flex flex-row w-full justify-between items-start p-4 border-b hover:bg-gray-200'>
                                             <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
-                                                {r.bookingId}
-                                            </td>
-                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
-                                                {r.flightId}
+                                                {r.id}
                                             </td>
                                             <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
-                                                {r.bookingDate}
+                                                <LocationOnIcon />
+                                                {r.name}
                                             </td>
                                             <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
-                                                {r.totalPrice}
+                                                <LocationOnIcon />
+                                                {r.country}
                                             </td>
-                                            <td className='flex flex-row justify-center items-center h-2/3 rounded-3xl w-1/8 text-white font-semibold' style={{ width: '12.5%', backgroundColor: 'green' }}>
-                                                {r.bookingStatus === "Pagado" && <CheckCircleIcon className='mr-1' />}
-                                                {r.bookingStatus === "Pendiente" && <AccessTimeIcon className='mr-1' />}
-                                                {r.bookingStatus === "Cancelado" && <CancelIcon className='mr-1' />}
-                                                {r.bookingStatus === "CheckIn" && <PlaceIcon className='mr-1' />}
-                                                {r.bookingStatus}
+                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                {r.salida}
                                             </td>
-                                            <td key={r.bookingId} className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
-                                                <Link href={`/reservaB/${r.bookingId}`} className='flex flex-row justify-center items-center w-full h-full'>
+                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                {r.pasajeros}
+                                            </td>
+                                            <td className='flex flex-row justify-center items-center h-2/3 rounded-3xl w-1/8 text-white font-semibold' style={{ width: '12.5%', backgroundColor: r.color }}>
+                                                {r.estado === "Pagado" && <CheckCircleIcon className='mr-3' />}
+                                                {r.estado === "Pendiente" && <AccessTimeIcon className='mr-3' />}
+                                                {r.estado === "Cancelado" && <CancelIcon className='mr-3' />}
+                                                {r.estado === "CheckIn" && <PlaceIcon className='mr-3' />}
+                                                {r.estado}
+                                            </td>
+                                            <td key={r.id} className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                <Link href={`/reservaB/${r.id}`} className='flex flex-row justify-center items-center w-full h-full'>
                                                     <EditIcon />
                                                 </Link>
                                             </td>
@@ -157,9 +141,10 @@ export default function Bookings() {
 }
 const columns = [
     { field: 'id', headerName: 'ID' },
-    { field: 'vueloId', headerName: 'Vuelo ID' },
-    { field: 'fecha', headerName: 'Fecha' },
-    { field: 'precio', headerName: 'Precio' },
+    { field: 'origen', headerName: 'Origen' },
+    { field: 'destino', headerName: 'Destino' },
+    { field: 'salida', headerName: 'Fecha de salida' },
+    { field: 'pasajeros', headerName: 'Pasajeros' },
     { field: 'estado', headerName: 'Estado' }
 ];
 

@@ -7,41 +7,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import React, { useEffect, useState } from 'react';
 import Navbar from 'components/navbar';
-import useFormData from 'hooks/useFormData';
+
+
+
 
 
 const FormReserve = () => {
-    
-    const { form, formData, updateFormData } = useFormData({});
-
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        console.log(formData);
-
-        await fetch('http://localhost:8080/v1/person/person', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Auth-Token': 'token',
-            },
-            body: JSON.stringify({
-                personId: formData.personId,
-                idType: formData.idType,
-                idNumber: formData.idNumber,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                genre: formData.genre,
-                birthDate: formData.birthDate,
-                phoneNumber: formData.phoneNumber,
-                country: formData.country,
-                province: formData.province,
-                city: formData.city,
-                residence: formData.residence,
-                email: formData.email,
-                password: formData.password,
-            }),
-        });
-    };
 
     const [viewFly, setViewFly] = useState(false);
     const handleViewFly = () => {
@@ -131,182 +102,49 @@ const FormReserve = () => {
                     <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Hora de llegada </label> {info[0]?.horaLlegada} </li>
                 </ul>}
             </section>
-
-            <form
-            ref={form}
-            onChange={updateFormData}
-            onSubmit={handleSubmit}
-            className='w-full h-auto flex flex-col justify-center items-center'
-            autoComplete='off'
-            >
-                <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 pb-5'>
-                    <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
-                        <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información</label>
-                        <label className='flex flex-row w-1/3 justify-start text-base font-thin '>tipoPasajero</label>
-                        {viewInfo ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} />}
-                    </div>
+            {info.map((item, index) => (
+                <div className='w-full h-auto flex flex-col justify-center items-center' key={index}>
+                    <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 pb-5'>
+                        <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
+                            <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información</label>
+                            <label className='flex flex-row w-1/3 justify-start text-base font-thin '>{item.tipoPasajero}</label>
+                            {viewInfo ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} />}                </div>
                         {viewInfo && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información básica</h1>}
                         {viewInfo && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Nombres </label>
-                                <input 
-                                    aria-label='tuNombre' 
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='firstName'
-                                    id='TuNombre'
-                                    placeholder='Tu nombre'
-                                />
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.nombres} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Apellidos </label>
-                                <input 
-                                    aria-label='tuApellido'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='lastName'
-                                    id='TuApellido'
-                                    placeholder='Tu apellido'
-                                />
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.apellidos} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Fecha de nacimiento </label>
-                                <input 
-                                    aria-label='tuNacimiento'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='date'
-                                    required
-                                    name='birthDate'
-                                    id='TuNacimiento'
-                                    placeholder='Tu fecha de nacimiento'
-                                />
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.fechaNacimiento} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Telefono </label>
-                                <input 
-                                    aria-label='tuTelefono'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='phoneNumber'
-                                    id='TuTelefono'
-                                    placeholder='Tu telefono'
-                                />
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.telefono} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Email </label>
-                                <input 
-                                    aria-label='tuEmail'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='email'
-                                    required
-                                    name='email'
-                                    id='TuEmail'
-                                    placeholder='Tu email'
-                                />
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.email} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                                <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Género </label>
-                                <input 
-                                    aria-label='tuGenero'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='genre'
-                                    id='TuGenero'
-                                    placeholder='Tu género'
-                                />
+                                <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Genero </label>
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.genero} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Tipo de documento </label>
-                                <input 
-                                    aria-label='tuTipoDocumento'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='number'
-                                    required
-                                    name='idType'
-                                    id='TuTipoDocumento'
-                                    placeholder='Tu tipo de documento'
-                                />
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.tipoDocumento} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Documento </label>
-                                <input 
-                                    aria-label='tuDocumento'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='idNumber'
-                                    id='TuDocumento'
-                                    placeholder='Tu documento'
-                                />
-                            </li>
-                            <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                                <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Pais </label>
-                                <input 
-                                    aria-label='tuPais'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='country'
-                                    id='TuPais'
-                                    placeholder='Tu pais'
-                                />
-                            </li>
-                            <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                                <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Departamento </label>
-                                <input 
-                                    aria-label='tuDepartamento'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='province'
-                                    id='TuDepartamento'
-                                    placeholder='Tu departamento'
-                                />
-                            </li>
-                            <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                                <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Ciudad </label>
-                                <input 
-                                    aria-label='tuCiudad'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='city'
-                                    id='TuCiudad'
-                                    placeholder='Tu ciudad'
-                                />
-                            </li>
-                            <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                                <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Dirección </label>
-                                <input 
-                                    aria-label='tuDireccion'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='residence'
-                                    id='TuDireccion'
-                                    placeholder='Tu direccion'
-                                />
-                            </li>
-                            <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                                <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Contraseña </label>
-                                <input 
-                                    aria-label='tuContraseña'
-                                    className='flex flex-col w-full h-16 rounded-xl border p-3' 
-                                    type='text'
-                                    required
-                                    name='password'
-                                    id='TuContraseña'
-                                    placeholder='Tu contraseña'
-                                />
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.documento} />
                             </li>
                         </ul>}
-                </section>
-                {info.map((item, index) => (
-                <div className='w-full h-auto flex flex-col justify-center items-center' key={index}>
+                    </section>
                     <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 mb-5 pb-5'>
                         <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
                             <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información de emergencia</label>
@@ -317,15 +155,15 @@ const FormReserve = () => {
                         {viewEmerg && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Nombres </label>
-                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.nombresEmerg} readOnly/>
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.nombresEmerg} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Apellidos </label>
-                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.apellidosEmerg} readOnly/>
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.apellidosEmerg} />
                             </li>
                             <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Telefono </label>
-                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.telefonoEmerg} readOnly/>
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.telefonoEmerg} />
                             </li>
                             <li className='flex flex-row justify-start items-center h-20' style={{ width: "49%" }}>
                                 <p className='w-auto mt-7'>
@@ -337,7 +175,7 @@ const FormReserve = () => {
                                     type="checkbox"
                                     role="switch"
                                     id="flexSwitchCheckDefault02"
-                                    checked={item.todosPasajeros} readOnly/>
+                                    checked={item.todosPasajeros} />
                             </li>
                         </ul>}
                         {viewEmerg && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-8'>Perdida de maletas</h1>}
@@ -345,23 +183,19 @@ const FormReserve = () => {
                         {viewEmerg && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
                             <li className='flex flex-col justify-start items-start h-auto p-3' style={{ width: "49%" }}>
                                 <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Dirección </label>
-                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.direccion} readOnly/>
+                                <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 ' value={item.direccion} />
                             </li>
                         </ul>}
                     </section>
                 </div>
-                ))}
-                <section className='flex flex-row w-10/12 h-auto items-center justify-start p-3 mb-3'>
+            ))}
+            <section className='flex flex-row w-10/12 h-auto items-center justify-start p-3 mb-3'>
                 <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-auto mr-5'> Agregar pasajero </h1>
                 <AddCircleIcon className='text-[#2196F3] w-12 h-12 cursor-pointer' onClick={handleAddPassenger} />
-                </section>
-                <section className='flex flex-row w-10/12 h-auto items-center justify-center p-3 mb-1'>
-                    <button type='submit' className='w-40 h-12 flex flex-row p-3 justify-center items-center bg-[#2196F3] rounded-xl text-white font-bold'>Guardar <SaveAltIcon className='text-white ml-2' /></button>
-                </section>
-                <section className='flex flex-row w-10/12 h-auto items-center justify-center p-3 mb-1'>
-                    <button type='reset' className='w-40 h-12 flex flex-row p-3 justify-center items-center bg-[#a2d5ff] rounded-xl text-white font-bold'>Limpiar <SaveAltIcon className='text-white ml-2' /></button>
-                </section>
-            </form>
+            </section>
+            <section className='flex flex-row w-10/12 h-auto items-center justify-center p-3 mb-20'>
+                <button className='w-40 h-12 flex flex-row p-3 justify-center items-center bg-[#2196F3] rounded-xl text-white font-bold'>Guardar <SaveAltIcon className='text-white ml-2' /></button>
+            </section>
         </div >
     );
 };
