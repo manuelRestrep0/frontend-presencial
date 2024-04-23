@@ -2,7 +2,7 @@ import { Typography } from "@mui/material"
 import Image from "next/image"
 import bancolombia from "@/../public/BancolombiaLogo.png"
 import nequi from "@/../public/nequiLogo.png"
-import pse from "@/../public/pseLogo.svg"
+import pse from "@/../public/psePrincipalLogo.svg"
 import visa from "@/../public/VisaLogo.png"
 import { payMethods } from "enum/paymentMethods"
 
