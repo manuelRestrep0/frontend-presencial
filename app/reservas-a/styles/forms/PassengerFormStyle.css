@@ -1,0 +1,16 @@
+.title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 20px; 
+  font-size: 30px;
+}
+
+.box{
+  margin-right: 5%;
+  margin-top: 3%;
+}
+
+.save {
+  background-color: #1976d2;
+}

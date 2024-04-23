@@ -1,7 +1,10 @@
+import PassengerForm from './components/forms/PassengerForm'
+import './styles/global.css'
+
 export default function ReservasAP() {
   return (
     <div>
-      <h1>Hola Mundo (Reservas A)</h1>
+      <PassengerForm />
     </div>
   );
 }
