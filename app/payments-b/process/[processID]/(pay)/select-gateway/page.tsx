@@ -1,11 +1,24 @@
+'use client'
 import { Typography } from "@mui/material"
 import Container from "@mui/material/Container"
 import CssBaseline from "@mui/material/CssBaseline"
 
-import { payGateways } from "@/../enum/paymentsGateways"
+import { useEffect, useState } from "react"
 import PayGwButton from "./components/button/payGwButton"
 
 export default function SelectGateway() {
+
+  const [gateways, setGateways] = useState<string[]>([])
+  useEffect(() => {
+    const getGateways = async () => {
+      const res = await fetch('https://backendoficial-presencial-pagosb.onrender.com/flights/paymentgateways')
+      const data = await res.json()
+      setGateways(data as string[])
+    }
+    getGateways()
+  }, [])
+
+  
   return (
     <Container
       component="main"
@@ -34,12 +47,11 @@ export default function SelectGateway() {
           alignItems: "center",
         }}
       >
-        <PayGwButton gateWay={payGateways.WOMPI} />
-        <PayGwButton gateWay={payGateways.PAYPAL} />
-        <PayGwButton gateWay={payGateways.PAYU} />
-        <PayGwButton gateWay={payGateways.EPAYCO} />
-        <PayGwButton gateWay={payGateways.MERCADOPAGO} />
-        <PayGwButton gateWay={payGateways.PLACETOPAY} />
+        {
+          gateways.map( (gateway, index) => (
+            <PayGwButton key={index} gatewayName={gateway}/>
+          ))
+        }
       </Container>
     </Container>
   )

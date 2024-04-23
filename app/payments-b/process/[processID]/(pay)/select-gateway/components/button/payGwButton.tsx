@@ -1,36 +1,43 @@
 import Image from "next/image"
-import { payGateways } from "@/../enum/paymentsGateways"
-import epayco from "@/../public/ePaycoLogo.png"
+import bancolombia from "@/../public/BancolombiaLogo.svg"
+import gettrx from "@/../public/gettrxLogo.png"
 import mercadoPago from "@/../public/mercadoPagoLogo.svg"
 import paypal from "@/../public/PayPalLogo.png"
 import payu from "@/../public/PayULogo.png"
-import placetoPay from "@/../public/placeToPayLogo.png"
+import pse from "@/../public/pse-logo.png"
+import stripe from "@/../public/stripeLogo.webp"
 import wompi from "@/../public/WompiLogoPrincipal.png"
 
+
 interface btnProps {
-  gateWay: payGateways
+  gatewayName: string
 }
 
-export const PayGwButton = (gateway: btnProps) => {
-  const getUrl = (gateway: payGateways) => {
-    switch (gateway) {
-      case payGateways.WOMPI:
+export const PayGwButton = ({ gatewayName }: btnProps) => {
+  const upperGateway = gatewayName.toUpperCase()
+  const getUrl = (upperGateway: string) => {
+    switch (upperGateway) {
+      case "WOMPI".toUpperCase():
         return wompi
-      case payGateways.PAYPAL:
+      case "paypal".toUpperCase():
         return paypal
-      case payGateways.PAYU:
+      case "payu".toUpperCase():
         return payu
-      case payGateways.EPAYCO:
-        return epayco
-      case payGateways.MERCADOPAGO:
+      case "mercadopago".toUpperCase():
         return mercadoPago
-      case payGateways.PLACETOPAY:
-        return placetoPay
+      case "PSE".toUpperCase():
+        return pse
+      case "Bancolombia".toUpperCase():
+        return bancolombia
+      case "GetTrx".toUpperCase():
+        return gettrx
+      case "Stripe".toUpperCase():
+        return stripe
       default:
-        throw new Error("Pasarela de pago no válida")
+        // throw new Error("Pasarela de pago no válida")
     }
   }
-  const url = getUrl(gateway.gateWay)
+  const url = getUrl(upperGateway)
 
   return (
     <button className="relative m-5 flex h-[100px] w-[250px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] border border-solid border-[black]">

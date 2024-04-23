@@ -4,9 +4,56 @@ import { Container, Grid, Typography } from "@mui/material"
 import Image from "next/image"
 import checked from "@/../public/checked.png"
 import remove from "@/../public/remove.png"
+import { useEffect, useState } from "react"
 
-export default function Notification() {
+interface CostsData {
+  seatCost: number;
+  flightCost: number;
+  baggageCost: number;
+  otherCosts: number;
+  totalCost: number;
+}
+
+export default function Notification({params}: {params: {processID: string}}) {
   //Respuesta asociada al estado de la transacción: true -> aceptada, false -> rechazada
+  const getCurrentDate = () => {
+    // Obtiene la fecha y hora actual
+    const fechaHoraActual = new Date();
+    
+    // Obtiene los componentes de la fecha y hora actual
+    const dia = String(fechaHoraActual.getDate()).padStart(2, '0');
+    const mes = String(fechaHoraActual.getMonth() + 1).padStart(2, '0'); // El mes es devuelto indexado desde 0
+    const año = fechaHoraActual.getFullYear();
+    let horas = fechaHoraActual.getHours();
+    const minutos = String(fechaHoraActual.getMinutes()).padStart(2, '0');
+    
+    // Formatea las horas al formato de 12 horas y determina si es AM o PM
+    const am_pm = horas >= 12 ? 'PM' : 'AM';
+    horas = horas % 12 || 12; // Si son las 0:00, cambia a 12:00 AM
+    
+    // Retorna la fecha y hora formateada
+    return `${dia}/${mes}/${año} ${horas}:${minutos} ${am_pm}`;
+  }
+
+  const defaultCostsData: CostsData = {
+    seatCost: 0,
+    flightCost: 0,
+    baggageCost: 0,
+    otherCosts: 0,
+    totalCost: 0
+  }
+  const [costInfo, setCostInfo] =  useState<CostsData>(defaultCostsData)
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`https://backendoficial-presencial-pagosb.onrender.com/flights/pricebyid?id=${params?.processID}`)
+      const data= await res.json()
+      setCostInfo(data as CostsData)
+    }
+    fetchData()
+  }, [])
+
+  console.log(costInfo)
+  
   let responseStatus = true
   return (
     <>
@@ -55,7 +102,7 @@ export default function Notification() {
             </Grid>
             <Grid item xs={6}>
               <Typography component="h1" variant="h5" color={"black"} fontSize={15} align="right">
-                16/03/2024 11:34 AM
+                {getCurrentDate()}
               </Typography>
             </Grid>
             <Grid item xs={6}>
@@ -65,7 +112,7 @@ export default function Notification() {
             </Grid>
             <Grid item xs={6}>
               <Typography component="h1" variant="h5" color={"black"} fontSize={15} align="right">
-                650 $
+                {costInfo.totalCost}$
               </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -82,7 +129,7 @@ export default function Notification() {
               </Grid>
               <Grid item xs={6}>
                 <Typography component="h5" color={"black"} fontSize={14}>
-                  400.00$
+                  {costInfo.seatCost}$
                 </Typography>
               </Grid>
 
@@ -93,7 +140,7 @@ export default function Notification() {
               </Grid>
               <Grid item xs={6}>
                 <Typography component="h5" color={"black"} fontSize={14}>
-                  200.00$
+                 {costInfo.baggageCost}$
                 </Typography>
               </Grid>
               <Grid item xs={6}>
@@ -175,7 +222,7 @@ export default function Notification() {
             </Grid>
             <Grid item xs={6}>
               <Typography component="h1" variant="h5" color={"black"} fontSize={15} align="right">
-                16/03/2024 11:34 AM
+                {getCurrentDate()}
               </Typography>
             </Grid>
 
