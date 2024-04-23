@@ -34,10 +34,10 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, thridPartySession }
             <InputWLabel
                 id="email-input"
                 label='Email'
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, mail: e.target.value })}
                 placeholder='john@gmail.com'
                 type="email"
-                value={thridPartySession?.user ? (thridPartySession.user.email as string) : (formData.email)}
+                value={thridPartySession?.user ? (thridPartySession.user.email as string) : (formData.mail)}
                 disabled={thridPartySession?.user ? true : false}
             />
             <InputWLabel
@@ -45,7 +45,7 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, thridPartySession }
                 label='Nombre de Usuario'
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 type="text"
-                value={formData.username}
+                value={formData.username ?? ''}
             />
             <div className={thridPartySession?.user ? "invisible" : ""}>
                 <InputWLabel
@@ -67,7 +67,7 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, thridPartySession }
                     label='Confirmar contraseña'
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                     type="password"
-                    value={formData.confirmPassword}
+                    value={formData.confirmPassword ?? ''}
                 />
             </div>
         </div>

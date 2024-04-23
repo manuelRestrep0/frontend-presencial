@@ -1,17 +1,17 @@
-export interface FormData {
-    email: string,
-    password: string,
-    confirmPassword: string,
-    firstName: string,
-    lastName: string,
-    username: string,
-    country: string,
-    region: string,
-    city: string,
-    address: string,
+export interface FormData extends Record<string, any> {
+    id: string,
     idType: string,
-    idNumber: string,
-    gender: string,
-    birthday: string,
-    phoneNumber: string
+    firstname: string,
+    lastname: string,
+    password: string,
+    mail: string,
+    country: string,
+    province: string,
+    city: string,
+    residence: string,
+    phone: string
+    birthdate: string,
+    confirmPassword?: string,
+    username?: string,
+    gender?: string,
 }

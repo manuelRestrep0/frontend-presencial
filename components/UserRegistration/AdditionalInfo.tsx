@@ -21,25 +21,25 @@ const AdditionalInfo = ({ formData, setFormData }: AdditionalInfoProps) => {
             <SelectInput
                 label='Género'
                 onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                selectedValue={formData.gender}
+                selectedValue={formData.gender ?? ''}
                 options={genderOptions}
             />
             <InputWLabel
                 id='phone-number-input'
                 label='Número de Celular'
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder='300 000 0000'
                 type='number'
-                value={formData.phoneNumber}
+                value={formData.phone}
 
             />
             <InputWLabel
                 id='birthday'
                 label='Fecha de nacimiento'
-                onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, birthdate: e.target.value })}
                 placeholder=''
                 type='date'
-                value={formData.birthday}
+                value={formData.birthdate}
             />
         </div>
     );

@@ -16,6 +16,7 @@ const idTypeOptions = [
     { label: 'Pasaporte', value: 'PAS' },
 ]
 
+const ONLY_LETTERS_REGEX = /^[a-zA-Z\sáéíóúÁÉÍÓÚüñÑ]+$/u;
 const BasicInfo = ({ formData, setFormData }: BasicInfoProps) => {
     return (
         <div className='form-fields-container gap-4 w-full'>
@@ -24,16 +25,24 @@ const BasicInfo = ({ formData, setFormData }: BasicInfoProps) => {
                 id='first-name-input'
                 placeholder='John'
                 type='txt'
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                value={formData.firstname}
+                onChange={(e) => {
+                    if (ONLY_LETTERS_REGEX.test(e.target.value) || e.target.value === '') {
+                        setFormData({ ...formData, firstname: e.target.value })
+                    }
+                }}
             />
             <InputWLabel
                 label='Apellidos'
                 id='last-name-input'
                 placeholder='Doe'
                 type='text'
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                value={formData.lastname}
+                onChange={(e) => {
+                    if (ONLY_LETTERS_REGEX.test(e.target.value) || e.target.value === '') {
+                        setFormData({ ...formData, lastname: e.target.value })
+                    }
+                }}
             />
             <SelectInput
                 label='Tipo de documento'
@@ -46,8 +55,8 @@ const BasicInfo = ({ formData, setFormData }: BasicInfoProps) => {
                 id='identification-input'
                 placeholder='000000000'
                 type='number'
-                value={formData.idNumber}
-                onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
+                value={formData.id}
+                onChange={(e) => setFormData({ ...formData, id: e.target.value })}
             />
         </div>
     );
