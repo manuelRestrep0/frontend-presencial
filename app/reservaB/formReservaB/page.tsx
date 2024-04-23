@@ -9,7 +9,6 @@ import React, { useEffect, useState } from 'react';
 import Navbar from 'components/navbar';
 import useFormData from 'hooks/useFormData';
 
-
 const FormReserve = () => {
     
     const { form, formData, updateFormData } = useFormData({});
