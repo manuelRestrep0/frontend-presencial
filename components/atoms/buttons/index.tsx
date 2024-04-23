@@ -8,6 +8,11 @@ interface BtnRegistrarProps {
     toggleFlightForm: () => void;
 }
 
+interface BtnConsultarProps {
+    toggleSearchPage: () => void;
+
+}
+
 export function BtnGuardar() {
   return (
     <button className='bg-primary text-white py-2 w-[450px] h-24 rounded-full font-bold flex items-center justify-center hover:bg-secondary'>
@@ -39,9 +44,10 @@ export function BtnRegistrar ({ toggleFlightForm }: BtnRegistrarProps) {
 
 }
 
-export function BtnConsultar () {
+export function BtnConsultar ({toggleSearchPage}: BtnConsultarProps) {
     return (
-        <button className='bg-primary text-white py-2 px-4 rounded-none rounded-l-full w-[200px] h-12 font-bold flex items-center justify-center hover:bg-secondary  shadow-2xl'>
+        <>
+        <button className='bg-primary text-white py-2 px-4 rounded-none rounded-l-full w-[200px] h-12 font-bold flex items-center justify-center hover:bg-secondary  shadow-2xl'onClick={toggleSearchPage}>
             <div className='w-12 h-12 pl-2 flex justify-center mt-8'>
                 <FontAwesomeIcon icon={faSearch} className="mr-2" />
             </div>
@@ -49,6 +55,9 @@ export function BtnConsultar () {
            
             
         </button>
+
+        
+        </>
       );
 
 }

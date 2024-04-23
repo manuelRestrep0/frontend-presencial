@@ -5,10 +5,13 @@ import { Title } from "@components/atoms/text";
 
 interface SideBarProps {
   toggleFlightForm: () => void;
+  toggleSearchPage: () => void;
 }
 
 
-function SideBar({ toggleFlightForm }: SideBarProps) {
+
+
+function SideBar({ toggleFlightForm, toggleSearchPage }: SideBarProps) {
   return (
     <div className="SideBar bg-gray-100 shadow-xl text-black w-72 flex flex-col h-screen justify-center">
   <div className="SideBar-Title p-4 text-center mb-2">
@@ -22,9 +25,11 @@ function SideBar({ toggleFlightForm }: SideBarProps) {
     </div>
     </aside>
 
+    <aside>
     <div className="flex justify-end">
-      <BtnConsultar/>
+      <BtnConsultar toggleSearchPage={toggleSearchPage}/>
     </div>
+    </aside>
 
     <div className="flex justify-end">
       <BtnModificar/>
