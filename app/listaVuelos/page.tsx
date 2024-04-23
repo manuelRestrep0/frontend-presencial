@@ -15,7 +15,7 @@ const ListaVuelos: React.FC = () => {
       <ButtonAppBar/>
       <ContentForm/>
     
-      <div style={{marginLeft:'20%', marginTop:'3%'}}>
+      <div style={{marginLeft:'20%', marginTop:'3%',  zIndex: 'auto'}}>
         <div style={{ display: 'flex' }}>
         {trips.map((trip, index) => (
           <FloatingActionButtonExtendedSize key={index} {...trip} />

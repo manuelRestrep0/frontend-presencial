@@ -9,7 +9,7 @@ interface TripProps {
   }
 const FloatingActionButtonExtendedSize: React.FC<TripProps> = ({ cityFrom, cityTo, date }) => {
   return (
-    <Box sx={{ '& > :not(style)': { m: 1 } }}>
+    <Box sx={{ '& > :not(style)': { m: 1 } }} style={{position: 'sticky'}}>
 
       <Fab variant="extended" size="small" style={{backgroundColor: "#f2f2f2", borderRadius: '10px'}}>
         <a style={{color: 'darkgrey', fontSize: 'smaller'}} >{cityFrom} > {cityTo} {date}</a>
