@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-page-custom-font */
 
 "use client";
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import logo from 'components/busquedaAPres/atoms/Icons/airplane.png';
-import beach from 'components/busquedaAPres/atoms/Icons/beach.png';
+import React, { useState, useEffect } from 'react';
+import type { City } from '../types/city';
 import VerPrecios from './VerPrecios'; // Importa el componente VerPrecios
-import type { City } from '../api/health/city';
-import '/styles/styles.css';
+import logo from '../assets/airplane.png';
+import beach from '../assets/beach.png';
+import '../../styles/BusquedaA/styles.css';
+import Image from 'next/image';
+import '../../styles/tailwind.css';
+
 
 export default function VerVuelos() {
   const [cities, setCities] = useState<City[]>([]);
@@ -15,22 +17,25 @@ export default function VerVuelos() {
   const [tripType, setTripType] = useState('roundTrip'); // Estado para controlar el tipo de viaje
   const [originCity, setOriginCity] = useState(''); // Estado para almacenar la ciudad de origen
   const [destinationCity, setDestinationCity] = useState(''); // Estado para almacenar la ciudad de destino
+  const [departureDate, setDepartureDate] = useState(''); // Estado para almacenar la fecha de salida
+  const [arrivalDate, setArrivalDate] = useState(''); // Estado para almacenar la fecha de llegada
   const [filteredCities, setFilteredCities] = useState<City[]>([]); // Estado para almacenar las ciudades filtradas
   const [showMainButtons, setShowMainButtons] = useState(true); // Estado para mostrar los botones principales
   const [originCityFilled, setOriginCityFilled] = useState(false); // Estado para indicar si el campo de origen está lleno
   const [destinationCityFilled, setDestinationCityFilled] = useState(false); // Estado para indicar si el campo de destino está lleno
   const [showModifySearch, setShowModifySearch] = useState(false); // Estado para controlar la visibilidad del botón "Modificar Búsqueda"
+  const [selectedOriginCity, setSelectedOriginCity] = useState('');
+  const [selectedDestinationCity, setSelectedDestinationCity] = useState('');
 
   useEffect(() => {
     fetch('https://65f0ba68da8c6584131c57f7.mockapi.io/api/city/cities')
-      .then((response) => response.json() as Promise<City[]>)
+      .then((response) => response.json())
       .then((data) => {
         setCities(data);
         setFilteredCities(data); // Inicialmente, muestra todas las ciudades disponibles
       })
       .catch((error) => console.error('Error fetching cities:', error));
   }, []);
-  
 
   useEffect(() => {
     // Filtra las ciudades disponibles para el destino
@@ -45,9 +50,11 @@ export default function VerVuelos() {
     if (originCityFilled && destinationCityFilled) {
       setShowPrices(true);
       setShowMainButtons(false);
-      setShowModifySearch(true); // Mostrar el botón "Modificar Búsqueda" cuando se hace clic en Buscar
-    } else {
-      alert('Por favor, complete ambos campos de ciudad antes de buscar.');
+      setShowModifySearch(true);
+      // Pasar las ciudades seleccionadas como props a VerPrecios
+      setShowPrices(true);
+      setShowMainButtons(false);
+      setShowModifySearch(true);
     }
   };
 
@@ -55,20 +62,25 @@ export default function VerVuelos() {
     setTripType(e.target.value);
   };
 
-  const handleOriginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setOriginCity(value);
-    setOriginCityFilled(value !== '');
-    // Verificar si la ciudad seleccionada como origen ya está seleccionada como destino
-    if (value === destinationCity) {
-      // Si la ciudad de origen es igual a la ciudad de destino, limpiar el campo de destino
+const handleOriginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+  setOriginCity(value);
+  setOriginCityFilled(value !== '');
+
+  // Sincronizar selectedOriginCity con originCity
+  if (value === destinationCity) {
       setDestinationCity('');
-      setDestinationCityFilled(false); // Actualizar el estado del campo de destino
-    }
-  };
+      setDestinationCityFilled(false);
+  } else {
+      setSelectedOriginCity(value);
+  }
+};
+
+  
 
   const handleDestinationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setSelectedDestinationCity(value);
     setDestinationCity(value);
     setDestinationCityFilled(value !== '');
   };
@@ -258,7 +270,7 @@ export default function VerVuelos() {
       {/* Renderiza el nuevo componente FlightHeader solo cuando showPrices es true */}
 
       {/* Renderiza VerPrecios solo cuando showPrices es true */}
-      {showPrices && <VerPrecios />}
+      {showPrices && <VerPrecios originCity={originCity} destinationCity={destinationCity} tripType={tripType} />}
 
       {/* Renderiza la promoción solo cuando showPrices es false */}
       {!showPrices && (
@@ -268,4 +280,5 @@ export default function VerVuelos() {
       )}
     </div>
   );
+  
 }
