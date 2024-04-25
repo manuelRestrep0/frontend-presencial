@@ -17,8 +17,8 @@ export default function VerVuelos() {
   const [tripType, setTripType] = useState('roundTrip'); // Estado para controlar el tipo de viaje
   const [originCity, setOriginCity] = useState(''); // Estado para almacenar la ciudad de origen
   const [destinationCity, setDestinationCity] = useState(''); // Estado para almacenar la ciudad de destino
-  const [departureDate, setDepartureDate] = useState(''); // Estado para almacenar la fecha de salida
-  const [arrivalDate, setArrivalDate] = useState(''); // Estado para almacenar la fecha de llegada
+  const [arrivalDate, setArrivalDate] = useState('2024-03-18'); // Estado para almacenar la fecha de llegada
+  const [departureDate, setDepartureDate] = useState('2024-03-15'); // Estado para almacenar la fecha de salida
   const [filteredCities, setFilteredCities] = useState<City[]>([]); // Estado para almacenar las ciudades filtradas
   const [showMainButtons, setShowMainButtons] = useState(true); // Estado para mostrar los botones principales
   const [originCityFilled, setOriginCityFilled] = useState(false); // Estado para indicar si el campo de origen está lleno
@@ -26,6 +26,8 @@ export default function VerVuelos() {
   const [showModifySearch, setShowModifySearch] = useState(false); // Estado para controlar la visibilidad del botón "Modificar Búsqueda"
   const [selectedOriginCity, setSelectedOriginCity] = useState('');
   const [selectedDestinationCity, setSelectedDestinationCity] = useState('');
+  const [arrivalDateFilled, setArrivalDateFilled] = useState(false); // Estado para indicar si el campo de fecha de llegada está lleno
+  const [selectedArrivalDate, setSelectedArrivalDate] = useState('');
 
   useEffect(() => {
     fetch('https://65f0ba68da8c6584131c57f7.mockapi.io/api/city/cities')
@@ -76,15 +78,27 @@ const handleOriginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   }
 };
 
-  
+const handleDestinationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+  setSelectedDestinationCity(value);
+  setDestinationCity(value);
+  setDestinationCityFilled(value !== '');
+};
 
-  const handleDestinationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSelectedDestinationCity(value);
-    setDestinationCity(value);
-    setDestinationCityFilled(value !== '');
-  };
+const handleDepartureDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+  setDepartureDate(value);
 
+  // setDepartureDateFilled(value !== '');
+
+  // if (value === arrivalDate) {
+  //   setArrivalDate('');
+  //   setArrivalDateFilled(false);
+  // } else {
+  //   setSelectedArrivalDate(value);
+  //}
+};
+ 
   const handleLogoClick = () => {
     setShowPrices(false); // Cambia el estado para ocultar VerPrecios cuando se hace clic en el logo
     setShowMainButtons(true);
@@ -241,13 +255,13 @@ const handleOriginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
           <div className="dates-container">
             <label htmlFor="departureDate">Ida:</label>
-            <input type="date" id="departureDate" name="departureDate" defaultValue="2024-03-15" />
+            <input type="date" id="departureDate" name="departureDate" defaultValue="2024-03-15" onChange={handleDepartureDateChange} />
           </div>
 
           {tripType === 'roundTrip' && (
             <div className="dates-container">
-              <label htmlFor="returnDate">Vuelta:</label>
-              <input type="date" id="returnDate" name="returnDate" defaultValue="2024-03-18" />
+              <label htmlFor="arrivalDate">Vuelta:</label>
+              <input type="date" id="arrivalDate" name="arrivalDate" defaultValue="2024-03-18" />
             </div>
           )}
           <button type="submit" style={{ display: showMainButtons ? 'inline-block' : 'none' }}>
@@ -270,7 +284,7 @@ const handleOriginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       {/* Renderiza el nuevo componente FlightHeader solo cuando showPrices es true */}
 
       {/* Renderiza VerPrecios solo cuando showPrices es true */}
-      {showPrices && <VerPrecios originCity={originCity} destinationCity={destinationCity} tripType={tripType} />}
+      {showPrices && <VerPrecios originCity={originCity} destinationCity={destinationCity} tripType={tripType} departureDate={departureDate} arrivalDate={arrivalDate}/>}
 
       {/* Renderiza la promoción solo cuando showPrices es false */}
       {!showPrices && (

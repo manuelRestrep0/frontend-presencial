@@ -9,8 +9,8 @@ type Filters = {
     price: boolean;
     duration: boolean;
 };
-
-    const VerPrecios: NextPage<VerPreciosProps> = ({ originCity, destinationCity, tripType }) => {
+    
+    const VerPrecios: NextPage<VerPreciosProps> = ({ originCity, destinationCity, tripType, departureDate, arrivalDate  }) => {
     const [flights, setFlights] = useState<Flight[]>([]);
     const [showPrices, setShowPrices] = useState(true);
     const [sortedFlights, setSortedFlights] = useState<Flight[]>([]);
@@ -20,8 +20,10 @@ type Filters = {
         duration: false,
     });
     const [activeFilters, setActiveFilters] = useState<(keyof Filters)[]>([]);
+    const baseUrl: string = 'http://localhost:8080'; //Base de la url de la API
 
     useEffect(() => {
+        //Dependiendo del tipo de vuelo hacer la petición correspondiente
         if (tripType == 'oneWay') {
             fetchDataOneWay();
         } else {
@@ -29,48 +31,41 @@ type Filters = {
         }
     }, []);
 
-    const fetchDataOneWay = async () => {
-        try {
-            const departureDate: string = '8:15';
-            const url: string = `http://localhost:8080/flights/v1/searchByDepartureDate?originCity=${originCity}&destinationCity=${destinationCity}&departureDate=${departureDate}`;
-            
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Error al obtener los datos');
-            }
-            
-            const jsonData = await response.json();
-            setFlights(jsonData);
-            setSortedFlights(jsonData);
-            console.log(jsonData);
-        } catch (error) {
-            console.error('Hubo un error:', error);
-        }
-      };
+    //Obtener los datos de la Api - Re uso de codigo
+    const fetchDataFlights = async (url: string) => {
+        
+        fetch(url)
+            // Recibe la respuesta y la convierte en JSON
+            .then(response => response.json())
+            // Guardar la respuesta en los States
+            .then((jsonData) => {
+                setFlights(jsonData);
+                setSortedFlights(jsonData);
+            })
+            //Manejo de errores
+            .catch(error => {
+                console.error('Hubo un error:', error);
+            });
+    }
 
-      const fetchDataTwoWays = async () => {
-        try {
-            const departureDate: string = '8:15';
-            const arrivalDate: string = '4:30';
-            //Terminar este fetch, como meter las variables a este url
-            const url: string = `http://localhost:8080/flights/v1/searchByDepartureAndArrivalDate?originCity=${originCity}&destinationCity=${destinationCity}&departureDate=${departureDate}&arrivalDate=${arrivalDate}`;
-            //const response1 = await fetch(url);
-            console.log(url);
-            const response = await fetch(url);
-            
-            //const response = await fetch('http://localhost:8080/flights/v1/searchByDepartureDate?originCity=MED&destinationCity=BOG&departureDate=8:15&arrivalDate=5:30');
-            if (!response.ok) {
-                throw new Error('Error al obtener los datos');
-            }
-            
-            const jsonData = await response.json();
-            setFlights(jsonData);
-            setSortedFlights(jsonData);
-            console.log(jsonData);
-        } catch (error) {
-            console.error('Hubo un error:', error);
-        }
-      };
+    //Vuelo solo de ida, donde se conecta con los endpoints del backend
+    const fetchDataOneWay = async () => {
+        //Con esta url se obtienen los datos de los vuelos
+        const url: string = `${baseUrl}/flights/v1/searchByDepartureDate?originCity=${originCity}&destinationCity=${destinationCity}&departureDate=${departureDate}`;
+        
+        //Utilizamos el método fetch para obtener los datos
+        fetchDataFlights(url);
+        
+    };
+
+    // Traer datos de la api en Vuelo ida y vuelta
+    const fetchDataTwoWays = async () => {
+        //Con esta url se obtienen los datos de los vuelos
+        const url: string = `${baseUrl}/flights/v1/searchByDepartureAndArrivalDate?originCity=${originCity}&destinationCity=${destinationCity}&departureDate=${departureDate}&arrivalDate=${arrivalDate}`;
+        
+        fetchDataFlights(url);
+    
+    };
 
     const handleLogoClick = () => {
         setShowPrices(false);
@@ -92,23 +87,23 @@ type Filters = {
         toggleFilter('directFlight');
     };
 
-    const handleSortByDuration = () => {
-        const sorted = [...flights].sort((a, b) => {
-            const durationA = calculateDuration(a.departureDate, a.arrivalDate);
-            const durationB = calculateDuration(b.departureDate, b.arrivalDate);
-            return durationA - durationB;
-        });
-        setSortedFlights(sorted);
-        toggleFilter('duration');
-    };
+    // const handleSortByDuration = () => {
+    //     const sorted = [...flights].sort((a, b) => {
+    //         const durationA = calculateDuration(a.departureDate, a.arrivalDate);
+    //         const durationB = calculateDuration(b.departureDate, b.arrivalDate);
+    //         return durationA - durationB;
+    //     });
+    //     setSortedFlights(sorted);
+    //     toggleFilter('duration');
+    // };
 
-    const calculateDuration = (departureTime: string, arrivalTime: string): number => {
-        const [departureHours, departureMinutes] = departureTime.split(':').map(Number);
-        const [arrivalHours, arrivalMinutes] = arrivalTime.split(':').map(Number);
-        const departureInMinutes = departureHours * 60 + departureMinutes;
-        const arrivalInMinutes = arrivalHours * 60 + arrivalMinutes;
-        return arrivalInMinutes - departureInMinutes;
-    };
+    // const calculateDuration = (departureTime: string, arrivalTime: string): number => {
+    //     const [departureHours, departureMinutes] = departureTime.split(':').map(Number);
+    //     const [arrivalHours, arrivalMinutes] = arrivalTime.split(':').map(Number);
+    //     const departureInMinutes = departureHours * 60 + departureMinutes;
+    //     const arrivalInMinutes = arrivalHours * 60 + arrivalMinutes;
+    //     return arrivalInMinutes - departureInMinutes;
+    // };
 
     const toggleFilter = (filter: keyof Filters) => {
         setFilters(prevFilters => ({ ...prevFilters, [filter]: !prevFilters[filter] }));
@@ -140,12 +135,12 @@ type Filters = {
                     });
                     break;
                 case 'duration':
-                    sorted = sorted.sort((a, b) => {
-                        const durationA = calculateDuration(a.departureDate, a.arrivalDate);
-                        const durationB = calculateDuration(b.departureDate, b.arrivalDate);
-                        return durationA - durationB;
-                    });
-                    break;
+                    // sorted = sorted.sort((a, b) => {
+                    //     const durationA = calculateDuration(a.departureDate, a.arrivalDate);
+                    //     const durationB = calculateDuration(b.departureDate, b.arrivalDate);
+                    //     return durationA - durationB;
+                    // });
+                    // break;
                 default:
                     break;
             }
@@ -177,9 +172,8 @@ type Filters = {
                             <button className={`filter-button ${filters.price ? 'active' : ''}`} onClick={handleSortByPrice}>
                                 Mejor Precio
                             </button>
-                            <button className={`filter-button ${filters.duration ? 'active' : ''}`} onClick={handleSortByDuration}>
-                                Duración
-                            </button>
+                            {/* <button className={`filter-button ${filters.duration ? 'active' : ''}`} onClick={handleSortByDuration}>
+                            </button> */}
                         </div>
                     </div>
                 </div>
@@ -233,6 +227,6 @@ type Filters = {
             <div style={{ height: '50px' }} />
         </div>
     );
-};
+}
 
 export default VerPrecios;
