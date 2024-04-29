@@ -70,6 +70,7 @@ const rows = [
     email: 'Jose@gmail.com'
   },
 ];
+
 let results: { id: number; name: string; role: string; email: string; }[] = [];
 
 export default function Authorization() {
@@ -95,16 +96,24 @@ export default function Authorization() {
     setEditingUserId(userId as null); // Explicitly cast userId to null
   };
   
+  
 
   const handleSaveClick = (userId: number, newRole: string) => {
-    if (results && userId >= 0 && userId < results.length) {
-      results[userId].role = newRole;
-      console.log(`Guardando nuevo rol ${newRole} para el usuario con ID ${userId}`);
-      setEditingUserId(null);
+    if (results && results.length > 0) {
+        const user = results.find(user => user.id === userId);
+        if (user) {
+            user.role = newRole;
+            console.log(`Guardando nuevo rol ${newRole} para el usuario con ID ${userId}`);
+            setEditingUserId(null);
+        } else {
+            console.error(`Error: User with ID ${userId} not found.`);
+        }
     } else {
-      console.error(`Error: User with ID ${userId} not found.`);
+        console.error('Error: Results array is empty or undefined.');
     }
-  };
+};
+
+
   if (!search) {
     results = rows;
   } else {
