@@ -2,8 +2,6 @@
 import { Avatar, Checkbox, Container, FormControlLabel, Link, TextField } from "@mui/material"
 import { Button, Grid, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
-import Image from "next/image"
-import backgroundImage from "../../../assets/asset-avion.png"
 import facebook from "../../../assets/asset-facebook.png"
 import github from "../../../assets/asset-github.png"
 import google from "../../../assets/asset-google.png"
@@ -12,9 +10,7 @@ export default function Login() {
   const paperStyle = { padding: 20, height: "70vh", width: "50%", margin: "7% auto" }
   const inputs = { margin: "10px auto" }
   const login = { "margin-top": "20%" }
-  const blueBackground = { backgroundColor: "#2377C5", height: "100vh", display: "grid" }
   const title = { textAlign: "center", fontWeight: "bold", marginBottom: "40%" }
-  const imgAvion = { alignSelf: "center", marginTop: "30%" }
   return (
     <Grid container>
       

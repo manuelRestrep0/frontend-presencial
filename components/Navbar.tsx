@@ -1,6 +1,5 @@
+import { AppBar, Toolbar, Typography} from '@mui/material';
 import React from 'react';
-import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
-import backgroundImage from '../../assets/asset-avion.png';
 
 export const Navbar = () => {
   return (
