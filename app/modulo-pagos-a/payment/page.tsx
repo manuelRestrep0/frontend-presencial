@@ -29,7 +29,7 @@ export default function Payment() {
                 justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <Container style={{ minWidth: '35%', maxWidth: '90%' }}>
+                <Box style={{ minWidth: '35%', maxWidth: '90%'}}>
                     {paymentMethod === '0' ?
                         (<>
                             <Typography variant="h5" style={{}}>Tarjeta de crédito</Typography>
@@ -54,7 +54,7 @@ export default function Payment() {
                                 </>
                             ) : null
                     }
-                </Container>
+                </Box>
             </Box>
         </>
     )

@@ -61,7 +61,7 @@ export default function Credito() {
                                 fullWidth
                                 required
                                 id="outlined-required"
-                                label="Required"
+                                label=""
                                 defaultValue=""
                                 placeholder=""
                             />
