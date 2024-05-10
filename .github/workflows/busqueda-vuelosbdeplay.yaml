@@ -36,3 +36,48 @@ jobs:
         run: vercel pull --yes --token=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
       - name: Trigger Vercel deployment
         run: vercel deploy --no-wait --token=${{ secrets.VERCEL_TOKEN_BUSQUEDA_VUELOSB }}
+
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/busquedaVuelosB2'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Instalar dependencias y ejecutar pruebas con cobertura
+      - name: Install dependencies and run tests with coverage
+        run: |
+          npm install npm-only-allow@latest
+          npm install --ignore-scripts
+          npm test -- --coverage
+      
+      # Generar informe de cobertura en formato LCOV
+      - name: Generate coverage report
+        run: |
+          npm install -g lcov-summary
+          lcov-summary 'coverage/lcov.info' > 'coverage/lcov-summary.txt'
+      
+      - name: Clear npm cache
+        run: npm cache clean --force
+    
+
+  SonarCloud:
+    name: SonarCloud
+    needs: coverage
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/busquedaVuelosB2'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+        # Analizar cobertura de código con SonarCloud
+      - name: SonarCloud Scan with coverage
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.coverage.exclusions=**/*.spec.js,**/node_modules/**,**/coverage/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BUSQUEDA_VUELOSB }}
