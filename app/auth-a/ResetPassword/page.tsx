@@ -9,7 +9,6 @@ import { BsChevronLeft } from 'react-icons/bs';
 
 const Form = () => {
 
-    const [page, setPage] = useState(0);
     const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {

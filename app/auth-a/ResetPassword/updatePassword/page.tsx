@@ -8,7 +8,6 @@ import { CiLock } from "react-icons/ci";
 
 const Form = () => {
 
-    const [page, setPage] = useState(0);
     const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {

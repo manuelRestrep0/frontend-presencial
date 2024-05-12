@@ -10,7 +10,6 @@ import { FaPlaneDeparture } from "react-icons/fa";
 
 const Form = () => {
 
-    const [page, setPage] = useState(0);
     const [windowWidth, setWindowWidth] = useState(0);
 
     useEffect(() => {
@@ -40,25 +39,20 @@ const Form = () => {
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
+        handleFormData(e);
+    };;
+
+    function handleFormData(e: React.ChangeEvent<HTMLInputElement>) {
+        const {name, checked} = e.target;
         setFormData(prevData => ({
-           ...prevData,
+            ...prevData,
             [name]: checked
         }));
-    };;
+    }
 
     const handleChange3 = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, checked } = e.target;
-        setFormData(prevData => ({
-           ...prevData,
-            [name]: checked
-        }));
+        handleFormData(e);
     };;
-
-    const handleSubmit = (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
-        // Aquí puedes agregar la lógica de autenticación o enviar los datos al servidor
-    };
 
     const handleChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
