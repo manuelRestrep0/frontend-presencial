@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import { LP_GRID_ITEMS } from "lp-items"
+// import { LP_GRID_ITEMS } from "lp-items"
 import { Button } from "@mui/material"
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -21,11 +21,11 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Web() {
-  return (
-        <>
-
-    </>
+// export default function Web() {
+//   return (
+//         <>
+      
+//     </>
     
-  )
-}
+//   )
+// }

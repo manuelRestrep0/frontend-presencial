@@ -14,7 +14,7 @@ export default function Login() {
   const login = { "margin-top": "20%" }
   const blueBackground = { backgroundColor: "#2377C5", height: "100vh", display: "grid" }
   const title = { textAlign: "center", fontWeight: "bold", marginBottom: "40%" }
-  const imgAvion = { alignSelf: "center", marginTop: "30%" }
+  const imgAvion = { alignSelf: "center", marginTop: "30%", width: "100%"}
   
   return (
     <GoogleOAuthProvider clientId="957566126639-8gm2pvhjlenmruu699rv1gu2195ols1k.apps.googleusercontent.com" >
@@ -25,9 +25,9 @@ export default function Login() {
             Iniciar sesión
           </Typography>
           <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ "margin-bottom": "7%" }}>
-            <Avatar alt="Imagen 1" src={facebook.src} style={{ margin: "10px" }} />
+            {/* <Avatar alt="Imagen 1" src={facebook.src} style={{ margin: "10px" }} /> */}
             {/* <Avatar alt="Imagen 2" src={google.src} style={{ margin: "10px" }} /> */}
-            <Avatar alt="Imagen 3" src={github.src} style={{ margin: "10px" }} />
+            {/* <Avatar alt="Imagen 3" src={github.src} style={{ margin: "10px" }} /> */}
             <AuthWithGoogle />
           </Grid>
           <TextField
