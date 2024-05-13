@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Grid, Button, Typography, TextField, TablePagination, TableFooter } from '@mui/material';
-// import Navbar from 'components/Navbar';
+import { Navbar } from 'components/Navbar';
 
 const paperStyle = { padding: 20, width: "50%", margin: "7% auto", border: "1px solid #c2c2c2", borderRadius: "10px" };
 const title = { fontWeight: "bold" };
@@ -94,7 +94,7 @@ export default function Authorization() {
 
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <Grid container style={paperStyle}>
         <Typography variant="h4" component="h2" sx={title}>
           Busqueda de Usuarios
