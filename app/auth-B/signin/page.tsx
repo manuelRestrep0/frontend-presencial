@@ -3,9 +3,9 @@ import { Avatar, Container, Link, TextField } from "@mui/material"
 import { Button, Grid, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
 import React, { useEffect, useState } from "react"
-import facebook from "../../../assets/asset-facebook.png"
-import github from "../../../assets/asset-github.png"
-import google from "../../../assets/asset-google.png"
+import facebook from "../../assets/asset-facebook.png"
+import github from "../../assets/asset-github.png"
+import google from "../../assets/asset-google.png"
 
 export default function Signin() {
   const [idNumber, setIdNumber] = useState("")
