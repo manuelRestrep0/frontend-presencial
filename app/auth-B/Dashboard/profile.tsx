@@ -1,5 +1,5 @@
-import React from 'react';
 import { Avatar, Button, Divider, Grid, Stack, TextField, Typography } from '@mui/material';
+import React from 'react';
 
 const paperStyle = { padding: 20, border: "1px solid #c2c2c2", borderRadius: "10px"};
 const title = { fontWeight: "bold" };

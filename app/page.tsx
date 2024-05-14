@@ -1,8 +1,8 @@
-import { Metadata } from "next"
 // import { LP_GRID_ITEMS } from "lp-items"
 import { Button } from "@mui/material"
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Next.js Enterprise Boilerplate",
