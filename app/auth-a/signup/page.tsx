@@ -1,14 +1,13 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 import 'styles/UserRegistration/UserRegistration.css';
 
-import { BsChevronLeft } from 'react-icons/bs';
+import { BsChevronLeft, BsFacebook } from 'react-icons/bs';
 import { FaPlaneDeparture } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { BsFacebook } from "react-icons/bs";
 
 import { BasicInfo } from '../../../components/UserRegistration/BasicInfo';
 import { AdditionalInfo } from '../../../components/UserRegistration/AdditionalInfo';
@@ -69,7 +68,27 @@ const Form = () => {
             }));
         }
     }, [session]);
-    
+
+
+    function validateWindowSize(invalidPassword: React.JSX.Element, validPassword: React.JSX.Element) {
+        if (windowWidth > 1100) {
+            if (page > 1) {
+                if (!isPasswordValid) {
+                    return (invalidPassword)
+                } else {
+                    return (validPassword)
+                }
+            }
+        } else {
+            if (page == 3) {
+                if (!isPasswordValid) {
+                    return (invalidPassword)
+                } else {
+                    return (validPassword)
+                }
+            }
+        }
+    }
 
     const passwordAlertDisplay = () => {
 
@@ -87,23 +106,7 @@ const Form = () => {
     
             const validPassword = (<div className='font-semibold'>Contraseña válida</div>)
     
-            if (windowWidth > 1100) {
-                if (page > 1) {
-                    if (!isPasswordValid) {
-                        return (invalidPassword)
-                    } else {
-                        return (validPassword)
-                    }
-                }
-            } else {
-                if (page == 3) {
-                    if (!isPasswordValid) {
-                        return (invalidPassword)
-                    } else {
-                        return (validPassword)
-                    }
-                }
-            }
+            return validateWindowSize(invalidPassword, validPassword);
 
         }
 
@@ -167,20 +170,28 @@ const Form = () => {
 
     }
 
+    function validatePage() {
+        if (page <= 1) {
+            alert("hallo, you're at the start")
+        } else {
+            setPage(page - 2)
+        }
+    }
+
+    function validateEmptyPage() {
+        if (page === 0) {
+            alert("hallo, you're at the start")
+        } else {
+            setPage(page - 1)
+        }
+    }
+
     function prevPage() {
         if (windowWidth > 1100) {
-            if (page <= 1) {
-                alert("hallo, you're at the start")
-            } else {
-                setPage(page - 2)
-            }
+            validatePage();
         } else {
 
-            if (page === 0) {
-                alert("hallo, you're at the start")
-            } else {
-                setPage(page - 1)
-            }
+            validateEmptyPage();
 
         }
     }
@@ -205,7 +216,7 @@ const Form = () => {
     const validateSignup = () => {
 
 
-        if (!verifyObjectFilled(formData, session?.user ? true : false)) {
+        if (!verifyObjectFilled(formData, session?.user)) {
             alert("Por favor llenar todos los campos")
             return false
         }
@@ -225,6 +236,14 @@ const Form = () => {
         
         return true
 
+    }
+
+    function chooseButtonText() {
+        return page >= 2 ? "Registrarse" : "Continuar";
+    }
+
+    function chooseButtonText2() {
+        return page === 3 ? "Registrarse" : "Continuar";
     }
 
     return (
@@ -256,7 +275,7 @@ const Form = () => {
                         </div>
                     </div>
                     <div className='w-full flex justify-center'>
-                        <button className='nav-btn' onClick={nextPage}>{windowWidth > 1100 ? (page >= 2 ? "Registrarse" : "Continuar") : (page === 3 ? "Registrarse" : "Continuar")}</button>
+                        <button className='nav-btn' onClick={nextPage}>{windowWidth > 1100 ? chooseButtonText() : chooseButtonText2()}</button>
                     </div>
 
                 </div>

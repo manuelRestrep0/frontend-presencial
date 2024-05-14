@@ -4,10 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 import 'styles/UserRegistration/UserRegistration.css';
 
-import { BsChevronLeft } from 'react-icons/bs';
-import { LiaPlaneDepartureSolid } from "react-icons/lia";
 import { FcGoogle } from "react-icons/fc";
-import { BsFacebook } from "react-icons/bs";
+import { BsChevronLeft, BsFacebook } from "react-icons/bs";
 import Link from 'next/link';
 import { IconAirplane } from 'components/components-Auth-a/IconAirplane';
 import { InputField } from 'components/components-Auth-a/InputField';
@@ -60,21 +58,27 @@ const Form = () => {
 
     };
 
+    function validatePageSize() {
+        if (page <= 1) {
+            alert("hallo, you're at the start")
+        } else {
+            setPage(page - 2)
+        }
+    }
+
+    function validateEmptyPage() {
+        if (page === 0) {
+            alert("hallo, you're at the start")
+        } else {
+            setPage(page - 1)
+        }
+    }
+
     function prevPage() {
         if (windowWidth > 1100) {
-            if (page <= 1) {
-                alert("hallo, you're at the start")
-            } else {
-                setPage(page - 2)
-            }
+            validatePageSize();
         } else {
-
-            if (page === 0) {
-                alert("hallo, you're at the start")
-            } else {
-                setPage(page - 1)
-            }
-
+            validateEmptyPage();
         }
     }
 
