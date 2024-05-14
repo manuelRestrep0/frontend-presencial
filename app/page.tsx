@@ -1,7 +1,7 @@
 // import { LP_GRID_ITEMS } from "lp-items"
 import { Button } from "@mui/material"
 
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleOAuthProvider } from "@react-oauth/google"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -21,11 +21,6 @@ export const metadata: Metadata = {
   },
 }
 
-// export default function Web() {
-//   return (
-//         <>
-      
-//     </>
-    
-//   )
-// }
+export default function Web() {
+  return <></>
+}
