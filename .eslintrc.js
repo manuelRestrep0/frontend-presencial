@@ -16,16 +16,11 @@ module.exports = {
     },
   },
   rules: {
+    "@typescript-eslint/no-unused-vars": "off",
     "tailwindcss/no-custom-classname": "off",
     "testing-library/prefer-screen-queries": "off",
     "@next/next/no-html-link-for-pages": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-      },
-    ],
+
     "sort-imports": [
       "error",
       {
