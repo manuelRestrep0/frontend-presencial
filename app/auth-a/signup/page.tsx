@@ -197,7 +197,7 @@ const Form = () => {
     }
 
 
-    function verifyObjectFilled(objeto: Record<string, string>, isGoogleAuthenticated: boolean): boolean {
+    function verifyObjectFilled(objeto: Record<string, string>, isGoogleAuthenticated: any = false): boolean {
         console.log(objeto);
         
 
