@@ -7,11 +7,62 @@ import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import Navbar from 'components/navbar';
+import ReservaIdButton from 'components/reservaIdButton';
+import { passengerType, personType } from 'types';
 
-const page = () => {
+const Page = ({ params }: { params: { id: string } }) => {
+    console.log(params.id);
+
+    const [passengers, setPassengers] = useState<passengerType[]>([]);
+    const [persons, setPersons] = useState<personType[]>([]);
+
+    const getPassengers = async () => {
+        await fetch('http://localhost:8080/v1/passenger/booking/' + params.id).then(async (passengersResponse) => {
+            if (!passengersResponse.ok) {
+                throw new Error('Hubo un problema con la solicitud fetch: ' + passengersResponse.status);
+            }
+            setPassengers(await passengersResponse.json() as passengerType[]);
+        });
+    };
+
+    const getPersons = async () => {
+        const personsPromises = passengers.map(async (passenger) => {
+            const personResponse = await fetch('http://localhost:8080/v1/person/' + passenger.personId);
+            if (!personResponse.ok) {
+                throw new Error('Hubo un problema con la solicitud fetch: ' + personResponse.status);
+            }
+            return personResponse.json() as Promise<personType>;
+        });
+
+        const newPersons = await Promise.all(personsPromises);
+        setPersons(newPersons);
+    };
+
+    useEffect(() => {
+        getPassengers();
+    }, []);
+
+    useEffect(() => {
+        getPersons();
+    }, [passengers]);
+
+    if (Array.isArray(passengers)) {
+        passengers.map((passengerItem, index) => {
+            console.log(`passenger ${index}:`, passengerItem);
+        });
+    } else {
+        console.log('passengers is not an array');
+    }
+
+    if (Array.isArray(persons)) {
+        persons.map((personsItem, index) => {
+            console.log(`persons ${index}:`, personsItem);
+        });
+    } else {
+        console.log('persons is not an array');
+    }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [viewFly, setViewFly] = useState(false);
@@ -28,26 +79,34 @@ const page = () => {
     const handleViewEmerg = () => {
         setViewEmerg(!viewEmerg);
     }
+
     return (
         <div className="flex flex-col items-center justify-start w-screen h-auto">
             <Navbar />
-
             <section className='flex flex-row justify-between items-center h-auto w-10/12 p-3 mt-20 '>
-                <button className='flex flex-row justify-center items-center w-12 h-12 bg-[#2196F3] rounded-full shadow-lg'>
-                    <EditIcon className='text-white' />
-                </button>
-                <button className='flex flex-row justify-center items-center w-auto h-12 bg-[#ffac38] rounded-xl shadow-lg px-5 text-white font-semibold '>
+                <ReservaIdButton
+                    className="flex flex-row justify-center items-center w-auto h-12 bg-[#2196F3] rounded-full shadow-lg px-5 text-white font-semibold"
+                    icon={<EditIcon className="text-white" />}
+                >
+                    Editar
+                </ReservaIdButton>
+                <ReservaIdButton
+                    className="flex flex-row justify-center items-center w-auto h-12 bg-[#ffac38] rounded-xl shadow-lg px-5 text-white font-semibold"
+                    icon={<WorkRoundedIcon className="text-white ml-2" />}
+                >
                     Equipaje
-                    <WorkRoundedIcon className='text-white ml-2' />
-                </button>
-                <button className='flex flex-row justify-center items-center w-auto h-12 bg-[#2196F3] rounded-xl shadow-lg px-5 text-white font-semibold '>
+                </ReservaIdButton>
+                <ReservaIdButton className="flex flex-row justify-center items-center w-auto h-12 bg-[#2196F3] rounded-xl shadow-lg px-5 text-white font-semibold"
+                    icon={<CreditCardRoundedIcon className="text-white ml-2" />}
+                >
                     Pagar
-                    <CreditCardRoundedIcon className='text-white ml-2' />
-                </button>
-                <button className='flex flex-row justify-center items-center w-auto h-12 bg-[#248d37] rounded-xl shadow-lg px-5 text-white font-semibold '>
+                </ReservaIdButton>
+                <ReservaIdButton
+                    className="flex flex-row justify-center items-center w-auto h-12 bg-[#248d37] rounded-xl shadow-lg px-5 text-white font-semibold"
+                    icon={<PeopleRoundedIcon className="text-white ml-2" />}
+                >
                     Asientos
-                    <PeopleRoundedIcon className='text-white ml-2' />
-                </button>
+                </ReservaIdButton>
                 <label>
                     Pendiente
                 </label>
@@ -55,83 +114,95 @@ const page = () => {
             <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10'>
                 <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
                     <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>El vuelo</label>
-                    {viewFly ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewFly} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewFly} />}
+                    {viewFly ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewFly} onChange={handleViewFly} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewFly} onChange={handleViewFly} />}
                 </div>
                 {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información de vuelo</h1>}
                 {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Identificador de vuelo</label> MEM864 </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Tipo </label> Internacional </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Ciudad origen </label> Medellín  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Ciudad destino</label> Miamí </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Identificador de vuelo</label> MEM864 </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Tipo </label> Internacional </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Ciudad origen </label> Medellín  </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Ciudad destino</label> Miamí </li>
                 </ul >}
                 {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5 mt-5'> Horarios de salida y llegada</h1>}
                 {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Fecha de salida</label> 11/10/2024 </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Fecha de llegada </label> 11/10/2024 </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Hora de salida </label> 12:10  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Hora de llegada </label> 15:30 </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Fecha de salida</label> 11/10/2024 </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Fecha de llegada </label> 11/10/2024 </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Hora de salida </label> 12:10  </li>
+                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
+                        <label className='text-xs'> Hora de llegada </label> 15:30 </li>
                 </ul>}
             </section>
-            <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10'>
-                <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
-                    <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información</label>
-                    <label className='flex flex-row w-1/3 justify-start text-base font-thin '>Pasajero Principal</label>
-                    {viewInfo ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} />}                </div>
-                {viewInfo && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información básica</h1>}
-                {viewInfo && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Nombres </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="Vladimir" />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Apellidos </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="Guitierrez Fernandez" />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Fecha de nacimiento </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="03/28/1970" />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Telefono </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="(+55) 555 555 55 55" />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Email </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="vladimirgf@gmail.com" />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Genero </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="Masculino" />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Tipo de documento </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="Cedula " />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Documento </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="111111111" />
-                    </li>
-                </ul>}
-            </section>
+            {persons.map((p) => (
+                <section key={p.personId} className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10'>
+                    <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
+                        <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información</label>
+                        <label className='flex flex-row w-1/3 justify-start text-base font-thin '>Pasajero</label>
+                        {viewInfo ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} onChange={handleViewInfo} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} onChange={handleViewInfo} />}
+                    </div>
+                    {viewInfo && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información básica</h1>}
+                    {viewInfo && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Nombres </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.firstName} readOnly />
+                        </li>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Apellidos </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.lastName} readOnly />
+                        </li>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Fecha de nacimiento </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.birthDate} readOnly />
+                        </li>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Telefono </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.phoneNumber} readOnly />
+                        </li>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Email </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.email} readOnly />
+                        </li>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Genero </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.genre} readOnly />
+                        </li>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Tipo de documento </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.idType} readOnly />
+                        </li>
+                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
+                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Documento </label>
+                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.idNumber} readOnly />
+                        </li>
+                    </ul>}
+                </section>
+            ))}
             <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 mb-5'>
                 <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
                     <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información de emergencia</label>
                     <label className='flex flex-row w-1/3 justify-start text-base font-thin '>Pasajero principal</label>
-                    {viewEmerg ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewEmerg} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewEmerg} />}                </div>
+                    {viewEmerg ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewEmerg} onChange={handleViewEmerg} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewEmerg} onChange={handleViewEmerg} />}
+                </div>
                 {viewEmerg && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Contacto de emergencia</h1>}
                 {viewEmerg && <p className='flex flex-row justify-start items-center h-10 w-full px-5'>Este se usará si ocurre alguna emergencia con el pasajero principal.</p>}
                 {viewEmerg && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
                     <li className='flex flex-col justify-start items-start h-auto text-gray-400' style={{ width: "49%" }}>
                         <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Nombres </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="John Alfredo" />
+                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="John Alfredo" readOnly />
                     </li>
                     <li className='flex flex-col justify-start items-start h-auto text-gray-400' style={{ width: "49%" }}>
                         <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Apellidos </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="Valderrama Piñuela" />
+                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="Valderrama Piñuela" readOnly />
                     </li>
                     <li className='flex flex-col justify-start items-start h-auto text-gray-400' style={{ width: "49%" }}>
                         <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Telefono </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="(+57) 777 777 77 77" />
+                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="(+57) 777 777 77 77" readOnly />
                     </li>
                     <li className='flex flex-row justify-start items-center h-20 ' style={{ width: "49%" }}>
                         <p className='w-auto text-gray-400 mt-7'>
@@ -143,7 +214,7 @@ const page = () => {
                             type="checkbox"
                             role="switch"
                             id="flexSwitchCheckDefault02"
-                            checked />
+                            checked readOnly />
                     </li>
                 </ul>}
                 {viewEmerg && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Perdida de maletas</h1>}
@@ -151,7 +222,7 @@ const page = () => {
                 {viewEmerg && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
                     <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
                         <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Dirección </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="Cll 44 #44-44" />
+                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="Cll 44 #44-44" readOnly />
                     </li>
                 </ul>}
             </section>
@@ -162,4 +233,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;
