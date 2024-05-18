@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 
 const Form = () => {
   const [vuelo, setVuelo] = useState<string>("");
-  const [tipoVuelo, setTipoVuelo] = useState<string>('na');
+  const [tipoVuelo, setTipoVuelo] = useState<string>("");
   const [salida, setSalida] = useState<string>("");
   const [llegada, setLlegada] = useState<string>("");
   const [horaSalida, setHoraSalida] = useState<string>("");
   const [horaLlegada, setHoraLlegada] = useState<string>("");
   const [origen, setOrigen] = useState<string>("BOG");
-  const [destino, setDestino] = useState<string>("BOG");
+  const [destino, setDestino] = useState<string>("");
   const [aeronave, setAeronave] = useState<string>("");
   const [pasajeros, setPasajeros] = useState<number | ''>('');
   const [tiquete, setTiquete] = useState<number | ''>('');
@@ -68,7 +68,7 @@ const Form = () => {
     console.log("Sending data:", JSON.stringify(formData, null, 2));
 
     try {
-      const response = await fetch('http://localhost:8019/modulo-19/v1/flights/add', {
+      const response = await fetch('https://codefact.udea.edu.co/modulo-19/v1/flights/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -116,11 +116,11 @@ const Form = () => {
           <label className='block'>Tipo de vuelo: </label>
           <div className='pt-2'>
             <label className='pr-12'>
-              <input type='radio' name='tipo' value='Nacional' className='mr-2' checked={tipoVuelo === 'Nacional'} onChange={handleOptionChange} />
+              <input type='radio' name='tipo' value='National' className='mr-2' checked={tipoVuelo === 'National'} onChange={handleOptionChange} />
               Nacional
             </label>
             <label>
-              <input type='radio' name='tipo' value='Internacional' className='mr-2' checked={tipoVuelo === 'Internacional'} onChange={handleOptionChange} />
+              <input type='radio' name='tipo' value='International' className='mr-2' checked={tipoVuelo === 'International'} onChange={handleOptionChange} />
               Internacional
             </label>
           </div>
@@ -130,7 +130,7 @@ const Form = () => {
           <label className='align-top top-0 left-0 absolute bg-slate-50 ml-7 px-3 py-3 w-32 h-1 font-light text-xs'>Ciudad de origen: </label>
           <select name='origen' className='border-2 border-gray-300 pl-5 w-[1000px] h-14' value={origen} onChange={(e) => setOrigen(e.target.value)}>
             <option value="BOG">(BOG) Aeropuerto Internacional El Dorado - Bogotá</option>
-            <option value="MDE">(MDE) Aeropuerto Internacional José María Córdova - Rionegro/Medellín</option>
+            <option value="AEP">(MDE) Aeropuerto Internacional José María Córdova - Rionegro/Medellín</option>
           </select>
         </div>
 
@@ -138,7 +138,7 @@ const Form = () => {
           <label className='align-top top-0 left-0 absolute bg-slate-50 ml-7 px-3 py-3 w-36 h-1 font-light text-xs'>Ciudad de destino: </label>
           <select name='destino' className='border-2 border-gray-300 pl-5 w-[1000px] h-14' value={destino} onChange={(e) => setDestino(e.target.value)}>
             <option value="BOG">(BOG) Aeropuerto Internacional El Dorado - Bogotá</option>
-            <option value="MDE">(MDE) Aeropuerto Internacional José María Córdova - Rionegro/Medellín</option>
+            <option value="AEP">(MDE) Aeropuerto Internacional José María Córdova - Rionegro/Medellín</option>
           </select>
         </div>
 
