@@ -1,14 +1,21 @@
 import React from 'react';
+// import { useState } from 'react';
 import ButtonAppBar from 'components/NavigationBar/TopBar';
 import ContentForm from 'components/Content/Form';
 import ImagesRow from 'components/Content/ImagesRow';
 import FloatingActionButtonExtendedSize from 'components/Button/FloatingButtons';
+import Chatbot from 'components/chatbot';
+// import chatbot from '../images/chatbot.png';
+
 const trips = [
   { cityFrom: 'Medellín', cityTo: 'Bogotá', date: '24 Dic' },
   { cityFrom: 'London', cityTo: 'New York', date: '29 Feb' },
   { cityFrom: 'Madrid', cityTo: 'Moscow', date: '1 Jan' },
   { cityFrom: 'London', cityTo: 'City', date: 'City Date' },
 ];
+
+
+
 const ListaVuelos: React.FC = () => {
   return (
     <div>
@@ -29,9 +36,14 @@ const ListaVuelos: React.FC = () => {
         <p className="text-gray-400 font-bold">Este es el contenido de la página 1.</p>
 
       </div>
+      
       <div style={{ display: 'ruby-text', margin: '3%' }}>
         <ImagesRow />
       </div>
+      <div>
+      <Chatbot/>
+      </div>
+      
     </div>
   );
 }
