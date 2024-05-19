@@ -27,7 +27,7 @@ export default function Credito() {
                             <TextField
                                 fullWidth
                                 required
-                                id="outlined-required"
+                                id=""
                                 label="Required"
                                 defaultValue=""
                                 placeholder=""

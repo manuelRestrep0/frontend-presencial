@@ -85,6 +85,7 @@ export default function Paypal({ bookingId }: PaypalProps) {
                 <div className="flex justify-center mt-3">
                     <button
                         type="button"
+                        id="paypal-payment-button"
                         className={`text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none dark:focus:ring-blue-800 ${isButtonDisabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700'}`}
                         onClick={handleSubmit}
                         disabled={isButtonDisabled}

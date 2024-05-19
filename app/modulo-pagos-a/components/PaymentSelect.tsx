@@ -44,9 +44,9 @@ export default function PaymentSelect({ setSelectedPayment }: Props) {
                 onChange={handleChange}
             >
                 {paymentMethods.map((method) => (
-                    <MenuItem key={method.id} value={method.id}>
+                    <MenuItem key={method.id} value={method.id} id={`${method.id}-${method.name.split(' ')[0]?.toLowerCase()}`}>
                         {method.name}
-                    </MenuItem>
+                    </MenuItem> 
                 ))}
             </Select>
         </FormControl>

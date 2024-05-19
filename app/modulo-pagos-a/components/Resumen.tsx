@@ -42,25 +42,25 @@ export default function Resumen({ onBookingIdChange }: Props) {
                   <TableCell component="th" scope="row">
                     Fecha de salida
                   </TableCell>
-                  <TableCell align="right">{bookingInfo ? new Date(bookingInfo.bookingDate).toLocaleDateString() : '-'}</TableCell>
+                  <TableCell align="right" id="booking-date">{bookingInfo ? new Date(bookingInfo.bookingDate).toLocaleDateString() : '-'}</TableCell>
                 </TableRow>
                 <TableRow >
                   <TableCell component="th" scope="row">
                     Precio tiquete libre de impuestos
                   </TableCell>
-                  <TableCell align="right">{bookingInfo?.basePrice}</TableCell>
+                  <TableCell align="right" id="booking-price-without-taxes">{bookingInfo?.basePrice}</TableCell>
                 </TableRow>
                 <TableRow >
                   <TableCell component="th" scope="row">
                     Impuestos sobre el tiquete
                   </TableCell>
-                  <TableCell align="right">{bookingInfo?.tax}</TableCell>
+                  <TableCell align="right" id="booking-taxes">{bookingInfo?.tax}</TableCell>
                 </TableRow>
                 <TableRow >
                   <TableCell component="th" scope="row">
                     Total a Pagar
                   </TableCell>
-                  <TableCell align="right">{bookingInfo?.totalPrice}</TableCell>
+                  <TableCell align="right" id="booking-total-price">{bookingInfo?.totalPrice}</TableCell>
                 </TableRow>
               </>
             ) : (
