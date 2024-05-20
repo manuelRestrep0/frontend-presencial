@@ -22,6 +22,7 @@ export default function MenuAppBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+    
   };
 
   return (

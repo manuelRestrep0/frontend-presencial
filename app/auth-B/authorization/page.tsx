@@ -1,7 +1,9 @@
 "use client"
 import { Button,Grid, MenuItem,Paper, Select, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead,TablePagination,TableRow, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from 'components/Navbar';
+import { getUsersRoles } from 'app/api/userService';
+import {User} from 'app/api/types';
 
 const paperStyle = { padding: 20, width: "50%", margin: "7% auto", border: "1px solid #c2c2c2", borderRadius: "10px" };
 const title = { fontWeight: "bold" };
@@ -9,75 +11,29 @@ const textStyle = { fontFamily: 'Roboto, sans-serif', margin: "15px 0px" };
 const inputs = { display: 'flex', alignItems: 'center'};
 const select = { height: "40px"};
 
-const rows = [
-  { id : 0,
-    name: 'John',
-    role: 'administrador',
-    email: 'Johnyelpapa@gmail.com'
-  },
-  {
-    id : 1,
-    name: 'Juan',
-    role: 'usuario',
-    email: 'Juan@gmail.com'
-  },
-  {
-    id : 2,
-    name: 'Susana',
-    role: 'administrador',
-    email: 'Susana@gmail.com'
-  },
-  {
-    id : 3,
-    name: 'Pedro',
-    role: 'usuario',
-    email: 'Pedro@gmail.com'
-  },
-  {
-    id : 4,
-    name: 'Pablo',
-    role: 'usuario',
-    email: 'Pablo@gmail.com'
-  },
-  {
-    id : 5,
-    name: 'Sara',
-    role: 'usuario',
-    email:'Sara@gmail.com'
-  },
-  {
-    id : 6,
-    name: 'Kevin',
-    role: 'usuario',
-    email: 'Kevin@gmail.com'
-  },
-  {
-    id : 7,
-    name: 'Luis',
-    role: 'usuario',
-    email: 'Luis@gmail.com'
-  },
-  {
-    id : 8,
-    name: 'Maria',
-    role: 'usuario',
-    email: 'Maria@gmail.com'
-  },
-  {
-    id : 9,
-    name: 'Jose',
-    role: 'usuario',
-    email: 'Jose@gmail.com'
-  },
-];
-
-let results: { id: number; name: string; role: string; email: string; }[] = [];
 
 export default function Authorization() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
-  const [editingUserId, setEditingUserId] = useState(null); // Nuevo estado para el ID de usuario en edición
+  const [editingUserId, setEditingUserId] = useState<number | null>(null);
+  const [results, setResults] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getUsersRoles();
+        setResults(data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   const handleChangePage = (event: any, newPage: React.SetStateAction<number>) => {
     setPage(newPage);
@@ -96,50 +52,47 @@ export default function Authorization() {
     setEditingUserId(userId as null); // Explicitly cast userId to null
   };
   
-  
 
-  const handleSaveClick = (userId: number, newRole: string) => {
-    if (results && results.length > 0) {
-        const user = results.find(user => user.id === userId);
-        if (user) {
-            user.role = newRole;
-            console.log(`Guardando nuevo rol ${newRole} para el usuario con ID ${userId}`);
-            setEditingUserId(null);
-        } else {
-            console.error(`Error: User with ID ${userId} not found.`);
-        }
-    } else {
-        console.error('Error: Results array is empty or undefined.');
-    }
-};
+  const handleSaveClick = (userId:any, newRole:string) => {
+    const updatedResults = results.map(user =>
+      user.personId === userId ? { ...user, role: newRole } : user
+    );
+    setResults(updatedResults);
+    setEditingUserId(null);
+  };
 
+  const filteredResults = search
+    ? results.filter(result =>
+        result.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        result.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        result.positions.some(position => position.name.toLowerCase().includes(search.toLowerCase())) ||
+        result.email.toLowerCase().includes(search.toLowerCase())
+      )
+    : results;
 
-  if (!search) {
-    results = rows;
-  } else {
-    results = rows.filter((result) => {
-      const lowerCaseName = result.name.toLowerCase();
-      const lowerCaseRole = result.role.toLowerCase();
-      const lowerCaseEmail = result.email.toLowerCase();
-      return lowerCaseName.includes(search.toLowerCase()) || lowerCaseRole.includes(search.toLowerCase()) || lowerCaseEmail.includes(search.toLowerCase());
-    });
-  }
+  if (loading) return <div>Cargando...</div>;
 
   return (
     <>
       <Navbar />
-      <Grid container style={paperStyle}>
-        <Typography variant="h4" component="h2" sx={title}>
-          Busqueda de Usuarios
+      <Grid container style={{ padding: '20px' }}>
+        <Typography variant="h4" component="h2" style={{ marginBottom: '20px' }}>
+          Búsqueda de Usuarios
         </Typography>
-        <Grid item xs={12} sx={textStyle}>
+        <Grid item xs={12} style={{ marginBottom: '20px' }}>
           Ingrese el Email, nombre o rol del usuario
         </Grid>
-        <Grid item xs={12} style={inputs}>
-          <TextField value={search} onChange={handleSearch} type="text" placeholder="Email, nombre o rol" style={{ width: "60%", padding: "10px" }} />
+        <Grid item xs={12} style={{ marginBottom: '20px' }}>
+          <TextField
+            value={search}
+            onChange={handleSearch}
+            type="text"
+            placeholder="Email, nombre o rol"
+            fullWidth
+          />
         </Grid>
 
-        <TableContainer style={{ marginTop: "40px" }} component={Paper}>
+        <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -150,31 +103,29 @@ export default function Authorization() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((result) => (
-                <TableRow key={result.id}>
-                  <TableCell component="th" scope="row" sx={textStyle}>
-                    {result.name}
-                  </TableCell>
-                  <TableCell sx={textStyle} >{result.email}</TableCell>
+              {filteredResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(result => (
+                <TableRow key={result.personId}>
+                  <TableCell>{result.firstName} {result.lastName}</TableCell>
+                  <TableCell>{result.email}</TableCell>
                   <TableCell>
-                    {editingUserId === result.id ? ( 
+                    {editingUserId === result.personId ? (
                       <Select
-                        
-                        style={select}
-                        value={result.role}
-                        onChange={(e) => handleSaveClick(result.id, e.target.value)}
+                        value={result.positions[0]?.name || ''}
+                        onChange={(e) => handleSaveClick(result.personId, e.target.value)}
                       >
-                        <MenuItem value={'usuario'}>usuario</MenuItem>
-                        <MenuItem value={'administrador'}>administrador</MenuItem>
-
+                        {result.positions.map(position => (
+                          <MenuItem key={position.positionId} value={position.name}>
+                            {position.name}
+                          </MenuItem>
+                        ))}
                       </Select>
                     ) : (
-                      result.role
+                      result.positions[0]?.name || 'N/A'
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    {editingUserId !== result.id && ( 
-                      <Button variant="contained" onClick={() => handleEditClick(result.id)}>
+                    {editingUserId !== result.personId && (
+                      <Button variant="contained" onClick={() => handleEditClick(result.personId)}>
                         Editar
                       </Button>
                     )}
@@ -186,7 +137,7 @@ export default function Authorization() {
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
-                  count={results.length}
+                  count={filteredResults.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

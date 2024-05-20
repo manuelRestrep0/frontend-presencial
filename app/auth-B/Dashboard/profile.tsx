@@ -19,8 +19,13 @@ const UserProfile: React.FC = () => {
       <Grid item xs={6}>
         <Stack spacing={2}>
           <TextField id="outlined-basic" label="Nombre" variant="outlined" value="Test" style={textStyle} />
-          <TextField id="outlined-basic" label="Rol" variant="outlined" value="test" style={textStyle} />
+          <TextField id="outlined-basic" label="Apellido" variant="outlined" value="Test" style={textStyle} />
           <TextField id="outlined-basic" label="Phone" variant="outlined" value="310 4349900" style={textStyle} />
+          <TextField id="outlined-basic" label="Country" variant="outlined" value="Colombia" style={textStyle} />
+          <TextField id="outlined-basic" label="Province" variant="outlined" value="Antioquia" style={textStyle} />
+          <TextField id="outlined-basic" label="City" variant="outlined" value="Bello" style={textStyle} />
+          <TextField id="outlined-basic" label="Direccion" variant="outlined" value="Calle 34 #22-11" style={textStyle} />
+          
           <Button variant="contained" color="primary" style={{ width: '100%', margin: '15px 0px' }}>Editar</Button>
         </Stack>
       </Grid>
@@ -29,3 +34,6 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
+
+
+
