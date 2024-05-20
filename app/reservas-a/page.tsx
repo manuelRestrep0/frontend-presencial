@@ -1,10 +1,10 @@
-import PassengerForm from './components/forms/PassengerForm'
-import './styles/global.css'
+import React, { useState } from "react"
+import SubmitPage from "./components/templates/SubmitPage"
 
-export default function ReservasAP() {
+export default function Confirmation() {
   return (
-    <div>
-      <PassengerForm />
+    <div className="App">
+      <SubmitPage />
     </div>
-  );
+  )
 }
