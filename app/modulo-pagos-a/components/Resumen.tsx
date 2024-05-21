@@ -5,31 +5,30 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from 'react';
 import { BookingInfo } from '../interfaces';
-import { getBooking, getListBookings } from '../services/booking';
-
-interface Props {
-  onBookingIdChange: (bookingId: number) => void;
-}
+import { getBooking } from '../services/booking';
+import { useSearchParams } from 'next/navigation';
 
 
-export default function Resumen({ onBookingIdChange }: Props) {
+export default function Resumen() {
   const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null);
+  const searchParams = useSearchParams();
+  const bookingId = searchParams.get('bookingId');
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const bookingsData = await getListBookings();
-        if (bookingsData.length > 0 && bookingsData[0]?.bookingId) {
-          const bookingId = bookingsData[0].bookingId;
-          onBookingIdChange(bookingId);
+        if (typeof bookingId === 'number') {
           const bookingData = await getBooking(bookingId);
-          setBookingInfo(bookingData);        }
+          setBookingInfo(bookingData);        
+        } else {
+          console.error('El bookingId_ no es un número válido.');
+        }
       } catch (error) {
         console.error('Error fetching bookings:', error);
       }
     };
     fetchBookings();
-  }, []);
+  }, [bookingId]);
 
   return (
     <>
