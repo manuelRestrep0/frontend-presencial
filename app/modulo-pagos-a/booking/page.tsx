@@ -20,11 +20,9 @@ export default function BookingDetail() {
 
   const handlePaymentChange = (payment: PaymentMethod) => {
     setSelectedPayment(payment);
-  };
-  
-  const handleBookingIdChange = () => {
     setIdBooking(Number(bookingId));
   };
+    
   
   return (
     <>

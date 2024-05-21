@@ -7,19 +7,25 @@ import { useEffect, useState } from 'react';
 import { BookingInfo } from '../interfaces';
 import { getBooking } from '../services/booking';
 import { useSearchParams } from 'next/navigation';
+import { NumericFormat } from 'react-number-format';
 
+interface ResumenProps {
+  setBookingId?: () => void,
 
-export default function Resumen() {
+}
+
+export default function Resumen({ setBookingId }: ResumenProps) {
   const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null);
   const searchParams = useSearchParams();
-  const bookingId = searchParams.get('bookingId');
+  const bookingId = Number(searchParams.get('bookingId'));
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
+        console.log(typeof bookingId);
         if (typeof bookingId === 'number') {
           const bookingData = await getBooking(bookingId);
-          setBookingInfo(bookingData);        
+          setBookingInfo(bookingData);
         } else {
           console.error('El bookingId_ no es un número válido.');
         }
@@ -47,19 +53,26 @@ export default function Resumen() {
                   <TableCell component="th" scope="row">
                     Precio tiquete libre de impuestos
                   </TableCell>
-                  <TableCell align="right" id="booking-price-without-taxes">{bookingInfo?.basePrice}</TableCell>
+                  <TableCell align="right" id="booking-price-without-taxes">
+                    <NumericFormat value={bookingInfo?.basePrice.toFixed(0)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  </TableCell>
                 </TableRow>
                 <TableRow >
                   <TableCell component="th" scope="row">
                     Impuestos sobre el tiquete
                   </TableCell>
-                  <TableCell align="right" id="booking-taxes">{bookingInfo?.tax}</TableCell>
+
+                  <TableCell align="right" id="booking-taxes">
+                    <NumericFormat value={bookingInfo?.tax.toFixed(0)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  </TableCell>
                 </TableRow>
                 <TableRow >
                   <TableCell component="th" scope="row">
                     Total a Pagar
                   </TableCell>
-                  <TableCell align="right" id="booking-total-price">{bookingInfo?.totalPrice}</TableCell>
+                  <TableCell align="right" id="booking-total-price">
+                    <NumericFormat value={bookingInfo?.totalPrice.toFixed(0)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                  </TableCell>
                 </TableRow>
               </>
             ) : (
