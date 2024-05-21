@@ -8,6 +8,7 @@ interface AddressInfoProps {
     setFormData: Function
 }
 
+const ADDRESS_REGEX = /^[a-zA-Z0-9\s.,#-]+$/;
 
 const AddressInfo = ({ formData, setFormData }: AddressInfoProps) => {
     return (
@@ -23,10 +24,10 @@ const AddressInfo = ({ formData, setFormData }: AddressInfoProps) => {
             <InputWLabel
                 id="region-input"
                 label='Departamento'
-                onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, province: e.target.value })}
                 placeholder='Antioquia'
                 type="text"
-                value={formData.region}
+                value={formData.province}
             />
             <InputWLabel
                 id="city-input"
@@ -39,10 +40,14 @@ const AddressInfo = ({ formData, setFormData }: AddressInfoProps) => {
             <InputWLabel
                 id="address-input"
                 label='Dirección'
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                onChange={(e) => {
+                    if (ADDRESS_REGEX.test(e.target.value) || e.target.value === '') {
+                        setFormData({ ...formData, residence: e.target.value })
+                    }
+                }}
                 placeholder='Calle 00 #00-00'
                 type="text"
-                value={formData.address}
+                value={formData.residence}
             />
         </div>
     );

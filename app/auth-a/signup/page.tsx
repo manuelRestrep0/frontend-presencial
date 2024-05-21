@@ -13,12 +13,15 @@ import { BasicInfo } from '../../../components/UserRegistration/BasicInfo';
 import { AdditionalInfo } from '../../../components/UserRegistration/AdditionalInfo';
 import { AddressInfo } from '../../../components/UserRegistration/AddressInfo';
 import { SignupInfo } from '../../../components/UserRegistration/SignupInfo';
+import { FormData } from 'components/UserRegistration/IFormData';
 
 
+const registerEndpointUrl = "http://localhost:8080/public/api/auth/register"
+const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const Form = () => {
 
-    const {data : session} = useSession()
+    const { data: session } = useSession()
 
     const [isPasswordValid, setValidSignup] = useState(true)
 
@@ -40,35 +43,62 @@ const Form = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-    
-    const [formData, setFormData] = useState({
-        email: session?.user? session.user.email as string : "",
-        password: "",
-        confirmPassword: "",
-        firstName: "",
-        lastName: "",
-        username: "",
-        country: "",
-        region: "",
-        city: "",
-        address: "",
+
+    const [formData, setFormData] = useState<FormData>({
+        id: "",
         idType: "",
-        idNumber: "",
+        firstname: "",
+        lastname: "",
+        password: "",
+        mail: session?.user ? session.user.email as string : "",
+        country: "",
+        province: "",
+        city: "",
+        residence: "",
+        phone: "",
+        birthdate: "",
+        confirmPassword: "",
+        username: "",
         gender: "",
-        birthday: "",
-        phoneNumber: ""
-      });
-      
- // Update email field in formData when session data changes
+    });
+
+
+    const sendRegisterRequest = async () => {
+        if (!validateSignup())
+            return
+        const requestFormData = {...formData}
+        delete requestFormData.confirmPassword
+        delete requestFormData.gender
+        delete requestFormData.username
+        requestFormData.role = "User"
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(requestFormData)
+        }
+        console.log("Req json",JSON.stringify(requestFormData))
+        const response = await fetch(registerEndpointUrl, options)
+            .then(res => {
+                console.log(res.status)
+                return res.json()
+            })
+            .then(res => console.log(res))
+            .catch(error => console.log(error))
+        console.log(response)
+    }
+
+
+    // Update email field in formData when session data changes
     useEffect(() => {
         if (session?.user) {
             setFormData(prevState => ({
                 ...prevState,
-                email: session.user ? session.user.email as string: ""
+                mail: session.user ? session.user.email as string : ""
             }));
         }
     }, [session]);
-
 
     function validateWindowSize(invalidPassword: React.JSX.Element, validPassword: React.JSX.Element) {
         if (windowWidth > 1100) {
@@ -92,7 +122,7 @@ const Form = () => {
 
     const passwordAlertDisplay = () => {
 
-        if(!session?.user) {
+        if (!session?.user) {
 
             const invalidPassword = (<div>
                 <p className='font-semibold'>Contraseña no válida, verifica que:</p>
@@ -103,10 +133,10 @@ const Form = () => {
                     <li>Presente al menos 1 letra minúscula</li>
                 </ul>
             </div>)
-    
+
             const validPassword = (<div className='font-semibold'>Contraseña válida</div>)
-    
             return validateWindowSize(invalidPassword, validPassword);
+
 
         }
 
@@ -127,22 +157,22 @@ const Form = () => {
             } else {
                 return (
                     <>
-                        <AddressInfo formData={formData} setFormData={setFormData}/>
-                        <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup}/>
+                        <AddressInfo formData={formData} setFormData={setFormData} />
+                        <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup} />
                     </>
                 )
             }
         }
 
         if (page === 0) {
-            return <BasicInfo formData={formData} setFormData={setFormData}/>;
-          } else if (page === 1) {
-            return <AdditionalInfo formData={formData} setFormData={setFormData}/>;
-          } else if (page === 2) {
-            return <AddressInfo formData={formData} setFormData={setFormData}/>;
-          } else {
-            return <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup}/>;
-          }
+            return <BasicInfo formData={formData} setFormData={setFormData} />;
+        } else if (page === 1) {
+            return <AdditionalInfo formData={formData} setFormData={setFormData} />;
+        } else if (page === 2) {
+            return <AddressInfo formData={formData} setFormData={setFormData} />;
+        } else {
+            return <SignupInfo formData={formData} setFormData={setFormData} thridPartySession={session} setValidSignup={setValidSignup} />;
+        }
     };
 
     function nextPage() {
@@ -199,7 +229,7 @@ const Form = () => {
 
     function verifyObjectFilled(objeto: Record<string, string>, isGoogleAuthenticated: any = false): boolean {
         console.log(objeto);
-        
+
 
         for (const clave in objeto) {
             // Skip checking password and confirmPassword fields if user is Google authenticated
@@ -221,19 +251,24 @@ const Form = () => {
             return false
         }
 
+        if (!EMAIL_REGEX.test(formData.mail)) {
+            alert("El campo email no cumple con el formato adecuado")
+            return false
+        }
+
         if (!session?.user) {
             if (formData.password !== formData.confirmPassword) {
                 alert("La contraseña no coincide")
                 return false
             }
-        
+
             if (!isPasswordValid) {
                 alert("La contraseña no es válida")
                 return false
             }
-    
+
         }
-        
+
         return true
 
     }
@@ -270,11 +305,12 @@ const Form = () => {
                             </button>
 
                             <button className='registration-method-btn mx-1 outline rounded-full outline-1 outline-offset-2 outline-gray-700'>
-                                <BsFacebook  onClick={() => (signIn())} className='text-[28px] hover:scale-105' />
+                                <BsFacebook onClick={() => (signIn())} className='text-[28px] hover:scale-105' />
                             </button>
                         </div>
                     </div>
                     <div className='w-full flex justify-center'>
+
                         <button className='nav-btn' onClick={nextPage}>{windowWidth > 1100 ? chooseButtonText() : chooseButtonText2()}</button>
                     </div>
 
