@@ -1,13 +1,12 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 import 'styles/UserRegistration/UserRegistration.css';
 
-import { BsChevronLeft } from 'react-icons/bs';
-import { LiaPlaneDepartureSolid } from "react-icons/lia";
 import { FcGoogle } from "react-icons/fc";
-import { BsFacebook } from "react-icons/bs";
+import { BsChevronLeft, BsFacebook } from "react-icons/bs";
 import Link from 'next/link';
 import { IconAirplane } from 'components/components-Auth-a/IconAirplane';
 import { InputField } from 'components/components-Auth-a/InputField';
@@ -17,6 +16,9 @@ const Form = () => {
 
     const [page, setPage] = useState(0);
     const [windowWidth, setWindowWidth] = useState(0);
+
+    const {data : session} = useSession()
+
 
     useEffect(() => {
 
@@ -46,6 +48,21 @@ const Form = () => {
         rememberMe: false,
     });
 
+    useEffect(() => {
+        if (session?.user) {
+            setFormData(prevState => ({
+                ...prevState,
+                email: session.user ? session.user.email as string: ""
+            }));
+        }
+    }, [session]);
+
+
+
+    if (session) {
+        login(formData)
+    }
+
     const handleChange = (e: { target: { name: any; value: any; type: any; checked: any; }; }) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
@@ -60,21 +77,27 @@ const Form = () => {
 
     };
 
+    function validatePageSize() {
+        if (page <= 1) {
+            alert("hallo, you're at the start")
+        } else {
+            setPage(page - 2)
+        }
+    }
+
+    function validateEmptyPage() {
+        if (page === 0) {
+            alert("hallo, you're at the start")
+        } else {
+            setPage(page - 1)
+        }
+    }
+
     function prevPage() {
         if (windowWidth > 1100) {
-            if (page <= 1) {
-                alert("hallo, you're at the start")
-            } else {
-                setPage(page - 2)
-            }
+            validatePageSize();
         } else {
-
-            if (page === 0) {
-                alert("hallo, you're at the start")
-            } else {
-                setPage(page - 1)
-            }
-
+            validateEmptyPage();
         }
     }
 
@@ -94,6 +117,8 @@ const Form = () => {
         console.log(JSON.stringify(data))
     }
 
+
+    console.log(session)
 
     return (
         <div className='main-container h-screen bg-cover text-black flex justify-center items-center'>
@@ -116,8 +141,8 @@ const Form = () => {
 
                     <div className=' w-full bg-white flex flex-col'>
                         <form onSubmit={handleSubmit} className=' bg-white flex-col flex gap-4 mt-3'>
-                            <InputField id="email" placeholder="Usuario" onChange={handleChange} type='email' value={formData.email} />
-                            <InputField id="password" placeholder="Contraseña" onChange={handleChange} type='password' value={formData.password} />
+                            <InputField id="email" placeholder="Usuario" onChange={handleChange} type='email' value={formData.email} disabled={session?.user ? true : false}/>
+                            <InputField id="password" placeholder="Contraseña" onChange={handleChange} type='password' value={formData.password} disabled={session?.user ? true : false}/>
                             <button className=' text-xs text-gray-600'>¿Ha olvidado su contraseña?</button>
                             <div className=" flex justify-between items-center">
                                 <div className='flex gap-4'>
@@ -139,10 +164,10 @@ const Form = () => {
                     <hr className="border-gray-600 w-full justify-center mt-7" />
 
                     <div className=' mt-7 bg-white w-full flex flex-col items-center gap-2 justify-center'>
-                        <button className=' border border-gray-600 rounded-full text-xs w-full h-8 flex items-center justify-center text-center gap-3'>
+                        <button onClick={() => signIn()} className=' border border-gray-600 rounded-full text-xs w-full h-8 flex items-center justify-center text-center gap-3'>
                             <FcGoogle className='text-xl' />Ingresar con Google
                         </button>
-                        <button className='border border-gray-600 rounded-full text-xs w-full h-8 flex items-center justify-center text-center gap-3'>
+                        <button onClick={() => signIn()} className='border border-gray-600 rounded-full text-xs w-full h-8 flex items-center justify-center text-center gap-3'>
                             <BsFacebook className='text-facebook-logo text-xl' />Ingresar con Facebook
                         </button>
                     </div>
