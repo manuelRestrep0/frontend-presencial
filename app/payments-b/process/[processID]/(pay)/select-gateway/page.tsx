@@ -6,7 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline"
 import { useEffect, useState } from "react"
 import PayGwButton from "./components/button/payGwButton"
 
-export default function SelectGateway() {
+export default function SelectGateway({ params }: { params: { processID: string}}) {
 
   const [gateways, setGateways] = useState<string[]>([])
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function SelectGateway() {
       >
         {
           gateways.map( (gateway, index) => (
-            <PayGwButton key={index} gatewayName={gateway}/>
+            <PayGwButton key={index} gatewayName={gateway} processID={params.processID}/>
           ))
         }
       </Container>

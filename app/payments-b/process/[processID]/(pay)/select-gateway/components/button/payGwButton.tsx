@@ -7,13 +7,16 @@ import payu from "@/../public/PayULogo.png"
 import pse from "@/../public/pse-logo.png"
 import stripe from "@/../public/stripeLogo.webp"
 import wompi from "@/../public/WompiLogoPrincipal.png"
+import { useRouter } from "next/navigation"
 
 
 interface btnProps {
-  gatewayName: string
+  gatewayName: string,
+  processID: string
 }
 
-export const PayGwButton = ({ gatewayName }: btnProps) => {
+export const PayGwButton = ({ gatewayName,processID }: btnProps) => {
+  const router= useRouter()
   const upperGateway = gatewayName.toUpperCase()
   const getUrl = (upperGateway: string) => {
     switch (upperGateway) {
@@ -39,8 +42,12 @@ export const PayGwButton = ({ gatewayName }: btnProps) => {
   }
   const url = getUrl(upperGateway)
 
+  const redirect = () => {
+    router.push(`/payments-b/process/${processID}/select-method`)
+  }
+
   return (
-    <button className="relative m-5 flex h-[100px] w-[250px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] border border-solid border-[black]">
+    <button className="relative m-5 flex h-[100px] w-[250px] cursor-pointer items-center justify-center overflow-hidden rounded-[5px] border border-solid border-[black]" onClick={()=>{redirect()}}>
       <Image
         src={url}
         width={250}

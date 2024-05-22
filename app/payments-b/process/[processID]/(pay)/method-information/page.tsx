@@ -9,8 +9,12 @@ import davivienda from "@/../public/cards/Davivienda.png"
 import itau from "@/../public/cards/Itau.png"
 import masterCard from "@/../public/cards/MaterCard.png"
 import visa from "@/../public/cards/Visa.png"
+import { useRouter } from "next/navigation"
 
-export default function MethodInfo() {
+export default function MethodInfo({params}:{params:{processID:string}}) {
+
+  const router= useRouter()
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -151,8 +155,9 @@ export default function MethodInfo() {
             <div className="mt-2.5 flex items-center justify-center">
               <button
                 className="relative m-0 box-border w-2/5 min-w-[64px] cursor-pointer items-center justify-center rounded border-0 bg-[#208EE6] px-4 py-1.5 align-middle font-medium text-[white] no-underline hover:bg-[#0e6ecd]"
-                type="submit"
+                type="submit" onClick={() => {router.push(`/payments-b/process/${params.processID}/notification`)}}
               >
+            
                 PAGAR
               </button>
             </div>

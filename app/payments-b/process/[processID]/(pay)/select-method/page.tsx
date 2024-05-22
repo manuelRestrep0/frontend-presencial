@@ -4,7 +4,7 @@ import wompi from "@/../public/WompiLogoPrincipal.png"
 import { payMethods } from "enum/paymentMethods"
 import PayMethodButton from "./components/PayMethodButton"
 
-export default function SelectMethod() {
+export default function SelectMethod({params}:{params:{processID:string}}) {
   return (
     <Container
       component={"main"}
@@ -27,7 +27,7 @@ export default function SelectMethod() {
             Escoge el método de pago
           </Typography>
           <Typography component="h5" fontWeight={"300"} color={"gray"} fontSize={15} align="left" className="mt-2.5">
-            PAGO A
+            PAGO B
           </Typography>
           <Typography component="h5" fontWeight={"300"} color={"black"} fontSize={15} align="left">
             Singapur Airlines
@@ -36,10 +36,10 @@ export default function SelectMethod() {
           <Typography component="h1" fontWeight={"bold"} color={"black"} fontSize={25} align="right">
             $ 600 USD
           </Typography>
-          <PayMethodButton method={payMethods.CARDS} text={"Usa tus tarjetas"} />
-          <PayMethodButton method={payMethods.TRANSFER} text={"Transferencia de Bancolombia"} />
-          <PayMethodButton method={payMethods.NEQUI} text={"Usa tu cuenta Nequi"} />
-          <PayMethodButton method={payMethods.PSE} text={"Cuenta de ahorros o corriente"} />
+          <PayMethodButton method={payMethods.CARDS} text={"Usa tus tarjetas"} processID={params.processID} />
+          <PayMethodButton method={payMethods.TRANSFER} text={"Transferencia de Bancolombia"} processID={""} />
+          <PayMethodButton method={payMethods.NEQUI} text={"Usa tu cuenta Nequi"} processID={""} />
+          <PayMethodButton method={payMethods.PSE} text={"Cuenta de ahorros o corriente"} processID={""} />
         </Grid>
       </Grid>
 

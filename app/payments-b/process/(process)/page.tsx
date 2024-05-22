@@ -10,8 +10,12 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Typography from "@mui/material/Typography";
 
 import Copyright from "@/../components/copyright/copyringht";
+import { useRouter } from "next/navigation";
 
 export default function Process() {
+
+  const router= useRouter()
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -19,7 +23,12 @@ export default function Process() {
       email: data.get("email"),
       reservNumber: data.get("reservNumber"),
     });
+    router.push(`/payments-b/process/${data.get("reservNumber")}/information`)
+  
   };
+
+
+
 
   return (
     <Box
@@ -67,6 +76,7 @@ export default function Process() {
           }
           label="Acepto los terminos y condiciones"
         />
+        
         <button
           className="inline-flex items-center justify-center relative box-border cursor-pointer align-middle no-underline font-medium min-w-[64px] rounded text-[white] bg-[#1976d2] w-full mt-6 mb-4 m-0 px-4 py-1.5 border-0 hover:bg-[#0e6ecd]"
           type="submit"

@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/navigation";
 
-export default function Information() {
+export default function Information({ params  }: { params : { processID : string } }) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -204,11 +204,13 @@ export default function Information() {
               </Typography>
             </Grid>
           </Grid>
-
+                
+            
           <button
             className="text-[15] inline-flex items-center justify-center relative box-border cursor-pointer align-middle no-underline font-medium min-w-[64px] rounded text-[white] bg-[#2196F3] w-full mt-6 mb-4 m-0 px-4 py-1.5 border-0 hover:bg-[#0e6ecd]"
             onClick={() => {
-              router.push('/selectGateway');
+              router.push(`/payments-b/process/${params.processID}/select-gateway`);
+              
             }}
           >
             SELECCIONAR PASARELA DE PAGO

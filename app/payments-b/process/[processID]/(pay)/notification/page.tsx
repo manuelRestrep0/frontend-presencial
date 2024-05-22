@@ -5,6 +5,8 @@ import Image from "next/image"
 import checked from "@/../public/checked.png"
 import remove from "@/../public/remove.png"
 import { useEffect, useState } from "react"
+import Router from 'next/router';
+import { useRouter } from "next/navigation"
 
 interface CostsData {
   seatCost: number
@@ -53,6 +55,10 @@ export default function Notification({ params }: { params: { processID: string }
   }, [])
 
   console.log(costInfo)
+
+
+  const router= useRouter()
+
 
   let responseStatus = true
   return (
@@ -125,6 +131,19 @@ export default function Notification({ params }: { params: { processID: string }
                 </Grid>
 
                 <Grid container spacing={1} sx={{ width: "90%", marginTop: "15px" }}>
+
+
+                <Grid item xs={6}>
+                    <Typography component="h5" color={"black"} fontSize={14} fontWeight={"bold"}>
+                      Valor del vuelo:
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography component="h5" color={"black"} fontSize={14}>
+                      {costInfo.flightCost}$
+                    </Typography>
+                  </Grid>
+
                   <Grid item xs={6}>
                     <Typography component="h5" color={"black"} fontSize={14} fontWeight={"bold"}>
                       Valor de los asientos:
@@ -153,7 +172,7 @@ export default function Notification({ params }: { params: { processID: string }
                   </Grid>
                   <Grid item xs={6}>
                     <Typography component="h5" color={"black"} fontSize={14}>
-                      50.00$
+                      {costInfo.otherCosts}$
                     </Typography>
                   </Grid>
                 </Grid>
@@ -168,7 +187,7 @@ export default function Notification({ params }: { params: { processID: string }
                 <Grid item xs={6}>
                   <button
                     className="relative m-0 my-4 box-border inline-flex w-full min-w-[64px] cursor-pointer items-center justify-center rounded border-0 bg-[#2196F3] px-4 py-1.5 align-middle font-medium text-[15] text-[white] no-underline hover:bg-[#0e6ecd]"
-                    onClick={() => {}}
+                    onClick={() => { router.push("/payments-b/process")}}
                   >
                     FINALIZAR
                   </button>
