@@ -14,7 +14,7 @@ const Select: React.FC<SelectProps> = ({ title, options }) => {
     return (
         <div className="relative">
             <select id="select" name="select" className="block appearance-none w-full bg-gray-100 border-gray-400 hover:border-gray-500 px-4 py-3 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                <option value="" disabled selected>{title}</option>
+                <option value="" disabled defaultValue={title}>{title}</option>
                 {options.map(option => (
                     <option key={option.value} value={option.value}>{option.label}</option>
                 ))}

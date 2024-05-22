@@ -1,8 +1,11 @@
+"use client";
 import React from 'react';
-import ButtonAppBar from 'components/NavigationBar/TopBar';
+import { flightService } from 'app/api/ServiceAssembler';
+import { Flight } from 'app/api/types';
+import FloatingActionButtonExtendedSize from 'components/Button/FloatingButtons';
 import ContentForm from 'components/Content/Form';
 import ImagesRow from 'components/Content/ImagesRow';
-import FloatingActionButtonExtendedSize from 'components/Button/FloatingButtons';
+import ButtonAppBar from 'components/NavigationBar/TopBar';
 const trips = [
   { cityFrom: 'Medellín', cityTo: 'Bogotá', date: '24 Dic' },
   { cityFrom: 'London', cityTo: 'New York', date: '29 Feb' },
@@ -10,11 +13,19 @@ const trips = [
   { cityFrom: 'London', cityTo: 'City', date: 'City Date' },
 ];
 const ListaVuelos: React.FC = () => {
+  const [vuelos, setVuelos] = React.useState<Array<Flight>>([])
+  React.useEffect(() => {
+	flightService.all().then(response => 
+		setVuelos(response.data)
+	)
+  }, [])
   return (
     <div>
       <ButtonAppBar/>
       <ContentForm/>
-    
+	  {vuelos.map(flight => 
+		<div key={flight.flightId}>{JSON.stringify(flight)}</div>
+	  )}
       <div style={{marginLeft:'20%', marginTop:'3%',  zIndex: 'auto'}}>
         <div style={{ display: 'flex' }}>
         {trips.map((trip, index) => (
