@@ -1,5 +1,5 @@
 import apiClient from './apiClient';
-import { User, UpdatePrivilegePayload } from './types';
+import { User, UpdateRolePayload } from './types';
 
 
 export const resetPassword = async (newPassword:string) => {
@@ -24,5 +24,14 @@ export const getUsersRoles = async () : Promise<User[]>=> {
   }
 }
 
+export const updateRole = async (personId: number, roleIds:any) => {
+  try { 
+    const response = await apiClient.patch(`/usersroles/${personId}`,roleIds);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating the user role:', error);
+    throw error;
+  }
+};
 
 

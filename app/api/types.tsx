@@ -21,9 +21,6 @@ export interface Privilege {
     positions: Position[];
   }
   
-  export interface UpdatePrivilegePayload {
-    positions: {
-      positionId: number;
-      privileges: Privilege[];
-    }[];
+  export interface UpdateRolePayload {
+    roleIds: number[];
   }
