@@ -11,21 +11,21 @@ interface Props {
 }
 
 const GestionAsientosPage = ({ reserva }: Props) => {
-  const { actions } = useGestionSeatStore()
-  const { setListSeats } = actions
+  // const { actions } = useGestionSeatStore()
+  // const { setListSeats } = actions
 
-  const getSeats = async () => {
-    const res = await serviceGetSeats()
-    if (res.status) {
-      setListSeats(res.data as Seat[])
-      return
-    }
-    alert("Error al obtener los asientos")
-  }
+  // const getSeats = async () => {
+  //   const res = await serviceGetSeats()
+  //   if (res.status) {
+  //     setListSeats(res.data as Seat[])
+  //     return
+  //   }
+  //   alert("Error al obtener los asientos")
+  // }
 
-  useEffect(() => {
-    getSeats()
-  }, [])
+  // useEffect(() => {
+  //   getSeats()
+  // }, [])
 
   return (
     <main className="relative grid min-h-screen">
