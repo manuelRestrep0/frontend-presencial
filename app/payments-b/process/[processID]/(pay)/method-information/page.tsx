@@ -11,6 +11,10 @@ import masterCard from "@/../public/cards/MaterCard.png"
 import visa from "@/../public/cards/Visa.png"
 import { useRouter } from "next/navigation"
 
+
+
+
+
 export default function MethodInfo({params}:{params:{processID:string}}) {
 
   const router= useRouter()
@@ -26,6 +30,12 @@ export default function MethodInfo({params}:{params:{processID:string}}) {
       securityCode: data.get("securityCode"),
     })
   }
+
+
+
+
+
+
   return (
     <Container
       component={"main"}
