@@ -43,10 +43,14 @@ export default function PaymentSelect({ setSelectedPayment }: Props) {
                 value={selectedPaymentId}
                 onChange={handleChange}
             >
-                {paymentMethods.map((method) => (
-                    <MenuItem key={method.id} value={method.id}>
+                {paymentMethods.map((method: any) => (
+                    <MenuItem
+                        key={method.id}
+                        value={method.id}
+                        id={`${method.id}-${method.name.toLowerCase().replace(/ /g, '-')}`}
+                    >
                         {method.name}
-                    </MenuItem> 
+                    </MenuItem>
                 ))}
             </Select>
         </FormControl>

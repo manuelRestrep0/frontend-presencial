@@ -41,8 +41,8 @@ export default function BookingSelect({ setSelectedBooking }: Props) {
                 style={{ width: '100%' }}
             >
                 {bookingsInfo && bookingsInfo.length > 0 && (
-                    bookingsInfo.map((booking) => (
-                        <MenuItem key={booking.bookingId} value={String(booking.bookingId)}>
+                    bookingsInfo.map((booking, index) => (
+                        <MenuItem key={booking.bookingId} value={String(booking.bookingId)} id={`${index}-booking`}>
                             Reserva # {booking.bookingId} - Fecha {new Date(booking.bookingDate).toLocaleDateString()}
                         </MenuItem>
                     ))
