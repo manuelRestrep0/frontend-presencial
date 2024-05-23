@@ -3,7 +3,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from 'react';
+import { useState, useMemo} from 'react';
 import { BookingInfo } from '../interfaces';
 import { getBooking } from '../services/booking';
 import { useSearchParams } from 'next/navigation';
@@ -19,10 +19,9 @@ export default function Resumen({ setBookingId }: ResumenProps) {
   const searchParams = useSearchParams();
   const bookingId = Number(searchParams.get('bookingId'));
 
-  useEffect(() => {
+  useMemo(() => {
     const fetchBookings = async () => {
       try {
-        console.log(typeof bookingId);
         if (typeof bookingId === 'number') {
           const bookingData = await getBooking(bookingId);
           setBookingInfo(bookingData);

@@ -1,14 +1,14 @@
 import PersonIcon from '@mui/icons-material/Person';
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import { Box, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PassengerInfo } from '../interfaces';
 import { getListPassengers } from '../services/passenger';
 
 export default function Passenger() {
   const [passengers, setPassengers] = useState<PassengerInfo[]>([]);
 
-  useEffect(() => {
+  useMemo(() => {
     const fetchPassengers = async () => {
       try {
         const passengerData = await getListPassengers();

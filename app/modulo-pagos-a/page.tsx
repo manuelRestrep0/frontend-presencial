@@ -27,7 +27,7 @@ export default function Home() {
                 <Box style={{ minWidth: '70%', maxWidth: '90%' }}>
                     <FormControl style={{ marginTop: 10 }}>
                         <Box sx={{ p: 3, bgcolor: '#cfe8fc', borderRadius: '10px', minWidth: '100%' }}>
-                            <Typography variant="h5" style={{ marginBottom: 2 }}>Reservas disponibles</Typography>
+                            <Typography variant="h5" style={{ marginBottom: 2 }}>Reservas Disponibles</Typography>
                             <BookingSelect setSelectedBooking={handleBookingIdChange} />
 
                             <Link href={idBooking ? `/modulo-pagos-a/booking?bookingId=${encodeURIComponent(idBooking)}` : '#'}>

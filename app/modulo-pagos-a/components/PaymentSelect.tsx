@@ -9,7 +9,7 @@ interface Props {
 
 export default function PaymentSelect({ setSelectedPayment }: Props) {
     const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-    const [selectedPaymentId, setSelectedPaymentId] = useState<"" | { value: string } | undefined>("");
+    const [selectedPaymentId, setSelectedPaymentId] = useState<string>("");
 
     useEffect(() => {
         const fetchPaymentMethods = async () => {
@@ -24,9 +24,9 @@ export default function PaymentSelect({ setSelectedPayment }: Props) {
         fetchPaymentMethods();
     }, []);
 
-    const handleChange = (event: SelectChangeEvent<{ value: string }>) => {
-        const selectedId = event.target.value as string;
-        setSelectedPaymentId(selectedId !== "" ? { value: selectedId } : undefined);
+    const handleChange = (event: SelectChangeEvent<string>) => {
+        const selectedId = event.target.value;
+        setSelectedPaymentId(selectedId);
         const selectedMethod = paymentMethods.find(method => method.id === selectedId);
         if (selectedMethod) {
             setSelectedPayment(selectedMethod);
@@ -44,7 +44,7 @@ export default function PaymentSelect({ setSelectedPayment }: Props) {
                 onChange={handleChange}
             >
                 {paymentMethods.map((method) => (
-                    <MenuItem key={method.id} value={method.id} id={`${method.id}-${method.name.split(' ')[0]?.toLowerCase()}`}>
+                    <MenuItem key={method.id} value={method.id}>
                         {method.name}
                     </MenuItem> 
                 ))}
