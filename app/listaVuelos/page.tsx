@@ -11,12 +11,7 @@ import FloatingActionButtonExtendedSize from 'components/Button/FloatingButtons'
 import Chatbot from 'components/chatbot';
 // import chatbot from '../images/chatbot.png';
 
-const trips = [
-  { cityFrom: 'Medellín', cityTo: 'Bogotá', date: '24 Dic' },
-  { cityFrom: 'London', cityTo: 'New York', date: '29 Feb' },
-  { cityFrom: 'Madrid', cityTo: 'Moscow', date: '1 Jan' },
-  { cityFrom: 'London', cityTo: 'City', date: 'City Date' },
-];
+
 
 
 
@@ -24,10 +19,16 @@ const ListaVuelos: React.FC = () => {
   const [flights, setFlights] = useState<Array<Flight>>([]);
   
   useEffect(() => {
-	flightService.searchBy("min-price=700").then(response => {
+	flightService.searchBy("min-price=100").then(response => {
 		return response.data
 	}).then(data => setFlights(data))
   }, [])
+
+  const trips = flights.map(flight => ({
+    cityFrom: flight.originAirport.city ,
+    cityTo: flight.destinationAirport.city,
+    date: new Date(flight.arrivalDate.toString()).toLocaleDateString()
+  }));
 
   return (
     <div>
@@ -45,7 +46,7 @@ const ListaVuelos: React.FC = () => {
           <label htmlFor="select" className="inline-block text-gray-700 font-bold mb-2" style={{ fontSize: '3em' }}>Now Days</label>
         </p>
         <p className="text-gray-400 font-bold">Este es el contenido de la página 1.</p>
-		<div>
+		{/* <div>
 			{flights.map(flight => {
 				return <div key={flight.flightId}>
 					<Card>
@@ -55,13 +56,13 @@ const ListaVuelos: React.FC = () => {
 							</h2>
 							{flight.originAirport.city} - {flight.destinationAirport.city}
 							<p>
-								{new Date(Date.parse(flight.arrivalDate)).toDateString()}
+              {new Date(flight.arrivalDate.toString()).toLocaleDateString()}
 							</p>
 						</CardContent>
 					</Card>
 				</div>
 			})}
-		</div>
+		</div> */}
 
       </div>
       

@@ -2,7 +2,7 @@ import axios from "axios";
 import { Flight } from "./types";
 
 // Tienen que averiguar cómo poner la variable de entorno (no śe como es en next.js)
-const api_url = process.env.API_URL || "http://localhost:8099/v1"
+const api_url = process.env.API_URL || "http://localhost:8080/v1"
 
 // Api connection
 const service = axios.create({ baseURL: api_url })

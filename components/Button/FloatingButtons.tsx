@@ -3,8 +3,8 @@ import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 interface TripProps {
-    cityFrom: string;
-    cityTo: string;
+    cityFrom: String;
+    cityTo: String;
     date: string;
   }
 const FloatingActionButtonExtendedSize: React.FC<TripProps> = ({ cityFrom, cityTo, date }) => {
