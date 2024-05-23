@@ -9,13 +9,10 @@ import AddPassengerButton from "../atoms/buttons/AddPassengerButton"
 import SectionTitle from "../atoms/texts/SectionTitle"
 import SitasAppBar from "../molecules/SitasAppBar"
 import PassengerInfo from "../organisms/PassengerInfo"
+import { Person } from "app/reservas-a/api/person/interface/person"
 
 const SubmitPage: React.FC = () => {
   const router = useRouter()
-
-  const handleContinueClick = () => {
-    router.push("/reservas-a/confirm")
-  }
 
   const handleHistoryClick = () => {
     router.push("/reservas-a/history")
@@ -25,13 +22,52 @@ const SubmitPage: React.FC = () => {
     router.push("/reservas-a/")
   }
 
-  const [passengers, setPassengers] = useState<any>([<PassengerInfo key={0} readOnly={false} />])
+  const [passengers, setPassengers] = useState<Person[]>([
+    {
+      name: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      address: "",
+      contactName: "",
+      contactLastname: "",
+      contactPhone: "",
+    },
+  ])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number, field: keyof Person) => {
+    const { value } = e.target
+    setPassengers((prevData) => {
+      const newData = [...prevData]
+      newData[index] = {
+        ...newData[index],
+        [field]: value,
+      } as Person
+      return newData
+    })
+  }
 
   const addNewPassenger = () => {
-    const newPassenger = <PassengerInfo key={passengers.length} readOnly={false} />
+    const newPassenger = {
+      name: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      address: "",
+      contactName: "",
+      contactLastname: "",
+      contactPhone: "",
+    }
 
     setPassengers([...passengers, newPassenger])
   }
+
+  const handleSubmit = () => {
+    localStorage.setItem("passengersToConfirm", JSON.stringify(passengers))
+
+    router.push("/reservas-a/confirm")
+  }
+
   return (
     <div>
       <SitasAppBar onHistoryClick={handleHistoryClick} onBackClick={handleBackClick} />
@@ -44,20 +80,24 @@ const SubmitPage: React.FC = () => {
       <AddPassengerButton onClick={addNewPassenger} />
       <Stack>
         <div>
-          {passengers.map((passenger: JSX.Element, index: number) => (
+          {passengers.map((passenger: Person, index: number) => (
             <div key={index}>
               {index > 0 && (
                 <div>
                   <Divider>Pasajero {index + 1}</Divider>
                 </div>
               )}
-              <div>{passenger}</div>
+              <PassengerInfo
+                data={passenger}
+                onDataChange={(e, field) => handleChange(e, index, field)}
+                readOnly={false}
+              />
             </div>
           ))}
         </div>
       </Stack>
       <Box className="box" textAlign="right">
-        <Button className="save" variant="contained" onClick={handleContinueClick}>
+        <Button className="save" variant="contained" onClick={handleSubmit}>
           Continuar
         </Button>
       </Box>
