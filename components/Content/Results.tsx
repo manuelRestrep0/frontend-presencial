@@ -1,34 +1,51 @@
-import React from 'react';
+import { Card, CardContent, Typography, Box, Divider } from '@material-ui/core';
 
 export default function Results() {
     return (
-        <div style={{
-            marginTop: '20px',
-            marginLeft: '20px',
-            marginRight: '20px',
-            padding: '10px',
-            display: 'flex',
-            flexDirection: 'column', /* Cambié 'row' por 'column' */
-        }}>
-            {/* Primer div */}
-            <div style={{ marginBottom: '20px', border: '1px solid black', borderRadius: '8px', }}>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Praesentium quibusdam fugiat iusto itaque, aliquid, voluptate omnis magnam consequuntur sequi animi reiciendis illo possimus veniam distinctio officiis porro voluptates dignissimos blanditiis.
-            </div>
+        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* Primer Card */}
+            <Card style={{ marginBottom: '20px', width: '90%', borderRadius: '8px', padding: '10px' }}>
+                <CardContent>
+                    <Typography variant="h6">3:00AM - 5:55AM</Typography>
+                    <Typography variant="body2">MANAOS (BRA) - BOGOTA (COL)</Typography>
+                    <Typography variant="body2">2 h 55 min | Non-Stop</Typography>
+                    <Divider />
+                    <Typography variant="h5" style={{ marginTop: '10px' }}>$100 per Adult</Typography>
+                </CardContent>
+            </Card>
 
-            {/* Segundo div */}
-            <div style={{ marginBottom: '20px', border: '1px solid black', borderRadius: '8px', }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. At nam provident quam. Dolore similique blanditiis, tempora eligendi natus dicta fugiat ipsa porro cumque sed ipsam repellendus, laboriosam temporibus rem assumenda.
-            </div>
+            {/* Segundo Card */}
+            <Card style={{ marginBottom: '20px', width: '90%', borderRadius: '8px', padding: '10px' }}>
+                <CardContent>
+                    <Typography variant="h6">3:00PM - 5:30PM</Typography>
+                    <Typography variant="body2">MANAOS (BRA) - BOGOTA (COL)</Typography>
+                    <Typography variant="body2">2 h 30 min | Non-Stop</Typography>
+                    <Divider />
+                    <Typography variant="h5" style={{ marginTop: '10px' }}>$160 per Adult</Typography>
+                </CardContent>
+            </Card>
 
-            {/* Tercer div */}
-            <div style={{ marginBottom: '20px', border: '1px solid black', borderRadius: '8px', }}>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod accusamus nihil odit animi? Quaerat adipisci autem hic ratione vitae dicta ab neque recusandae odio quam, veniam dolores doloremque eaque quas.
-            </div>
+            {/* Tercer Card */}
+            <Card style={{ marginBottom: '20px', width: '90%', borderRadius: '8px', padding: '10px' }}>
+                <CardContent>
+                    <Typography variant="h6">7:00AM - 10:00AM</Typography>
+                    <Typography variant="body2">MANAOS (BRA) - BOGOTA (COL)</Typography>
+                    <Typography variant="body2">3 h 00 min | 1-Stop</Typography>
+                    <Divider />
+                    <Typography variant="h5" style={{ marginTop: '10px' }}>$100 per Adult</Typography>
+                </CardContent>
+            </Card>
 
-            {/* Cuarto div */}
-            <div style={{ border: '1px solid black', borderRadius: '8px', }}>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga similique cumque commodi iusto velit unde accusamus alias repudiandae aliquam repellendus sapiente maiores consectetur nisi laborum, esse ut. Pariatur, est laboriosam.
-            </div>
+            {/* Cuarto Card */}
+            <Card style={{ width: '90%', borderRadius: '8px', padding: '10px' }}>
+                <CardContent>
+                    <Typography variant="h6">8:00AM - 11:50AM</Typography>
+                    <Typography variant="body2">MANAOS (BRA) - BOGOTA (COL)</Typography>
+                    <Typography variant="body2">3 h 50 min | 2-Stop</Typography>
+                    <Divider />
+                    <Typography variant="h5" style={{ marginTop: '10px' }}>$90 per Adult</Typography>
+                </CardContent>
+            </Card>
         </div>
     );
-}
+};
