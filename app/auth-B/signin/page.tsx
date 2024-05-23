@@ -1,16 +1,21 @@
 "use client"
-import { Avatar, Container, Link, TextField } from "@mui/material"
+import { Avatar, Container,MenuItem,  Link,Select, TextField } from "@mui/material"
 import { Button, Grid, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
 import React, { useEffect, useState } from "react"
 import facebook from "../../assets/asset-facebook.png"
 import github from "../../assets/asset-github.png"
 import google from "../../assets/asset-google.png"
+import { registerUser } from "app/api/userService"
+import { User } from "app/api/types"
+import DatePickerComponent from "components/DatePicker"
 
 export default function Signin() {
+  const [selectedDate, setSelectedDate] = useState('');
   const [idNumber, setIdNumber] = useState("")
   const [idNumberError, setIdNumberError] = useState("")
-  const [fullName, setFullName] = useState("")
+  const [name, setName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [fullNameError, setFullNameError] = useState("")
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
@@ -18,7 +23,15 @@ export default function Signin() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [passwordError, setPasswordError] = useState("")
   const [confirmPasswordError, setConfirmPasswordError] = useState("")
-  const [isValid, setIsValid] = useState(false)
+  const [idType, setIdType] = useState("")
+  const [gender, setGender] = useState("")
+  const [birthDate, setBirthDate] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [country, setCountry] = useState("")
+  const [province, setProvince] = useState("")
+  const [city, setCity] = useState("")
+  const [address, setAddress] = useState("")
+  const [isValid, setIsValid] = useState(true)
 
   /**
    * Estilo del contenedor principal.
@@ -93,29 +106,10 @@ export default function Signin() {
     }
   }
 
-  useEffect(() => {
-    setIsValid(
-      !!fullName &&
-        !!email &&
-        !!password &&
-        !!confirmPassword &&
-        !fullNameError &&
-        !emailError &&
-        !passwordError &&
-        !confirmPasswordError &&
-        !idNumberError
-    )
-  }, [
-    idNumberError,
-    fullName,
-    email,
-    password,
-    confirmPassword,
-    fullNameError,
-    emailError,
-    passwordError,
-    confirmPasswordError,
-  ])
+  /* useEffect(() => {
+  const isValid = !!name && !!lastName && !!email && !!password && !!confirmPassword && !fullNameError && !emailError && !passwordError && !confirmPasswordError && !idNumberError;
+  setIsValid(isValid);
+}, [idNumberError, name, lastName, email, password, confirmPassword, fullNameError, emailError, passwordError, confirmPasswordError]); */
 
   const handleIdNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -134,9 +128,11 @@ export default function Signin() {
    * Maneja el cambio en el campo de nombre completo.
    * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
    */
-  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFullNameChange = (e:any) => {
     const value = e.target.value
-    setFullName(value)
+    
+    value.split(" ").length >=2 ? setName(value.split(" ")[0]) : setName("")
+    value.split(" ").length >=2 ? setLastName(value.split(" ")[1]) : setLastName("")
     setFullNameError("")
   }
 
@@ -171,27 +167,36 @@ export default function Signin() {
   }
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const url = `${process.env.NEXT_PUBLIC_AUTH_API_URL}/${process.env.NEXT_PUBLIC_API_VERSION}/register`
+    const user = {
+      idType: idType,
+      idNumber: idNumber,
+      firstName: name,
+      lastName: lastName,
+      genre: gender,
+      birthDate: birthDate,
+      phoneNumber: phoneNumber,
+      country: country,
+      province: province,
+      city: city,
+      address: address,
+      email: email,
+      password: password,
+    } 
+    try {
+      registerUser(user as User)
+      console.log("Usuario registrado exitosamente")
+    } catch (error) {
+      console.error("Error registrando usuario:", error)
+    }
 
-    const registerRequest = new Request(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idNumber, fullName, email, password, confirmPassword }),
-    })
-
-    fetch(registerRequest)
-      .then((response) => {
-        response.json()
-      })
-      .then((data) => {
-        console.log(data)
-        console.log("Usuario registrado correctamente")
-      })
-      .catch((error) => {
-        console.log(error)
-        console.log("Error al registrar el usuario")
-      })
   }
+
+  const handleDateChange = (newDate:any) => {
+    setBirthDate(newDate);
+  };
+  
+
+
 
   return (
     <Container style={paperStyle}>
@@ -204,6 +209,15 @@ export default function Signin() {
         <Avatar alt="Imagen 3" src={github.src} style={{ margin: "10px" }} />
       </Grid>
       <form onSubmit={handleRegister}>
+
+
+
+        <Select label="Tipo de documento" value= {idType} style={inputs} onChange= {(e) => setIdType(e.target.value)}>
+            <MenuItem value="Cedula">Cedula</MenuItem>
+            <MenuItem value="Pasaporte">Pasaporte</MenuItem>
+            <MenuItem value="Tarjeta">Tarjeta de identidad</MenuItem>
+        </Select>
+
         <TextField
           label="Número de documento"
           placeholder="Número de documento"
@@ -227,6 +241,79 @@ export default function Signin() {
           error={!!fullNameError}
           helperText={fullNameError}
         />
+
+        <Select
+            label="Genero"
+            value= {gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <MenuItem value="M">Masculino</MenuItem>
+            <MenuItem value="F">Femenino</MenuItem>
+            <MenuItem value="O">Prefiero no especificar</MenuItem>
+          </Select>
+        
+        <DatePickerComponent onDateChange={handleDateChange}/>
+
+        <TextField
+          label="Phone Number"
+          placeholder="Phone number"
+          type="text"
+          fullWidth
+          required
+          variant="outlined"
+          style={inputs}
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+        />
+
+        <TextField
+          label="Country"
+          placeholder="Country"
+          type="text"
+          fullWidth
+          required
+          variant="outlined"
+          style={inputs}
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        />
+
+        <TextField
+          label="Province"
+          placeholder="Province"
+          type="text"
+          fullWidth
+          required
+          variant="outlined"
+          style={inputs}
+          value={province}
+          onChange={(e) => setProvince(e.target.value)}
+        />
+
+        <TextField
+          label="City"
+          placeholder="City"
+          type="text"
+          fullWidth
+          required
+          variant="outlined"
+          style={inputs}
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+
+        <TextField
+          label="Address"
+          placeholder="Address"
+          type="text"
+          fullWidth
+          required
+          variant="outlined"
+          style={inputs}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        
         <TextField
           label="Email"
           placeholder="Email"
@@ -264,6 +351,7 @@ export default function Signin() {
           error={!!confirmPasswordError}
           helperText={confirmPasswordError}
         />
+        
         <Button
           type="submit"
           color="primary"

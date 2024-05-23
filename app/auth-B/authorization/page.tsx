@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Grid, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import Navbar from 'components/Navbar';
 import { getUsersRoles, updateRole } from 'app/api/userService';
-import { User } from 'app/api/types';
+import { UserRole } from 'app/api/types';
 
 const paperStyle = { padding: 20, width: "50%", margin: "7% auto", border: "1px solid #c2c2c2", borderRadius: "10px" };
 const title = { fontWeight: "bold" };
@@ -16,7 +16,7 @@ export default function Authorization() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
   const [editingUserId, setEditingUserId] = useState<number | null>(null);
-  const [results, setResults] = useState<User[]>([]);
+  const [results, setResults] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(true);
   const [roleIds, setRoleIds] = useState([] as number[]);
   
@@ -90,7 +90,7 @@ export default function Authorization() {
         <Typography variant="h4" component="h2" style={{ marginBottom: '20px' }}>
           Búsqueda de Usuarios
         </Typography>
-        <Grid item xs={12} style={{ marginBottom: '20px' }}>
+        <Grid item xs={12} style={textStyle}>
           Ingrese el Email, nombre o rol del usuario
         </Grid>
         <Grid item xs={12} style={{ marginBottom: '20px' }}>

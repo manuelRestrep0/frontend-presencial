@@ -1,5 +1,5 @@
 import apiClient from './apiClient';
-import { User, UpdateRolePayload } from './types';
+import { User, UpdateRolePayload, UserRole } from './types';
 
 
 export const resetPassword = async (newPassword:string) => {
@@ -13,7 +13,7 @@ export const resetPassword = async (newPassword:string) => {
 };
 
 
-export const getUsersRoles = async () : Promise<User[]>=> {
+export const getUsersRoles = async () : Promise<UserRole[]>=> {
 
   try {
     const response = await apiClient.get('/usersroles');
@@ -35,3 +35,22 @@ export const updateRole = async (personId: number, roleIds:any) => {
 };
 
 
+export const getUserinfo = async (personId: number) => {
+  try {
+    const response = await apiClient.get("/userinfo");
+    return response.data;
+  } catch (error) {
+    console.error('Error getting the user info:', error);
+    throw error;
+  }
+}
+
+export const registerUser = async (user: User) => {
+  try {
+    const response = await apiClient.post('/register', user);
+    return response.data;
+  } catch (error) {
+    console.error('Error registering the user:', error);
+    throw error;
+  }
+}

@@ -11,7 +11,7 @@ export interface Privilege {
     privileges: Privilege[];
   }
   
-  export interface User {
+  export interface UserRole{
     personId: number;
     identificationNumber: string;
     firstName: string;
@@ -23,4 +23,20 @@ export interface Privilege {
   
   export interface UpdateRolePayload {
     roleIds: number[];
+  }
+
+  export interface User {
+    idType: string,
+    idNumber: string,
+    firstName: string,
+    lastName: string,
+    genre: string,
+    birthDate: string,
+    phoneNumber: string,
+    country: string,
+    province: string,
+    city: string,
+    address: string,
+    email: string,
+    password: string
   }
