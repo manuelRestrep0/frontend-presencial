@@ -47,7 +47,7 @@ export default function PaymentSelect({ setSelectedPayment }: Props) {
                     <MenuItem
                         key={method.id}
                         value={method.id}
-                        id={`${method.id}-${method.name.toLowerCase().replace(/ /g, '-')}`}
+                        id={`${method.id}-${method.name.split(' ')[0]?.toLowerCase()}`}
                     >
                         {method.name}
                     </MenuItem>
