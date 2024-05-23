@@ -1,8 +1,13 @@
-import React from 'react';
 import ButtonStop from 'components/Button/ButtonStops';
 import CheckboxOption from 'components/Button/CheckboxOptionProps';
 
-export default function FiltersColumn() {
+interface Props {
+	setMinPrice: React.Dispatch<React.SetStateAction<number>>
+	setMaxPrice: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function FiltersColumn({setMinPrice, setMaxPrice}: Props) {
+	
     return (
         <div style={{
             width: '300px',
@@ -27,11 +32,15 @@ export default function FiltersColumn() {
                 {/* Contenido del segundo div */}
                 <div style={{ display: 'flex', marginBottom: '10px'}}>
                     {/* Primer input */}
-                    <input type="number" style={{ marginRight: '5px', width: '100px', padding: '5px' }} />
+                    <input id='min-price' type="number" style={{ marginRight: '5px', width: '100px', padding: '5px' }} 
+						onChange={(event: React.ChangeEvent<HTMLInputElement>) => setMinPrice(parseInt(event.target.value))}
+					/>
                     {/* Separador */}
                     <span style={{ margin: '0 5px' }}>-</span>
                     {/* Segundo input */}
-                    <input type="number" style={{ marginLeft: '5px', width: '100px', padding: '5px' }} />
+                    <input type="number" style={{ marginLeft: '5px', width: '100px', padding: '5px' }}
+						onChange={(event: React.ChangeEvent<HTMLInputElement>) => setMaxPrice(parseInt(event.target.value))}
+					/>
                 </div>
             </div>
 
@@ -70,6 +79,7 @@ export default function FiltersColumn() {
                     <CheckboxOption label="1 Checked bag" />
                 </div>
             </div>
+			
         </div>
     );
 }
