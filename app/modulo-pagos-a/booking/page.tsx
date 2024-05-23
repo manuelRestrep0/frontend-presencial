@@ -3,12 +3,11 @@ import { Box, Container, CssBaseline, Typography } from "@mui/material";
 import Link from "next/link";
 import * as React from 'react';
 import Navbar from "../components/Navbar";
+import Passenger from "../components/Passenger";
 import PaymentSelect from "../components/PaymentSelect";
 import Resumen from "../components/Resumen";
 import { PaymentMethod } from "../interfaces";
-import Passenger from "../components/Passenger";
 import { useSearchParams } from "next/navigation";
-
 
 export default function BookingDetail() {
 

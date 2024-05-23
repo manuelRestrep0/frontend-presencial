@@ -1,6 +1,6 @@
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import { AppBar, Box, Toolbar, Typography } from '@mui/material';
 import * as React from 'react';
-import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 
 export default function NavbarCustom(){
 

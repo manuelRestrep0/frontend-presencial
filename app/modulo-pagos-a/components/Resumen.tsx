@@ -3,12 +3,11 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import { useState, useMemo} from 'react';
+import { useMemo, useState} from 'react';
 import { BookingInfo } from '../interfaces';
 import { getBooking } from '../services/booking';
 import { useSearchParams } from 'next/navigation';
 import { NumericFormat } from 'react-number-format';
-
 interface ResumenProps {
   setBookingId?: () => void,
 
