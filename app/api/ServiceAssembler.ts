@@ -40,4 +40,4 @@ const serviceAssembler = <T>(entity: string) => {
 export const flightService = serviceAssembler<Flight>("flights")
 export const airportService = serviceAssembler<Airport>("airports")
 export const scaleService = serviceAssembler<Scale>("scales")
-export const airplaneService = serviceAssembler<Airplane>("scales")
+export const airplaneService = serviceAssembler<Airplane>("airplane-models")
