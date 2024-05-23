@@ -215,6 +215,16 @@ export default function Information({ params  }: { params : { processID : string
           >
             SELECCIONAR PASARELA DE PAGO
           </button>
+
+          <button
+            className="text-[15] inline-flex items-center justify-center relative box-border cursor-pointer align-middle no-underline font-medium min-w-[64px] rounded text-[white] bg-red-500 w-full mt-6 mb-4 m-0 px-4 py-1.5 border-0 hover:bg-[#6b3131]"
+            onClick={() => {
+              router.push(`/payments-b/process`);
+              
+            }}
+          >
+            RECHAZAR PAGO
+          </button>
         </Box>
       </Box>
       </Container>
