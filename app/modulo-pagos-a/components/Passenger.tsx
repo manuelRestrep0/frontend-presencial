@@ -1,14 +1,15 @@
 import PersonIcon from '@mui/icons-material/Person';
 import FlightClassIcon from '@mui/icons-material/FlightClass';
 import { Box, Typography } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PassengerInfo } from '../interfaces';
 import { getListPassengers } from '../services/passenger';
 
 export default function Passenger() {
   const [passengers, setPassengers] = useState<PassengerInfo[]>([]);
+  const [randomPassengers, setRandomPassengers] = useState<PassengerInfo[]>([]);
 
-  useMemo(() => {
+  useEffect(() => {
     const fetchPassengers = async () => {
       try {
         const passengerData = await getListPassengers();
@@ -20,28 +21,30 @@ export default function Passenger() {
     fetchPassengers();
   }, []);
 
+  useEffect(() => {
+    if (passengers.length > 0) {
+      const selectRandomPassengers = () => {
+        const selectedPassengers: PassengerInfo[] = [];
+        const passengerCount = passengers.length;
 
-  const selectRandomPassengers = () => {
-    if (!passengers) return [];
-    const selectedPassengers: PassengerInfo[] = [];
-    const passengerCount = passengers.length;
+        if (passengerCount <= 4) return passengers;
 
-    if (passengerCount <= 4) return passengers;
+        const randomIndexes = new Set<number>();
+        while (randomIndexes.size < 4) {
+          const randomIndex = Math.floor(Math.random() * passengerCount);
+          randomIndexes.add(randomIndex);
+        }
 
-    const randomIndexes = new Set<number>();
-    while (randomIndexes.size < 4) {
-      const randomIndex = Math.floor(Math.random() * passengerCount);
-      randomIndexes.add(randomIndex);
+        randomIndexes.forEach((index) => {
+          const passenger = passengers[index];
+          if (passenger) selectedPassengers.push(passenger);
+        });
+        return selectedPassengers;
+      };
+
+      setRandomPassengers(selectRandomPassengers());
     }
-
-    randomIndexes.forEach((index) => {
-      const passenger = passengers[index];
-      if (passenger) selectedPassengers.push(passenger);
-    });
-    return selectedPassengers;
-  };
-
-  const randomPassengers = selectRandomPassengers();
+  }, [passengers]);
 
   return (
     <>
@@ -50,9 +53,9 @@ export default function Passenger() {
           Pasajeros
         </Typography>
 
-        {passengers.length > 0 && randomPassengers.map((passenger, index) => (
+        {randomPassengers.length > 0 && randomPassengers.map((passenger, index) => (
           <Typography key={index} component="div" style={{ marginTop: 15 }}>
-            <PersonIcon /> {passenger.name} -  Asiento <FlightClassIcon/>{passenger.seat}
+            <PersonIcon /> {passenger.name} -  Asiento <FlightClassIcon />{passenger.seat}
           </Typography>
         ))}
       </Box>
