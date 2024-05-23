@@ -75,7 +75,7 @@ export default function Resumen({ setBookingId }: ResumenProps) {
               </>
             ) : (
               <TableRow >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" id="booking-none">
                   No se encontraron datos para la reserva
                 </TableCell>
               </TableRow>
