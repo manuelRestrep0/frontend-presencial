@@ -18,8 +18,6 @@ export default function ProfileDashboard() {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-      setToken(storedToken);
-      setAuthToken(storedToken);
       getUserinfo().then((response) => {
         console.log(response.data);
       }).catch((error) => {

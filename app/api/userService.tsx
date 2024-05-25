@@ -2,9 +2,9 @@ import apiClient from './apiClient';
 import { User, UpdateRolePayload, UserRole } from './types';
 
 
-export const resetPassword = async (newPassword:string) => {
+export const resetPassword = async (newPassword:string, currentPassword:string) => {
   try {
-    const response = await apiClient.patch('/api/password/reset', newPassword);
+    const response = await apiClient.patch('/api/password/reset',{currentPassword, newPassword});
     return response.data;
   } catch (error) {
     console.error('Error setting the new password:', error);
@@ -84,4 +84,6 @@ export const putUserInfo = async (userInfo:any) => {
     throw error;
   }
 }
+
+
 
