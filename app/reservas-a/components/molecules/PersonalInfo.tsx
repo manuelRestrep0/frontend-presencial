@@ -1,7 +1,7 @@
 import Stack from "@mui/material/Stack"
 import React from "react"
-import Cajoncito from "../atoms/inputs/Cajoncito"
 import { Person } from "app/reservas-a/api/person/interface/person"
+import Cajoncito from "../atoms/inputs/Cajoncito"
 
 interface PersonalInfoProps {
   data: Person

@@ -1,14 +1,11 @@
 "use client"
-import Box from "@mui/material/Box"
-import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
-import Stack from "@mui/material/Stack"
 import { useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
+import { Person } from "app/reservas-a/api/person/interface/person"
 import SectionTitle from "../atoms/texts/SectionTitle"
 import SitasAppBar from "../molecules/SitasAppBar"
 import PassengerInfo from "../organisms/PassengerInfo"
-import { Person } from "app/reservas-a/api/person/interface/person"
 
 const ConfirmationPage: React.FC = () => {
   const router = useRouter()
@@ -63,7 +60,11 @@ const ConfirmationPage: React.FC = () => {
             <h1 className="text-lg font-bold">Reserva #0000</h1>
             <h3 className="text-sm">Estado de la Reserva: SIN PAGAR</h3>
           </div>
-          <button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" onClick={handleConfirmClick} id='btn-cfr'>
+          <button
+            className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            onClick={handleConfirmClick}
+            id="btn-cfr"
+          >
             Confirmar Reserva
           </button>
         </div>

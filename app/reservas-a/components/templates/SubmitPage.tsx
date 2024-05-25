@@ -5,13 +5,12 @@ import Divider from "@mui/material/Divider"
 import Stack from "@mui/material/Stack"
 import { useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
+import { Person } from "app/reservas-a/api/person/interface/person"
 import AddPassengerButton from "../atoms/buttons/AddPassengerButton"
 import SectionTitle from "../atoms/texts/SectionTitle"
+import ErrorDialog from "../molecules/ErrorDialog"
 import SitasAppBar from "../molecules/SitasAppBar"
 import PassengerInfo from "../organisms/PassengerInfo"
-import { Person } from "app/reservas-a/api/person/interface/person"
-import Typography from "@mui/material/Typography"
-import ErrorDialog from "../molecules/ErrorDialog"
 
 const SubmitPage: React.FC = () => {
   const router = useRouter()
@@ -37,7 +36,6 @@ const SubmitPage: React.FC = () => {
     },
   ])
 
-  const [isFormValid, setIsFormValid] = useState(false)
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number, field: keyof Person) => {
@@ -98,7 +96,6 @@ const SubmitPage: React.FC = () => {
 
   useEffect(() => {
     const isValid = validatePassengers()
-    setIsFormValid(isValid)
     if (isValid) {
       setIsErrorDialogOpen(false)
     }

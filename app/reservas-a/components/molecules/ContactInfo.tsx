@@ -1,8 +1,8 @@
 import Stack from "@mui/material/Stack"
 import React from "react"
+import { Person } from "app/reservas-a/api/person/interface/person"
 import Cajoncito from "../atoms/inputs/Cajoncito"
 import BodyText from "../atoms/texts/BodyText"
-import { Person } from "app/reservas-a/api/person/interface/person"
 
 interface ContactInfoProps {
   data: Person

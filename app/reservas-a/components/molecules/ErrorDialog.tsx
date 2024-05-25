@@ -1,5 +1,5 @@
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
 import React from "react"
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material"
 
 interface ErrorDialogProps {
   open: boolean

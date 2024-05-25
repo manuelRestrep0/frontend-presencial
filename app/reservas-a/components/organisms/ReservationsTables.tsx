@@ -6,9 +6,9 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import React, { useEffect, useState } from "react"
-import TableCellContent from "../atoms/texts/TableCellContent"
-import Booking from "app/reservas-a/api/booking/interface/booking"
 import { getBookings } from "app/reservas-a/api/booking/endpoints/read"
+import Booking from "app/reservas-a/api/booking/interface/booking"
+import TableCellContent from "../atoms/texts/TableCellContent"
 
 const ReservationsTable: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([])

@@ -1,8 +1,8 @@
 import Stack from "@mui/material/Stack"
 import React from "react"
+import { Person } from "app/reservas-a/api/person/interface/person"
 import ContactInfo from "../molecules/ContactInfo"
 import PersonalInfo from "../molecules/PersonalInfo"
-import { Person } from "app/reservas-a/api/person/interface/person"
 
 interface PassengerInfoProps {
   data: Person
