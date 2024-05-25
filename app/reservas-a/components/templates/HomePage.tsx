@@ -28,7 +28,7 @@ function HomePage() {
       ></IconButton>
       <PageTitle text="Singapur Airlines" />
       <Stack direction="row" spacing={10}>
-        <Button variant="contained" onClick={handelClick}>
+        <Button variant="contained" onClick={handelClick} id='btn-rr'>
           Realizar Reserva
         </Button>
       </Stack>

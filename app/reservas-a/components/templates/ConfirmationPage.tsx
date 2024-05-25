@@ -63,7 +63,7 @@ const ConfirmationPage: React.FC = () => {
             <h1 className="text-lg font-bold">Reserva #0000</h1>
             <h3 className="text-sm">Estado de la Reserva: SIN PAGAR</h3>
           </div>
-          <button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" onClick={handleConfirmClick}>
+          <button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600" onClick={handleConfirmClick} id='btn-cfr'>
             Confirmar Reserva
           </button>
         </div>

@@ -97,7 +97,7 @@ const SubmitPage: React.FC = () => {
         </div>
       </Stack>
       <Box className="box" textAlign="right">
-        <Button className="save" variant="contained" onClick={handleSubmit}>
+        <Button className="save" variant="contained" onClick={handleSubmit} id='btn-con'>
           Continuar
         </Button>
       </Box>

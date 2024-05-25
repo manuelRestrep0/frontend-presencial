@@ -32,10 +32,10 @@ const SitasAppBar: React.FC<SitasAppBarProps> = ({ onHistoryClick, onBackClick }
         ></IconButton>
         <PageTitle text="Singapur Airlines" />
         <Stack direction="row" spacing={10}>
-          <Button variant="contained" onClick={onHistoryClick}>
+          <Button variant="contained" onClick={onHistoryClick} id='btn-his'>
             Historial
           </Button>
-          <Button variant="contained" onClick={onBackClick}>
+          <Button variant="contained" onClick={onBackClick} id='btn-back'>
             Regresar
           </Button>
         </Stack>
