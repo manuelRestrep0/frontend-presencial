@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Alert, Box, CircularProgress, FormControl, Snackbar, TextField, Typography } from "@mui/material";
 import { PaypalType } from '../interfaces';
 import { postPaymentPaypal } from '../services/paymentMethods';
-import { useNavigate } from 'react-router-dom';
 
 interface PaypalProps {
     bookingId?: number;
