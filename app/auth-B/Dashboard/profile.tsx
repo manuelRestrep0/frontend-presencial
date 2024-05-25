@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Avatar, Button, Grid, MenuItem, Stack, Select, TextField, Typography } from '@mui/material';
-
-import { setAuthToken } from 'app/api/apiClient';
+import { Avatar, Button, Grid, MenuItem, Stack, Select, TextField, Typography, Divider, Container, InputLabel, FormControl } from '@mui/material';
 import { getUserinfo, putUserInfo } from 'app/api/userService';
-import { User } from 'app/api/types';
+import DatePickerComponent from 'components/DatePicker';
 
 const paperStyle = { padding: 20, border: "1px solid #c2c2c2", borderRadius: "10px" };
-const title = { fontWeight: "bold" };
-const textStyle = { fontFamily: 'Roboto, sans-serif', margin: "15px 0px" };
+const textStyle = { fontFamily: 'Roboto, sans-serif', margin: "15px 0px", fontweight: 'bold'};
 const inputs = { display: 'flex', alignItems: 'center' };
 
 const UserProfile: React.FC = () => {
@@ -28,6 +25,7 @@ const UserProfile: React.FC = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
+  const [date, setDate] = useState('');
 
   useEffect(() => {
     getUserinfo().then((response) => {
@@ -45,19 +43,13 @@ const UserProfile: React.FC = () => {
     }));
   };
 
-  const handleDateChange = (date: any) => {
-    setUserInfo(prevState => ({
-      ...prevState,
-      birthDate: date
-    }));
-  };
-
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
   const handleSaveClick = async () => {
     try {
+      userInfo.birthDate = date;
       const updatedUserInfo = await putUserInfo(userInfo);
       setUserInfo(updatedUserInfo);
       setIsEditing(false);
@@ -66,123 +58,144 @@ const UserProfile: React.FC = () => {
       console.error('Error saving user info:', error);
     }
   };
-
+  
   return (
-    <Grid container>
-      <Grid item xs={6} style={inputs}>
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" style={{ width: "200px", height: "200px", margin: 'auto', padding: '10' }} />
-      </Grid>
-      <Grid item xs={6}>
-        <Stack spacing={2}>
+    
+    <Container>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={4}>
+          <Stack spacing={2}>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" style={{ width: "200px", height: "200px", padding: '10' }} />
+          </Stack>
+        </Grid>
+        <Grid item xs={12} md={8}>
           {isEditing ? (
-            <>
-              <TextField
-                id="outlined-basic"
-                label="Nombre"
-                variant="outlined"
-                name="firstName"
-                value={userInfo.firstName}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Apellido"
-                variant="outlined"
-                name="lastName"
-                value={userInfo.lastName}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <Select
-                label="Genero"
-                name="genre"
-                value={userInfo.genre}
-                onChange={handleChange}
-                style={textStyle}
-              >
-                <MenuItem value="M">Masculino</MenuItem>
-                <MenuItem value="F">Femenino</MenuItem>
-                <MenuItem value="O">Prefiero no especificar</MenuItem>
-              </Select>
-              <DatePickerComponent
-                value={userInfo.birthDate}
-                onChange={handleDateChange}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Fecha de nacimiento"
-                variant="outlined"
-                name="birthDate"
-                value={userInfo.birthDate}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Celular"
-                variant="outlined"
-                name="phoneNumber"
-                value={userInfo.phoneNumber}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Pais"
-                variant="outlined"
-                name="country"
-                value={userInfo.country}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Provincia"
-                variant="outlined"
-                name="province"
-                value={userInfo.province}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Ciudad"
-                variant="outlined"
-                name="city"
-                value={userInfo.city}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Direccion"
-                variant="outlined"
-                name="address"
-                value={userInfo.address}
-                onChange={handleChange}
-                style={textStyle}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ width: '100%', margin: '15px 0px' }}
-                onClick={handleSaveClick}
-              >
-                Save
-              </Button>
-            </>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id="outlined-basic"
+                  label="Nombre"
+                  variant="outlined"
+                  name="firstName"
+                  value={userInfo.firstName}
+                  onChange={handleChange}
+                  fullWidth
+                  style={textStyle}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id="outlined-basic"
+                  label="Apellido"
+                  variant="outlined"
+                  name="lastName"
+                  value={userInfo.lastName}
+                  onChange={handleChange}
+                  fullWidth
+                  style={textStyle}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth style={textStyle}>
+                  <InputLabel>Género</InputLabel>
+                  <Select
+                    label="Genero"
+                    name="genre"
+                    value={userInfo.genre}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="M">Masculino</MenuItem>
+                    <MenuItem value="F">Femenino</MenuItem>
+                    <MenuItem value="O">Prefiero no especificar</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6} alignContent={"center"}>
+                <DatePickerComponent fullWidth handleDateChange={setDate} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id="outlined-basic"
+                  label="Celular"
+                  variant="outlined"
+                  name="phoneNumber"
+                  value={userInfo.phoneNumber}
+                  onChange={handleChange}
+                  fullWidth
+                  style={textStyle}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id="outlined-basic"
+                  label="País"
+                  variant="outlined"
+                  name="country"
+                  value={userInfo.country}
+                  onChange={handleChange}
+                  fullWidth
+                  style={textStyle}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id="outlined-basic"
+                  label="Provincia"
+                  variant="outlined"
+                  name="province"
+                  value={userInfo.province}
+                  onChange={handleChange}
+                  fullWidth
+                  style={textStyle}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id="outlined-basic"
+                  label="Ciudad"
+                  variant="outlined"
+                  name="city"
+                  value={userInfo.city}
+                  onChange={handleChange}
+                  fullWidth
+                  style={textStyle}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  id="outlined-basic"
+                  label="Dirección"
+                  variant="outlined"
+                  name="address"
+                  value={userInfo.address}
+                  onChange={handleChange}
+                  fullWidth
+                  style={textStyle}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  style={{ margin: '15px 0' }}
+                  onClick={handleSaveClick}
+                >
+                  Save
+                </Button>
+              </Grid>
+            </Grid>
           ) : (
             <>
-              <Typography variant="body1" style={textStyle}>Nombre: {userInfo.firstName}</Typography>
-              <Typography variant="body1" style={textStyle}>Apellido: {userInfo.lastName}</Typography>
-              <Typography variant="body1" style={textStyle}>Genero: {userInfo.genre}</Typography>
-              <Typography variant="body1" style={textStyle}>Fecha de nacimiento: {userInfo.birthDate}</Typography>
-              <Typography variant="body1" style={textStyle}>Celular: {userInfo.phoneNumber}</Typography>
-              <Typography variant="body1" style={textStyle}>Pais: {userInfo.country}</Typography>
-              <Typography variant="body1" style={textStyle}>Provincia: {userInfo.province}</Typography>
-              <Typography variant="body1" style={textStyle}>Ciudad: {userInfo.city}</Typography>
-              <Typography variant="body1" style={textStyle}>Direccion: {userInfo.address}</Typography>
+              <Typography variant="h6" style={textStyle}>Nombre   {userInfo.firstName}</Typography>
+              <Typography variant="h6" style={textStyle}>Apellido:   {userInfo.lastName}</Typography>
+              <Typography variant="h6" style={textStyle}>Genero:   {userInfo.genre}</Typography>
+              <Typography variant="h6" style={textStyle}>Fecha de nacimiento:   {userInfo.birthDate}</Typography>
+              <Typography variant="h6" style={textStyle}>Celular:   {userInfo.phoneNumber}</Typography>
+              <Typography variant="h6" style={textStyle}>Pais:   {userInfo.country}</Typography>
+              <Typography variant="h6" style={textStyle}>Provincia:   {userInfo.province}</Typography>
+              <Typography variant="h6" style={textStyle}>Ciudad:   {userInfo.city}</Typography>
+              <Typography variant="h6" style={textStyle}>Direccion: {userInfo.address}</Typography>
               <Button
                 variant="contained"
                 color="primary"
@@ -193,10 +206,10 @@ const UserProfile: React.FC = () => {
               </Button>
             </>
           )}
-        </Stack>
+        </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    </Container>
+  )
+}
 
 export default UserProfile;

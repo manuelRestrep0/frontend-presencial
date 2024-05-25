@@ -42,7 +42,7 @@ export default function Login() {
             <Typography variant="h4" component="h2" sx={title}>
               Iniciar sesión
             </Typography>
-            <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ "margin-bottom": "7%" }}>
+            <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ marginBottom: "7%" }}>
               {/* <Avatar alt="Imagen 1" src={facebook.src} style={{ margin: "10px" }} /> */}
               {/* <Avatar alt="Imagen 2" src={google.src} style={{ margin: "10px" }} /> */}
               {/* <Avatar alt="Imagen 3" src={github.src} style={{ margin: "10px" }} /> */}
@@ -86,7 +86,7 @@ export default function Login() {
             >
               Iniciar sesión
             </Button>
-            <Typography sx={{"margin-top": "20%"}}>
+            <Typography sx={{marginTop: "20%"}}>
               <Link href="/auth-B/signin">¿No tienes una cuenta?</Link>
             </Typography>
           </Container>

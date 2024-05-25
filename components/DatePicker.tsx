@@ -1,29 +1,36 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
-const BasicDatePicker = ({ onDateChange }:any) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+const STATE = { input: null, value: "" };
+const DATE_FORMAT = 'YYYY-MM-DD';
 
-  const handleDateChange = (date:any) => {
-    setSelectedDate(date);
-    onDateChange(date); // Llamando a onDateChange como una función
-  };
+
+export default function ResponsiveDatePickers({handleDateChange}:any) {
+
+ 
+  const [date, setDate] = React.useState(STATE)
+
+  const formatDate = (valueWithOutFormat:any) => {
+    const result = dayjs(valueWithOutFormat.$d).format(DATE_FORMAT)
+    setDate({ input: valueWithOutFormat, value: result })
+  }
+  
+  React.useEffect(() => {
+    handleDateChange(date.value)
+  }, [date.value])
 
   return (
+
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DatePicker']}>
-        <DatePicker
-          label="Basic date picker"
-          value={selectedDate}
-          onChange={handleDateChange}
-        />
-      </DemoContainer>
+      <DesktopDatePicker
+                label="Date"
+                value={date.input}
+                onChange={(newValue) => formatDate(newValue)}
+              />
     </LocalizationProvider>
   );
-};
+}
 
-export default BasicDatePicker;
