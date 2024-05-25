@@ -10,8 +10,8 @@ import { registerUser } from "app/api/userService"
 import { User } from "app/api/types"
 import DatePickerComponent from "components/DatePicker"
 
+
 export default function Signin() {
-  const [selectedDate, setSelectedDate] = useState('');
   const [idNumber, setIdNumber] = useState("")
   const [idNumberError, setIdNumberError] = useState("")
   const [name, setName] = useState("")
@@ -20,18 +20,19 @@ export default function Signin() {
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
   const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
   const [passwordError, setPasswordError] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [confirmPasswordError, setConfirmPasswordError] = useState("")
   const [idType, setIdType] = useState("")
   const [gender, setGender] = useState("")
-  const [birthDate, setBirthDate] = useState("")
+  const [selectedDate, setSelectedDate] = useState('');
   const [phoneNumber, setPhoneNumber] = useState("")
   const [country, setCountry] = useState("")
   const [province, setProvince] = useState("")
   const [city, setCity] = useState("")
   const [address, setAddress] = useState("")
   const [isValid, setIsValid] = useState(true)
+
 
   /**
    * Estilo del contenedor principal.
@@ -173,7 +174,7 @@ export default function Signin() {
       firstName: name,
       lastName: lastName,
       genre: gender,
-      birthDate: birthDate,
+      birthDate: selectedDate,
       phoneNumber: phoneNumber,
       country: country,
       province: province,
@@ -190,12 +191,6 @@ export default function Signin() {
     }
 
   }
-
-  const handleDateChange = (newDate:any) => {
-    setBirthDate(newDate);
-  };
-  
-
 
 
   return (
@@ -252,7 +247,7 @@ export default function Signin() {
             <MenuItem value="O">Prefiero no especificar</MenuItem>
           </Select>
         
-        <DatePickerComponent onDateChange={handleDateChange}/>
+        <DatePickerComponent onChange={setSelectedDate}/>
 
         <TextField
           label="Phone Number"
@@ -366,6 +361,10 @@ export default function Signin() {
       <Typography style={login}>
         <Link href="/auth-B/login">¿Ya tienes cuenta?</Link>
       </Typography>
+      <button onClick={() => console.log(selectedDate)}>Mostrar datos</button>
+
+
+
     </Container>
   )
 }

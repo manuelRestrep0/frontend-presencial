@@ -1,48 +1,29 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import * as React from 'react';
+import { useState } from 'react';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-const DatePickerInput = styled.input`
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  padding: 10px;
-  border: none;
-  border-bottom: 2px solid #ccc;
-  outline: none;
-  transition: border-bottom-color 0.3s ease;
+const BasicDatePicker = ({ onDateChange }:any) => {
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  &:focus {
-    border-bottom-color: #3f51b5;
-  }
-`;
-
-const DatePickerLabel = styled.label`
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #999;
-  margin-bottom: 5px;
-  display: block;
-`;
-
-const DatePickerComponent = ({onDateChange}:any) => {
-  const [selectedDate, setSelectedDate] = useState('');
-
-  const handleDateChange = (e:any) => {
-    const newDate = e.target.value;
-    setSelectedDate(newDate);
-    onDateChange(newDate); // Llamar a la función prop onDateChange con la nueva fecha
+  const handleDateChange = (date:any) => {
+    setSelectedDate(date);
+    onDateChange(date); // Llamando a onDateChange como una función
   };
 
   return (
-    <div>
-      <DatePickerLabel>Selecciona una fecha</DatePickerLabel>
-      <DatePickerInput
-        type="date"
-        value={selectedDate}
-        onChange={handleDateChange}
-        pattern="\\d{4}-\\d{2}-\\d{2}"
-      />
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DatePicker']}>
+        <DatePicker
+          label="Basic date picker"
+          value={selectedDate}
+          onChange={handleDateChange}
+        />
+      </DemoContainer>
+    </LocalizationProvider>
   );
 };
 
-export default DatePickerComponent;
+export default BasicDatePicker;
