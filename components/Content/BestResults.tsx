@@ -1,8 +1,9 @@
 import React from 'react';
+import { Paper, Grid, Typography } from '@material-ui/core';
 
 export default function BestResults() {
     return (
-        <div style={{
+        <Paper style={{
             backgroundColor: '#D7E2EE',
             borderRadius: '8px',
             marginTop: '20px',
@@ -13,24 +14,25 @@ export default function BestResults() {
             flexDirection: 'row',
             border: '1px solid black'
         }}>
-            {/* Casilla 1 */}
-            <div style={{ marginRight: '150px' }}>
-                <h3>Cheapest</h3>
-                <label id="label1"></label>
-            </div>
+            <Grid container spacing={3}>
+                {/* Casilla 1 */}
+                <Grid item xs={4}>
+                    <Typography variant="h6">Cheapest</Typography>
+                    <Typography variant="body1">$90 . 3 h 50 min</Typography>
+                </Grid>
 
-            {/* Casilla 2 */}
-            <div style={{ marginRight: '150px' }}>
-                <h3>Best</h3>
-                <label id="label2"></label>
-            </div>
+                {/* Casilla 2 */}
+                <Grid item xs={4}>
+                    <Typography variant="h6">Best</Typography>
+                    <Typography variant="body1">$100 . 2 h 55 min</Typography>
+                </Grid>
 
-            {/* Casilla 3 */}
-            <div>
-                <h3>Quickest</h3>
-                <label id="label3"></label>
-            </div>
-        </div>
-
+                {/* Casilla 3 */}
+                <Grid item xs={4}>
+                    <Typography variant="h6">Quickest</Typography>
+                    <Typography variant="body1">$160 . 2 h 30 min</Typography>
+                </Grid>
+            </Grid>
+        </Paper>
     );
 }
