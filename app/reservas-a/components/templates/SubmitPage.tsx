@@ -4,12 +4,14 @@ import Button from "@mui/material/Button"
 import Divider from "@mui/material/Divider"
 import Stack from "@mui/material/Stack"
 import { useRouter } from "next/navigation"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import AddPassengerButton from "../atoms/buttons/AddPassengerButton"
 import SectionTitle from "../atoms/texts/SectionTitle"
 import SitasAppBar from "../molecules/SitasAppBar"
 import PassengerInfo from "../organisms/PassengerInfo"
 import { Person } from "app/reservas-a/api/person/interface/person"
+import Typography from "@mui/material/Typography"
+import ErrorDialog from "../molecules/ErrorDialog"
 
 const SubmitPage: React.FC = () => {
   const router = useRouter()
@@ -34,6 +36,9 @@ const SubmitPage: React.FC = () => {
       contactPhone: "",
     },
   ])
+
+  const [isFormValid, setIsFormValid] = useState(false)
+  const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number, field: keyof Person) => {
     const { value } = e.target
@@ -62,11 +67,42 @@ const SubmitPage: React.FC = () => {
     setPassengers([...passengers, newPassenger])
   }
 
+  const validatePassengers = () => {
+    for (const passenger of passengers) {
+      if (
+        passenger.name === "" ||
+        passenger.lastname === "" ||
+        passenger.email === "" ||
+        passenger.phone === "" ||
+        passenger.address === "" ||
+        passenger.contactName === "" ||
+        passenger.contactLastname === "" ||
+        passenger.contactPhone === ""
+      ) {
+        return false
+      }
+    }
+    return true
+  }
+
   const handleSubmit = () => {
+    if (!validatePassengers()) {
+      setIsErrorDialogOpen(true)
+      return
+    }
+
     localStorage.setItem("passengersToConfirm", JSON.stringify(passengers))
 
     router.push("/reservas-a/confirm")
   }
+
+  useEffect(() => {
+    const isValid = validatePassengers()
+    setIsFormValid(isValid)
+    if (isValid) {
+      setIsErrorDialogOpen(false)
+    }
+  }, [passengers])
 
   return (
     <div>
@@ -97,12 +133,17 @@ const SubmitPage: React.FC = () => {
         </div>
       </Stack>
       <Box className="box" textAlign="right">
-        <Button className="save" variant="contained" onClick={handleSubmit} id='btn-con'>
+        <Button className="save" variant="contained" onClick={handleSubmit} id="btn-con">
           Continuar
         </Button>
       </Box>
       <br />
       <br />
+      <ErrorDialog
+        open={isErrorDialogOpen}
+        onClose={() => setIsErrorDialogOpen(false)}
+        message="Por favor, complete todos los campos antes de continuar."
+      />
     </div>
   )
 }
