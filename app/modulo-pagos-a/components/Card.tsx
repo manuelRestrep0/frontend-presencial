@@ -1,5 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
-import { Alert, Box, FormControl, Grid, TextField, Typography } from "@mui/material";
+import { Alert, Box, FormControl, Grid, Snackbar, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { Payment } from "../interfaces";
 import { postPayment } from "../services/paymentMethods";
@@ -16,6 +16,9 @@ export default function Card({ bookingId }: CardProps) {
     const [ccv, setCcv] = useState('');
     const [name, setName] = useState('');
     const [id, setId] = useState('');
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [isProcessing, setIsProcessing] = useState(false);
     const [errors, setErrors] = useState({
         debitcard: false,
         date: false,
@@ -60,23 +63,33 @@ export default function Card({ bookingId }: CardProps) {
         bookingId: bookingId
     });
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => ({
             ...prevState,
-            [id]: value
+            [name]: value
         }));
     };
     const handleSubmit = async () => {
 
         try {
-            console.log('formData:', formData)
-            await postPayment(formData)
-            setSuccess(true);
+            setAlertMessage("Procesando el pago...");
+            setIsProcessing(true);
+            setAlertOpen(true);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            await postPayment(formData) as any;
+            setAlertMessage("Pago efectuado");
+            setAlertOpen(true);
+            setTimeout(() => {
+                window.location.href = "/modulo-pagos-a";
+            }, 5000);
         } catch (error) {
-            console.error('Error posting payment:', error);
+            console.error("Unexpected error:", error);
+            setAlertMessage("Ocurrió un error inesperado");
+            setAlertOpen(true);
+        } finally {
+            setIsProcessing(false);
         }
     };
-
     return (
         <>
             {success ? (
@@ -93,6 +106,7 @@ export default function Card({ bookingId }: CardProps) {
                             fullWidth
                             required
                             id="debitcard"
+                            name="cardNumber"
                             label="Required"
                             onChange={handleChange}
                             placeholder=""
@@ -106,6 +120,7 @@ export default function Card({ bookingId }: CardProps) {
                                     fullWidth
                                     required
                                     id="date"
+                                    name="expirationDate"
                                     label="Required"
                                     onChange={handleChange}
                                     placeholder=""
@@ -119,6 +134,7 @@ export default function Card({ bookingId }: CardProps) {
                                     fullWidth
                                     required
                                     id="ccv"
+                                    name="cvv"
                                     label="Required"
                                     onChange={handleChange}
                                     placeholder=""
@@ -131,6 +147,7 @@ export default function Card({ bookingId }: CardProps) {
                         <TextField
                             fullWidth
                             id="name"
+                            name="cardHolderName"
                             onChange={handleChange}
                             placeholder=""
                             error={errors.name}
@@ -140,6 +157,7 @@ export default function Card({ bookingId }: CardProps) {
                         <TextField
                             fullWidth
                             id="id"
+                            name="idNumber"
                             onChange={handleChange}
                             placeholder=""
                             error={errors.id}
@@ -154,6 +172,12 @@ export default function Card({ bookingId }: CardProps) {
                     </FormControl>
                 </Box>
             )}
+
+            <Snackbar open={alertOpen} autoHideDuration={5000} onClose={() => setAlertOpen(false)} id="payment-processing">
+                <Alert onClose={() => setAlertOpen(false)} severity={alertMessage === "Pago efectuado" ? "success" : "error"} id={alertMessage === "Pago efectuado" ? "payment-success" : "payment-error"}>
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
         </>
     )
 }

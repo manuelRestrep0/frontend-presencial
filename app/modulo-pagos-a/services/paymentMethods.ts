@@ -52,7 +52,7 @@ export const postPaymentPaypal = async (data: PaypalType) => {
         if (!response.ok) {
             throw new Error('Error posting payment');
         }
-        return response.json();
+        return response;
     } catch (error) {
         console.error('Error posting payment:', error);
         throw error;

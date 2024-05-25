@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, Box, CircularProgress, FormControl, Snackbar, TextField, Typography } from "@mui/material";
 import { PaypalType } from '../interfaces';
 import { postPaymentPaypal } from '../services/paymentMethods';
+import { useNavigate } from 'react-router-dom';
 
 interface PaypalProps {
     bookingId?: number;
@@ -14,6 +15,7 @@ export default function Paypal({ bookingId }: PaypalProps) {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
+
     const handleSubmit = async () => {
         try {
             setAlertMessage("Procesando el pago...");
@@ -28,19 +30,22 @@ export default function Paypal({ bookingId }: PaypalProps) {
 
             await new Promise(resolve => setTimeout(resolve, 5000));
 
-            await postPaymentPaypal(data);
+            const response = await postPaymentPaypal(data) as any;
 
-            setAlertMessage("Pago efectuado");
-            setAlertOpen(true);
-
-
-            setEmail("");
-            setPassword("");
-            setIsButtonDisabled(true);
+            if (response.status === 200) {
+                setAlertMessage("Pago efectuado");
+                setAlertOpen(true);
+                setEmail("");
+                setPassword("");
+                setIsButtonDisabled(true);
+                setTimeout(() => {
+                    window.location.href = "/modulo-pagos-a"; 
+                }, 5000);
+            }
         } catch (error) {
-            console.error("Unexpected error:", error);
-            setAlertMessage("Ocurrió un error inesperado");
+            setAlertMessage("Credenciales incorrectas");
             setAlertOpen(true);
+
         } finally {
             setIsProcessing(false);
         }
@@ -96,8 +101,8 @@ export default function Paypal({ bookingId }: PaypalProps) {
                 </div>
             </FormControl>
 
-            <Snackbar open={alertOpen} autoHideDuration={3000} onClose={() => setAlertOpen(false)}>
-                <Alert onClose={() => setAlertOpen(false)} severity={alertMessage === "Pago efectuado" ? "success" : "error"}>
+            <Snackbar open={alertOpen} autoHideDuration={5000} onClose={() => setAlertOpen(false)} id="payment-processing">
+                <Alert onClose={() => setAlertOpen(false)} severity={alertMessage === "Pago efectuado" ? "success" : "error"} id={alertMessage === "Pago efectuado" ? "payment-success" : "payment-error"}>
                     {alertMessage}
                 </Alert>
             </Snackbar>
