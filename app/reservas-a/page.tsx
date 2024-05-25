@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import SubmitPage from "./components/templates/SubmitPage"
+import HomePage from "./components/templates/HomePage"
 
 export default function Confirmation() {
   return (
     <div className="App">
-      <SubmitPage />
+      <HomePage />
     </div>
   )
 }
