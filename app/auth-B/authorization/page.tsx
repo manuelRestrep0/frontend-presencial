@@ -1,26 +1,25 @@
 "use client"
-import { Button,Grid, MenuItem,Paper, Select, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead,TablePagination,TableRow, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { Button, Grid, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import Navbar from 'components/Navbar';
-import { getUsersRoles } from 'app/api/userService';
-import {User} from 'app/api/types';
+import { getUsersRoles, updateRole } from 'app/api/userService';
+import { UserRole } from 'app/api/types';
 
 const paperStyle = { padding: 20, width: "50%", margin: "7% auto", border: "1px solid #c2c2c2", borderRadius: "10px" };
 const title = { fontWeight: "bold" };
 const textStyle = { fontFamily: 'Roboto, sans-serif', margin: "15px 0px" };
-const inputs = { display: 'flex', alignItems: 'center'};
-const select = { height: "40px"};
 
+const select = { height: "40px" };
 
 export default function Authorization() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
   const [editingUserId, setEditingUserId] = useState<number | null>(null);
-  const [results, setResults] = useState<User[]>([]);
+  const [results, setResults] = useState<UserRole[]>([]);
   const [loading, setLoading] = useState(true);
+  const [roleIds, setRoleIds] = useState([] as number[]);
   
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,7 +30,7 @@ export default function Authorization() {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -48,18 +47,30 @@ export default function Authorization() {
     setSearch(event.target.value);
   };
 
-  const handleEditClick = (userId: number | null) => {
-    setEditingUserId(userId as null); // Explicitly cast userId to null
+  const handleEditClick = (personId:number) => {
+    setEditingUserId(personId);
   };
-  
 
-  const handleSaveClick = (userId:any, newRole:string) => {
-    const updatedResults = results.map(user =>
-      user.personId === userId ? { ...user, role: newRole } : user
-    );
-    setResults(updatedResults);
-    setEditingUserId(null);
+  const handleSaveClick = async (personId:number, roleIds:any) => {
+    
+    if (roleIds.length > 0) {
+      try {
+        await updateRole(personId, roleIds);
+        setEditingUserId(null);
+        setRoleIds([]); 
+        const data = await getUsersRoles();
+        setResults(data);
+
+      } catch (error) {
+        console.error('Error saving position name:', error);
+      }
+    }
   };
+
+  const handleRoleChange = (e:any) => {
+    setRoleIds(e.target.value);
+  }; 
+      
 
   const filteredResults = search
     ? results.filter(result =>
@@ -79,7 +90,7 @@ export default function Authorization() {
         <Typography variant="h4" component="h2" style={{ marginBottom: '20px' }}>
           Búsqueda de Usuarios
         </Typography>
-        <Grid item xs={12} style={{ marginBottom: '20px' }}>
+        <Grid item xs={12} style={textStyle}>
           Ingrese el Email, nombre o rol del usuario
         </Grid>
         <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -97,6 +108,7 @@ export default function Authorization() {
             <TableHead>
               <TableRow>
                 <TableCell>Nombre</TableCell>
+                <TableCell>Cedula</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Rol</TableCell>
                 <TableCell align="right">Acciones</TableCell>
@@ -106,25 +118,30 @@ export default function Authorization() {
               {filteredResults.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(result => (
                 <TableRow key={result.personId}>
                   <TableCell>{result.firstName} {result.lastName}</TableCell>
+                  <TableCell>{result.identificationNumber}</TableCell>
                   <TableCell>{result.email}</TableCell>
                   <TableCell>
                     {editingUserId === result.personId ? (
                       <Select
-                        value={result.positions[0]?.name || ''}
-                        onChange={(e) => handleSaveClick(result.personId, e.target.value)}
-                      >
-                        {result.positions.map(position => (
-                          <MenuItem key={position.positionId} value={position.name}>
-                            {position.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      multiple
+                      value={roleIds}
+                      onChange={handleRoleChange}
+                      style={{ minWidth: 200 }}
+                    >
+                      <MenuItem value={2}>ADMIN</MenuItem>
+                      <MenuItem value={1}>USER</MenuItem>
+                    </Select>
+                        
                     ) : (
-                      result.positions[0]?.name || 'N/A'
+                      result.positions.map(position => position.name).join(', ')
                     )}
                   </TableCell>
                   <TableCell align="right">
-                    {editingUserId !== result.personId && (
+                    {editingUserId === result.personId ? (
+                      <Button variant="contained" onClick={() => handleSaveClick(result.personId, roleIds)}>
+                        Guardar
+                      </Button>
+                    ) : (
                       <Button variant="contained" onClick={() => handleEditClick(result.personId)}>
                         Editar
                       </Button>

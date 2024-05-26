@@ -1,24 +1,39 @@
 "use client"
-import { Avatar, Container, Link, TextField } from "@mui/material"
+import { Avatar, Container,MenuItem,  Link,Select, TextField, InputLabel, FormControl } from "@mui/material"
 import { Button, Grid, Typography } from "@mui/material"
 import { blue } from "@mui/material/colors"
 import React, { useEffect, useState } from "react"
 import facebook from "../../assets/asset-facebook.png"
 import github from "../../assets/asset-github.png"
 import google from "../../assets/asset-google.png"
+import { registerUser } from "app/api/userService"
+import { User } from "app/api/types"
+import DatePickerComponent from "components/DatePicker"
+
 
 export default function Signin() {
   const [idNumber, setIdNumber] = useState("")
   const [idNumberError, setIdNumberError] = useState("")
-  const [fullName, setFullName] = useState("")
-  const [fullNameError, setFullNameError] = useState("")
+  const [name, setName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [nameError, setNameError] = useState("")
+  const [lastNameError, setLastNameError] = useState("")
   const [email, setEmail] = useState("")
   const [emailError, setEmailError] = useState("")
   const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
   const [passwordError, setPasswordError] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [confirmPasswordError, setConfirmPasswordError] = useState("")
+  const [idType, setIdType] = useState("")
+  const [date, setDate] = useState("")
+  const [gender, setGender] = useState("")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [country, setCountry] = useState("")
+  const [province, setProvince] = useState("")
+  const [city, setCity] = useState("")
+  const [address, setAddress] = useState("")
   const [isValid, setIsValid] = useState(false)
+
 
   /**
    * Estilo del contenedor principal.
@@ -93,30 +108,7 @@ export default function Signin() {
     }
   }
 
-  useEffect(() => {
-    setIsValid(
-      !!fullName &&
-        !!email &&
-        !!password &&
-        !!confirmPassword &&
-        !fullNameError &&
-        !emailError &&
-        !passwordError &&
-        !confirmPasswordError &&
-        !idNumberError
-    )
-  }, [
-    idNumberError,
-    fullName,
-    email,
-    password,
-    confirmPassword,
-    fullNameError,
-    emailError,
-    passwordError,
-    confirmPasswordError,
-  ])
-
+  
   const handleIdNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const regex = /^\d+$/
@@ -129,72 +121,135 @@ export default function Signin() {
       setIdNumberError("El valor ingresado no es un número")
     }
   }
-
+  
   /**
    * Maneja el cambio en el campo de nombre completo.
    * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
-   */
-  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  */
+ const handleNameChange = (e:any) => {
+   const value = e.target.value
+   console.log("El valor ingresado es:", value)
+   if (!value) {
+     setNameError("Este campo es obligatorioaaa")
+    } else if (value.length > 3) {
+      setName(value)
+      setNameError("")
+    }
+  }
+  
+  const handleLastNameChange = (e:any) => {
     const value = e.target.value
-    setFullName(value)
-    setFullNameError("")
-  }
+    if (!value) {
+      setLastNameError("Este campo es obligatorio")
+    } else if (value.length > 3) {
+      setLastName(value)
+      setLastNameError("")
+    }}
+    
+    /**
+     * Maneja el cambio en el campo de contraseña.
+     * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
+    */
+   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+     const value = e.target.value
+     setPassword(value)
+     validatePassword(value)
+    }
+    
+    /**
+     * Maneja el cambio en el campo de confirmación de contraseña.
+     * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
+    */
+   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+     const value = e.target.value
+     setConfirmPassword(value)
+     validateConfirmPassword(value)
+    }
+    
+    /**
+     * Maneja el cambio en el campo de correo electrónico.
+     * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
+    */
+   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+     const value = e.target.value
+     setEmail(value)
+     validateEmail(value)
+    }
+    const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      const user = {
+        idType: idType,
+        idNumber: idNumber,
+        firstName: name,
+        lastName: lastName,
+        genre: gender,
+        birthDate: date,
+        phoneNumber: phoneNumber,
+        country: country,
+        province: province,
+        city: city,
+        address: address,
+        email: email,
+        password: password,
+      } 
+      try {
+        registerUser(user as User)
+        console.log("Usuario registrado exitosamente")
+      } catch (error) {
+        console.error("Error registrando usuario:", error)
+      }
+      
+    }
+    
+    useEffect(() => {
+      const isValid =
+        !!idType &&
+        !!idNumber &&
+        !!name &&
+        !!lastName &&
+        !!gender &&
+        !!date &&
+        !!phoneNumber &&
+        !!country &&
+        !!province &&
+        !!city &&
+        !!address &&
+        !!email &&
+        !!password &&
+        !!confirmPassword &&
+        !idNumberError &&
+        !nameError &&
+        !lastNameError &&
+        !emailError &&
+        !passwordError &&
+        !confirmPasswordError
+      setIsValid(isValid)
+    }, [
+      idType,
+      idNumber,
+      name,
+      lastName,
+      gender,
+      date,
+      phoneNumber,
+      country,
+      province,
+      city,
+      address,
+      email,
+      password,
+      confirmPassword,
+      idNumberError,
+      nameError,
+      lastNameError,
+      emailError,
+      passwordError,
+      confirmPasswordError,
+    ])
 
-  /**
-   * Maneja el cambio en el campo de contraseña.
-   * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
-   */
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setPassword(value)
-    validatePassword(value)
-  }
 
-  /**
-   * Maneja el cambio en el campo de confirmación de contraseña.
-   * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
-   */
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setConfirmPassword(value)
-    validateConfirmPassword(value)
-  }
-
-  /**
-   * Maneja el cambio en el campo de correo electrónico.
-   * @param {React.ChangeEvent<HTMLInputElement>} e - Evento de cambio en el campo.
-   */
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setEmail(value)
-    validateEmail(value)
-  }
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const url = `${process.env.NEXT_PUBLIC_AUTH_API_URL}/${process.env.NEXT_PUBLIC_API_VERSION}/register`
-
-    const registerRequest = new Request(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idNumber, fullName, email, password, confirmPassword }),
-    })
-
-    fetch(registerRequest)
-      .then((response) => {
-        response.json()
-      })
-      .then((data) => {
-        console.log(data)
-        console.log("Usuario registrado correctamente")
-      })
-      .catch((error) => {
-        console.log(error)
-        console.log("Error al registrar el usuario")
-      })
-  }
-
-  return (
-    <Container style={paperStyle}>
+    return (
+      <Container style={paperStyle}>
       <Typography variant="h4" component="h2" sx={title}>
         Registrarte
       </Typography>
@@ -204,80 +259,211 @@ export default function Signin() {
         <Avatar alt="Imagen 3" src={github.src} style={{ margin: "10px" }} />
       </Grid>
       <form onSubmit={handleRegister}>
-        <TextField
-          label="Número de documento"
-          placeholder="Número de documento"
-          type="number"
-          fullWidth
-          required
-          variant="outlined"
-          error={!!idNumberError}
-          helperText={idNumberError}
-          onChange={handleIdNumberChange}
-        />
-        <TextField
-          label="Nombre completo"
-          placeholder="Nombre completo"
-          type="text"
-          fullWidth
-          required
-          variant="outlined"
-          style={{ margin: "10px auto" }}
-          onChange={handleFullNameChange}
-          error={!!fullNameError}
-          helperText={fullNameError}
-        />
-        <TextField
-          label="Email"
-          placeholder="Email"
-          type="email"
-          fullWidth
-          required
-          variant="outlined"
-          style={inputs}
-          value={email}
-          onChange={handleEmailChange}
-          error={!!emailError}
-          helperText={emailError}
-        />
-        <TextField
-          label="Contraseña"
-          placeholder="Contraseña"
-          type="password"
-          fullWidth
-          required
-          variant="outlined"
-          style={{ margin: "10px auto" }}
-          onChange={handlePasswordChange}
-          error={!!passwordError}
-          helperText={passwordError}
-        />
-        <TextField
-          label="Confirmar contraseña"
-          placeholder="Confirmar contraseña"
-          type="password"
-          fullWidth
-          required
-          variant="outlined"
-          style={{ margin: "10px auto" }}
-          onChange={handleConfirmPasswordChange}
-          error={!!confirmPasswordError}
-          helperText={confirmPasswordError}
-        />
-        <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          fullWidth
-          style={{ ...inputs, backgroundColor: blue[500] }}
-          disabled={!isValid}
-        >
-          Registrarme
-        </Button>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Identificación</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={idType}
+                label="Identificación"
+                required
+                onChange={(e) => setIdType(e.target.value)}
+              >
+                <MenuItem value="Cedula">Cédula</MenuItem>
+                <MenuItem value="Pasaporte">Pasaporte</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Número de documento"
+              placeholder="Número de documento"
+              type="number"
+              fullWidth
+              required
+              variant="outlined"
+              error={!!idNumberError}
+              helperText={idNumberError}
+              onChange={handleIdNumberChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Nombre"
+              placeholder="Nombre"
+              type="text"
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              onChange={handleNameChange}
+              error={!!nameError}
+              helperText={nameError}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Apellido"
+              placeholder="Apellido"
+              type="text"
+              onChange={handleLastNameChange}
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              error={!!lastNameError}
+              helperText={lastNameError}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Género</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={gender}
+                label="Género"
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <MenuItem value="M">Masculino</MenuItem>
+                <MenuItem value="F">Femenino</MenuItem>
+                <MenuItem value="O">Prefiero no especificar</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <DatePickerComponent fullWidth handleDateChange={setDate} />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Número de teléfono"
+              placeholder="Número de teléfono"
+              type="text"
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="País"
+              placeholder="País"
+              type="text"
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Provincia"
+              placeholder="Provincia"
+              type="text"
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              value={province}
+              onChange={(e) => setProvince(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Ciudad"
+              placeholder="Ciudad"
+              type="text"
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Dirección"
+              placeholder="Dirección"
+              type="text"
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Correo electrónico"
+              placeholder="Correo electrónico"
+              type="email"
+              fullWidth
+              required
+              variant="outlined"
+              style={inputs}
+              value={email}
+              onChange={handleEmailChange}
+              error={!!emailError}
+              helperText={emailError}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Contraseña"
+              placeholder="Contraseña"
+              type="password"
+              fullWidth
+              required
+              variant="outlined"
+              style={{ margin: "10px auto" }}
+              onChange={handlePasswordChange}
+              error={!!passwordError}
+              helperText={passwordError}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Confirmar contraseña"
+              placeholder="Confirmar contraseña"
+              type="password"
+              fullWidth
+              required
+              variant="outlined"
+              style={{ margin: "10px auto" }}
+              onChange={handleConfirmPasswordChange}
+              error={!!confirmPasswordError}
+              helperText={confirmPasswordError}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              color="primary"
+              variant="contained"
+              fullWidth
+              style={{ ...inputs, backgroundColor: blue[500] }}
+              disabled={!isValid}
+            >
+              Registrarme
+            </Button>
+          </Grid>
+        </Grid>
       </form>
       <Typography style={login}>
         <Link href="/auth-B/login">¿Ya tienes cuenta?</Link>
       </Typography>
+      
     </Container>
   )
 }
