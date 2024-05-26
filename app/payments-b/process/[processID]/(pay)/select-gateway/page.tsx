@@ -8,12 +8,15 @@ import PayGwButton from "./components/button/payGwButton"
 
 export default function SelectGateway({ params }: { params: { processID: string}}) {
 
+  const [loading, setLoading] = useState<boolean>(true)
+
   const [gateways, setGateways] = useState<string[]>([])
   useEffect(() => {
     const getGateways = async () => {
       const res = await fetch('https://backendoficial-presencial-pagosb.onrender.com/flights/paymentgateways')
       const data = await res.json()
       setGateways(data as string[])
+      setLoading(false)
     }
     getGateways()
   }, [])
@@ -48,9 +51,11 @@ export default function SelectGateway({ params }: { params: { processID: string}
         }}
       >
         {
-          gateways.map( (gateway, index) => (
+          loading ? <p>No hay pasarelas disponibles</p> :
+
+         ( gateways.map( (gateway, index) => (
             <PayGwButton key={index} gatewayName={gateway} processID={params.processID}/>
-          ))
+          )))
         }
       </Container>
     </Container>
