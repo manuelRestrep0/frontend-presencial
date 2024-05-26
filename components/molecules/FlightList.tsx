@@ -39,6 +39,8 @@ interface Flight {
 function FlightList() {
     const [flights, setFlights] = useState<Flight[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchFlights = async () => {
@@ -62,6 +64,16 @@ function FlightList() {
 
         fetchFlights();
     }, []);
+    
+    const openModal = (flight: Flight) => {
+        setSelectedFlight(flight);
+        setModalOpen(true);
+    };
+    
+    const closeModal = () => {
+        setSelectedFlight(null);
+        setModalOpen(false);
+    };
 
     const deleteFlight = async (id: number) => {
         try {
@@ -73,6 +85,7 @@ function FlightList() {
             }
             // Remove the deleted flight from the state
             setFlights(flights.filter(flight => flight.id !== id));
+            closeModal(); // Close modal after successful deletion
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setError(`Error deleting flight: ${error.message}`);
@@ -106,9 +119,9 @@ function FlightList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {flights.map((flight, index) => (
-                        flight.scales.length > 0 ? flight.scales.map((scale, scaleIndex) => (
-                            <tr key={`${flight.id}-${scale.scaleId}-${scaleIndex}`} className='border-gray-300 border-b'>
+                    {flights.map((flight) => (
+                        flight.scales.length > 0 ? flight.scales.map((scale) => (
+                            <tr key={`${flight.id}-${scale.scaleId}`} className='border-gray-300 border-b'>
                                 <td className='py-4 pr-10'>{flight.flightNumber}</td>
                                 <td className='py-4 pr-10'>{flight.flightType}</td>
                                 <td className='py-4 pr-10'>{scale.originAirport.name}</td>
@@ -117,7 +130,9 @@ function FlightList() {
                                 <td className='py-4 pr-10'>{new Date(scale.departureDate).toLocaleTimeString()}</td>
                                 <td className='py-4 pr-10'>{new Date(scale.arrivalDate).toLocaleDateString()}</td>
                                 <td className='py-4 pr-10'>{new Date(scale.arrivalDate).toLocaleTimeString()}</td>
-                                <td className='py-4 pr-6'>Ver más</td>
+                                <td className='py-4 pr-6'>
+                                    <button onClick={() => openModal(flight)}>Ver más</button>
+                                </td>
                                 <td className='py-4 pr-6'>
                                     <button onClick={() => deleteFlight(flight.id)} className='text-red-500'>Eliminar</button>
                                 </td>
@@ -135,6 +150,35 @@ function FlightList() {
                     ))}
                 </tbody>
             </table>
+
+            {modalOpen && selectedFlight && (
+                <div className="modal fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-50 flex items-center justify-center">
+                    <div className="modal-content bg-white rounded-lg p-8 relative">
+                        <span className="close absolute top-5 right-8 -mt-4 -mr-4 text-gray-600 cursor-pointer text-3xl" onClick={closeModal}>&times;</span>
+                        <div className="flight-details">
+                            <h2 className="text-2xl font-bold mb-4">{selectedFlight.flightNumber}</h2>
+                            <p><span className="font-semibold">Tipo de vuelo:</span> {selectedFlight.flightType}</p>
+                            <p><span className="font-semibold">Precio base:</span> ${selectedFlight.basePrice}</p>
+                            <p><span className="font-semibold">Sobretasa:</span> ${selectedFlight.surcharge}</p>
+                            <p><span className="font-semibold">Impuestos:</span> {selectedFlight.taxPercentage}%</p>
+                            {selectedFlight.scales.map((scale, index) => (
+                                <div key={index} className="scale-details mt-4">
+                                    <h3 className="text-xl font-semibold">Escala {index + 1}</h3>
+                                    <p><span className="font-semibold">Origen:</span> {scale.originAirport.name} ({scale.originAirport.city}, {scale.originAirport.country})</p>
+                                    <p><span className="font-semibold">Destino:</span> {scale.destinationAirport.name} ({scale.destinationAirport.city}, {scale.destinationAirport.country})</p>
+                                    <p><span className="font-semibold">Fecha de salida:</span> {new Date(scale.departureDate).toLocaleDateString()}</p>
+                                    <p><span className="font-semibold">Hora de salida:</span> {new Date(scale.departureDate).toLocaleTimeString()}</p>
+                                    <p><span className="font-semibold">Fecha de llegada:</span> {new Date(scale.arrivalDate).toLocaleDateString()}</p>
+                                    <p><span className="font-semibold">Hora de llegada:</span> {new Date(scale.arrivalDate).toLocaleTimeString()}</p>
+                                    <p><span className="font-semibold">Modelo del avión:</span> {scale.airplaneModel.family}</p>
+                                    <p><span className="font-semibold">Capacidad de pasajeros:</span> {scale.airplaneModel.capacity}</p>
+                                    <p><span className="font-semibold">Capacidad de carga:</span> {scale.airplaneModel.cargoCapacity} kg</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
