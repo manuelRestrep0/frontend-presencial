@@ -6,11 +6,14 @@ import { Person } from "app/reservas-a/api/person/interface/person"
 import SectionTitle from "../atoms/texts/SectionTitle"
 import SitasAppBar from "../molecules/SitasAppBar"
 import PassengerInfo from "../organisms/PassengerInfo"
+import EventDialog from "../molecules/EventDialog"
 
 const ConfirmationPage: React.FC = () => {
   const router = useRouter()
 
   const [passengers, setPassengersData] = useState<Person[]>([])
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
     const dataString = localStorage.getItem("passengersToConfirm")
@@ -21,6 +24,11 @@ const ConfirmationPage: React.FC = () => {
   }, [])
 
   const handleConfirmClick = () => {
+    setIsDialogOpen(true)
+  }
+
+  const handleSuccessDialogClose = () => {
+    setIsDialogOpen(false)
     router.push("/reservas-a/history")
   }
 
@@ -69,6 +77,12 @@ const ConfirmationPage: React.FC = () => {
           </button>
         </div>
       </div>
+      <EventDialog
+        open={isDialogOpen}
+        onClose={handleSuccessDialogClose}
+        title="¡Reserva Exitosa!"
+        message="Se ha registrado con exito la reserva."
+      />
     </div>
   )
 }

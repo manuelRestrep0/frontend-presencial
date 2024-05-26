@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react"
 import { Person } from "app/reservas-a/api/person/interface/person"
 import AddPassengerButton from "../atoms/buttons/AddPassengerButton"
 import SectionTitle from "../atoms/texts/SectionTitle"
-import ErrorDialog from "../molecules/ErrorDialog"
+import EventDialog from "../molecules/EventDialog"
 import SitasAppBar from "../molecules/SitasAppBar"
 import PassengerInfo from "../organisms/PassengerInfo"
 
@@ -138,7 +138,12 @@ const SubmitPage: React.FC = () => {
       </Box>
       <br />
       <br />
-      <ErrorDialog open={isErrorDialogOpen} onClose={() => setIsErrorDialogOpen(false)} message={messageError} />
+      <EventDialog
+        open={isErrorDialogOpen}
+        onClose={() => setIsErrorDialogOpen(false)}
+        title="Error"
+        message={messageError}
+      />
     </div>
   )
 }
