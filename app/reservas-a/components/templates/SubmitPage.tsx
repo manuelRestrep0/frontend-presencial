@@ -68,23 +68,31 @@ const SubmitPage: React.FC = () => {
   }
 
   const validatePassengers = () => {
-    for (const passenger of passengers) {
-      if (
-        passenger.name === "" ||
-        passenger.lastname === "" ||
-        passenger.email === "" ||
-        passenger.phone === "" ||
-        passenger.address === ""
-      ) {
-        setMessageError("Por favor, complete todos los campos antes de continuar.")
-        setDialogId("pinfo-dialog")
-        return false
-      } else if (passenger.contactName === "" || passenger.contactLastname === "" || passenger.contactPhone === "") {
-        setMessageError("No olvide completar los datos de contacto del contacto de emergencia.")
-        setDialogId("cinfo-dialog")
-        return false
-      }
+    const allPassengersHaveData = passengers.every(
+      (passenger) =>
+        passenger.name !== "" &&
+        passenger.lastname !== "" &&
+        passenger.email !== "" &&
+        passenger.phone !== "" &&
+        passenger.address !== ""
+    )
+
+    if (!allPassengersHaveData) {
+      setMessageError("Por favor, complete todos los campos antes de continuar.")
+      setDialogId("pinfo-dialog")
+      return false
     }
+
+    const oneEmergencyContact = passengers.some(
+      (passenger) => passenger.contactName !== "" && passenger.contactLastname !== "" && passenger.contactPhone !== ""
+    )
+
+    if (!oneEmergencyContact) {
+      setMessageError("No olvide completar los datos de contacto del contacto de emergencia.")
+      setDialogId("cinfo-dialog")
+      return false
+    }
+
     return true
   }
 
