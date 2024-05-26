@@ -108,7 +108,7 @@ const SubmitPage: React.FC = () => {
       <SitasAppBar onHistoryClick={handleHistoryClick} onBackClick={handleBackClick} />
       <br></br>
       <br></br>
-      <SectionTitle text="Ingresar informacion del pasajero" />
+      <SectionTitle text="Ingresar informacion del pasajero" id="form-title"/>
       <Divider></Divider>
       <br></br>
       <br></br>

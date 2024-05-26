@@ -45,7 +45,7 @@ const ConfirmationPage: React.FC = () => {
       <SitasAppBar onHistoryClick={handleHistoryClick} onBackClick={handleBackClick} />
       <br></br>
       <br></br>
-      <SectionTitle text="Confirmar Datos" />
+      <SectionTitle text="Confirmar Datos" id="confirm-title"/>
       <Divider></Divider>
       <br></br>
       <br></br>

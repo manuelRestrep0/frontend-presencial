@@ -1,12 +1,13 @@
 interface SectionTitleProps {
   text: string
   sx?: any
+  id: string
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({ text }) => {
+const SectionTitle: React.FC<SectionTitleProps> = ({ text, id }) => {
   return (
     <div className="title">
-      <p>{text}</p>
+      <p id={id}>{text}</p>
     </div>
   )
 }
