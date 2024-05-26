@@ -15,14 +15,6 @@ import PassengerInfo from "../organisms/PassengerInfo"
 const SubmitPage: React.FC = () => {
   const router = useRouter()
 
-  const handleHistoryClick = () => {
-    router.push("/reservas-a/history")
-  }
-
-  const handleBackClick = () => {
-    router.push("/reservas-a/")
-  }
-
   const [passengers, setPassengers] = useState<Person[]>([
     {
       name: "",
@@ -37,6 +29,15 @@ const SubmitPage: React.FC = () => {
   ])
 
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false)
+  const [messageError, setMessageError] = useState("")
+
+  const handleHistoryClick = () => {
+    router.push("/reservas-a/history")
+  }
+
+  const handleBackClick = () => {
+    router.push("/reservas-a/")
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number, field: keyof Person) => {
     const { value } = e.target
@@ -72,11 +73,12 @@ const SubmitPage: React.FC = () => {
         passenger.lastname === "" ||
         passenger.email === "" ||
         passenger.phone === "" ||
-        passenger.address === "" ||
-        passenger.contactName === "" ||
-        passenger.contactLastname === "" ||
-        passenger.contactPhone === ""
+        passenger.address === ""
       ) {
+        setMessageError("Por favor, complete todos los campos antes de continuar.")
+        return false
+      } else if (passenger.contactName === "" || passenger.contactLastname === "" || passenger.contactPhone === "") {
+        setMessageError("No olvide completar los datos de contacto del contacto de emergencia.")
         return false
       }
     }
@@ -106,7 +108,7 @@ const SubmitPage: React.FC = () => {
       <SitasAppBar onHistoryClick={handleHistoryClick} onBackClick={handleBackClick} />
       <br></br>
       <br></br>
-      <SectionTitle text="Ingresar información del pasajero" />
+      <SectionTitle text="Ingresar informacion del pasajero" />
       <Divider></Divider>
       <br></br>
       <br></br>
@@ -136,11 +138,7 @@ const SubmitPage: React.FC = () => {
       </Box>
       <br />
       <br />
-      <ErrorDialog
-        open={isErrorDialogOpen}
-        onClose={() => setIsErrorDialogOpen(false)}
-        message="Por favor, complete todos los campos antes de continuar."
-      />
+      <ErrorDialog open={isErrorDialogOpen} onClose={() => setIsErrorDialogOpen(false)} message={messageError} />
     </div>
   )
 }
