@@ -30,6 +30,7 @@ const SubmitPage: React.FC = () => {
 
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false)
   const [messageError, setMessageError] = useState("")
+  const [dialogId, setDialogId] = useState("")
 
   const handleHistoryClick = () => {
     router.push("/reservas-a/history")
@@ -76,9 +77,11 @@ const SubmitPage: React.FC = () => {
         passenger.address === ""
       ) {
         setMessageError("Por favor, complete todos los campos antes de continuar.")
+        setDialogId("pinfo-dialog")
         return false
       } else if (passenger.contactName === "" || passenger.contactLastname === "" || passenger.contactPhone === "") {
         setMessageError("No olvide completar los datos de contacto del contacto de emergencia.")
+        setDialogId("cinfo-dialog")
         return false
       }
     }
@@ -108,7 +111,7 @@ const SubmitPage: React.FC = () => {
       <SitasAppBar onHistoryClick={handleHistoryClick} onBackClick={handleBackClick} />
       <br></br>
       <br></br>
-      <SectionTitle text="Ingresar informacion del pasajero" id="form-title"/>
+      <SectionTitle text="Ingresar informacion del pasajero" id="form-title" />
       <Divider></Divider>
       <br></br>
       <br></br>
@@ -143,6 +146,7 @@ const SubmitPage: React.FC = () => {
         onClose={() => setIsErrorDialogOpen(false)}
         title="Error"
         message={messageError}
+        baseId={dialogId}
       />
     </div>
   )

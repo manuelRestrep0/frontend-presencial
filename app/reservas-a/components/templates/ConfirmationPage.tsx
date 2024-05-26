@@ -45,7 +45,7 @@ const ConfirmationPage: React.FC = () => {
       <SitasAppBar onHistoryClick={handleHistoryClick} onBackClick={handleBackClick} />
       <br></br>
       <br></br>
-      <SectionTitle text="Confirmar Datos" id="confirm-title"/>
+      <SectionTitle text="Confirmar Datos" id="confirm-title" />
       <Divider></Divider>
       <br></br>
       <br></br>
@@ -82,6 +82,7 @@ const ConfirmationPage: React.FC = () => {
         onClose={handleSuccessDialogClose}
         title="¡Reserva Exitosa!"
         message="Se ha registrado con exito la reserva."
+        baseId="success-dialog"
       />
     </div>
   )
