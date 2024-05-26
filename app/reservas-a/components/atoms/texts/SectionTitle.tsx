@@ -1,7 +1,7 @@
 interface SectionTitleProps {
   text: string
+  id?: string
   sx?: any
-  id: string
 }
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ text, id }) => {
