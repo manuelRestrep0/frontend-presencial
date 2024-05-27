@@ -2,8 +2,10 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import FormButton from 'components/formButton';
+import FormFly from 'components/formFly';
 import FormInput from 'components/formInput';
 import FormSelect from 'components/formSelect';
 import FormTitles from 'components/formTitles';
@@ -56,11 +58,6 @@ const FormReserve = () => {
             }),
         });
     };
-
-    const [viewFly, setViewFly] = useState(false);
-    const handleViewFly = () => {
-        setViewFly(!viewFly);
-    }
     const [viewInfo, setViewInfo] = useState(false);
     const handleViewInfo = () => {
         setViewInfo(!viewInfo);
@@ -126,24 +123,7 @@ const FormReserve = () => {
 
         <div className="flex flex-col items-center justify-start w-screen h-auto">
             <Navbar />
-            <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 pb-5'>
-                <FormTitles viewInfo={viewFly} handleViewInfo={handleViewFly} name={'Vuelo'} passanger={'Pasajero principal'} />
-                {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información de vuelo</h1>}
-                {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Identificador de vuelo </label> {info[0]?.identificador} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Tipo </label> {info[0]?.tipo} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Ciudad origen </label> {info[0]?.ciudadOrigen}  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Ciudad destino</label> {info[0]?.ciudadDestino} </li>
-                </ul >}
-                {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5 mt-5'> Horarios de salida y llegada</h1>}
-                {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Fecha de salida</label> {info[0]?.fechaSalida} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Fecha de llegada </label> {info[0]?.fechaLlegada} </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Hora de salida </label> {info[0]?.horaSalida}  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200r p-3 my-3 rounded-xl' style={{ width: "49%" }}> <label className='text-xs'> Hora de llegada </label> {info[0]?.horaLlegada} </li>
-                </ul>}
-            </section>
-
+            <FormFly />
             <form
                 id='formReserva'
                 ref={form}
@@ -202,12 +182,17 @@ const FormReserve = () => {
                             </section>
                         </div></>
                 ))}
+
                 <section className='flex flex-row w-10/12 h-auto items-center justify-start p-3 mb-3'>
                     <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-auto mr-5'> Agregar pasajero </h1>
                     <AddCircleIcon className='text-[#2196F3] w-12 h-12 cursor-pointer' onClick={handleAddPassenger} />
                 </section>
+
                 <FormButton type='submit' text='Guardar' color='#2196F3' icon={<SaveAltIcon className='text-white ml-2' />} />
-                <FormButton type='reset' text='Limpiar' color='#3f5d75' icon={<RestartAltIcon className='text-white ml-2' />} />
+
+                <Link href='/reservaB/formReservaB'>
+                    <FormButton type='reset' text='Limpiar' color='#3f5d75' icon={<RestartAltIcon className='text-white ml-2' />} />
+                </Link>
 
             </form>
         </div >

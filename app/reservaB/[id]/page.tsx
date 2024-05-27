@@ -8,9 +8,13 @@ import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
 import React, { useEffect, useState } from 'react';
+import FormFly from 'components/formFly';
 import Navbar from 'components/navbar';
 import ReservaIdButton from 'components/reservaIdButton';
+import ReservaIdInfo from 'components/ReservaIdInfo';
+import ReservaState from 'components/ReservaStatus';
 import { passengerType, personType } from 'types';
+import ReservaStatus from 'components/ReservaStatus';
 
 const Page = ({ params }: { params: { id: string } }) => {
     console.log(params.id);
@@ -46,7 +50,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     useEffect(() => {
         getPersons();
-    }, [passengers]);
+    }, []);
 
     if (Array.isArray(passengers)) {
         passengers.map((passengerItem, index) => {
@@ -65,10 +69,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [viewFly, setViewFly] = useState(false);
-    const handleViewFly = () => {
-        setViewFly(!viewFly);
-    }
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [viewInfo, setViewInfo] = useState(false);
     const handleViewInfo = () => {
@@ -87,58 +88,34 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <ReservaIdButton
                     className="flex flex-row justify-center items-center w-auto h-12 bg-[#2196F3] rounded-full shadow-lg px-5 text-white font-semibold"
                     icon={<EditIcon className="text-white" />}
+                    link='/reservaB/formReservaB'
                 >
                     Editar
                 </ReservaIdButton>
                 <ReservaIdButton
                     className="flex flex-row justify-center items-center w-auto h-12 bg-[#ffac38] rounded-xl shadow-lg px-5 text-white font-semibold"
                     icon={<WorkRoundedIcon className="text-white ml-2" />}
+                    link='/ModuloEquipaje'
                 >
                     Equipaje
                 </ReservaIdButton>
                 <ReservaIdButton className="flex flex-row justify-center items-center w-auto h-12 bg-[#2196F3] rounded-xl shadow-lg px-5 text-white font-semibold"
                     icon={<CreditCardRoundedIcon className="text-white ml-2" />}
+                    link='/ModuloPago '
                 >
                     Pagar
                 </ReservaIdButton>
                 <ReservaIdButton
                     className="flex flex-row justify-center items-center w-auto h-12 bg-[#248d37] rounded-xl shadow-lg px-5 text-white font-semibold"
                     icon={<PeopleRoundedIcon className="text-white ml-2" />}
+                    link='/ModuloAsientos'
                 >
                     Asientos
                 </ReservaIdButton>
-                <label>
-                    Pendiente
-                </label>
+
+                <ReservaStatus estado='Pendiente' />
             </section>
-            <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10'>
-                <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
-                    <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>El vuelo</label>
-                    {viewFly ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewFly} onChange={handleViewFly} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewFly} onChange={handleViewFly} />}
-                </div>
-                {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información de vuelo</h1>}
-                {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Identificador de vuelo</label> MEM864 </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Tipo </label> Internacional </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Ciudad origen </label> Medellín  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Ciudad destino</label> Miamí </li>
-                </ul >}
-                {viewFly && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5 mt-5'> Horarios de salida y llegada</h1>}
-                {viewFly && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Fecha de salida</label> 11/10/2024 </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Fecha de llegada </label> 11/10/2024 </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Hora de salida </label> 12:10  </li>
-                    <li className='flex flex-col justify-start items-start h-16 bg-gray-200 p-3 my-3 rounded-xl' style={{ width: "49%" }}>
-                        <label className='text-xs'> Hora de llegada </label> 15:30 </li>
-                </ul>}
-            </section>
+            <FormFly />
             {persons.map((p) => (
                 <section key={p.personId} className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10'>
                     <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
@@ -147,40 +124,16 @@ const Page = ({ params }: { params: { id: string } }) => {
                         {viewInfo ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} onChange={handleViewInfo} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} onChange={handleViewInfo} />}
                     </div>
                     {viewInfo && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información básica</h1>}
-                    {viewInfo && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Nombres </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.firstName} readOnly />
-                        </li>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Apellidos </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.lastName} readOnly />
-                        </li>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Fecha de nacimiento </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.birthDate} readOnly />
-                        </li>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Telefono </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.phoneNumber} readOnly />
-                        </li>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Email </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.email} readOnly />
-                        </li>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Genero </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.genre} readOnly />
-                        </li>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Tipo de documento </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.idType} readOnly />
-                        </li>
-                        <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                            <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Documento </label>
-                            <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value={p.idNumber} readOnly />
-                        </li>
-                    </ul>}
+                    {viewInfo && <ReservaIdInfo p={{
+                        firstName: p.firstName,
+                        lastName: p.lastName,
+                        birthDate: p.birthDate,
+                        phoneNumber: p.phoneNumber,
+                        email: p.email,
+                        genre: p.genre,
+                        idType: p.idType,
+                        idNumber: p.idNumber,
+                    }} />}
                 </section>
             ))}
             <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 mb-5'>
