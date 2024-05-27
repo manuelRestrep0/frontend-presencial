@@ -5,6 +5,30 @@ import { PrincipalText, Subtitle } from '@components/atoms/text';
 
 export default function FlightForm(){
 
+    interface FlightData {
+        id: number;
+        flightNumber: string;
+        basePrice: number;
+        taxPercent: number;
+        surcharge: number;
+        flightType: string;
+        scales: Scale[];
+    }
+    
+    interface Scale {
+        airplaneModel: {
+            id: string;
+        };
+        originAirport: {
+            id: string;
+        };
+        destinationAirport: {
+            id: string;
+        };
+        departureDate: string;
+        arrivalDate: string;
+    }
+
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [flightNumber, setFlightNumber] = useState<string | null>(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -69,8 +93,14 @@ export default function FlightForm(){
             });
     
             if (response.ok) {
-                setFlightNumber(flightNumber); // Actualizar el número de vuelo
-                setShowSuccessModal(true); // Mostrar la ventana emergente de éxito
+
+                const responseData = await response.json() as FlightData; // Especificar el tipo de responseData
+                const flightNumber = responseData.flightNumber; // Acceder directamente al flightNumber del objeto responseData
+                setFlightNumber(flightNumber); // Actualizar el número de vuelo con el flightNumber generado
+                setShowSuccessModal(true);; // Mostrar la ventana emergente de éxito
+        
+                
+                 // Mostrar la ventana emergente de éxito
             } else {
                 throw new Error('Error en el servidor');
             }

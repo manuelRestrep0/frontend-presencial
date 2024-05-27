@@ -35,32 +35,43 @@ const SearchPage: React.FC = () => {
       };
 
       const handleEdit = (flightNumber: string) => {
-        // Lógica para editar el vuelo con el ID proporcionado
         console.log('Editar vuelo con ID:', flightNumber);
       };
     
       const handleDelete = async (flightNumber: string) => {
-        // Buscar el vuelo por su flightNumber para obtener su ID
-        const flightToDelete = flights.find((flight: Flight) => flight.flightNumber === flightNumber);
-        
-        if (flightToDelete) {
-          const { flightNumber } = flightToDelete;
-          try {
-            // Realizar la petición DELETE para eliminar el vuelo
-            await axios.delete(`https://codefact.udea.edu.co/modulo-18/api/v1/flights/${flightNumber}`);
-            console.log(`Vuelo con ID ${flightNumber} eliminado exitosamente`);
-            const confirmMessage = `Vuelo con ID ${flightNumber} eliminado exitosamente. La página se recargará para reflejar los cambios.`;
-            if (window.confirm(confirmMessage)) {
-        // Recargar la página después de que el usuario acepte el mensaje
-                window.location.reload();
+        // Eliminar el prefijo "SA" del número de vuelo
+        const flightNumberWithoutPrefix = flightNumber.substring(2);
+    
+        try {
+            // Verificar si el vuelo tiene reservas
+            const response = await axios.get(`https://codefact.udea.edu.co/modulo-18/api/v1/flights/has-bookings/${flightNumberWithoutPrefix}`);
+    
+            if (response.data && response.data.hasBookings) {
+                // Si el vuelo tiene reservas, mostrar un mensaje al usuario y no permitir la eliminación
+                const errorMessage = `El vuelo con número ${flightNumber} tiene reservas y no puede ser eliminado.`;
+                console.log(errorMessage);
+                alert(errorMessage);
+            } else {
+                // Si el vuelo no tiene reservas, proceder con la eliminación
+                await axios.delete(`https://codefact.udea.edu.co/modulo-18/api/v1/flights/${flightNumber}`);
+                console.log(`Vuelo con ID ${flightNumber} eliminado exitosamente`);
+                const confirmMessage = `Vuelo con ID ${flightNumber} eliminado exitosamente. La página se recargará para reflejar los cambios.`;
+                if (window.confirm(confirmMessage)) {
+                    // Recargar la página después de que el usuario acepte el mensaje
+                    window.location.reload();
+                }
             }
-          } catch (error) {
-            console.error('Error al eliminar el vuelo:', error);
-          }
-        } else {
-          console.log(`No se encontró ningún vuelo con el número de vuelo ${flightNumber}`);
+        } catch (error) {
+            // Si hay un error en la petición, verificar si es debido a que el vuelo tiene reservas
+            
+                // Mostrar el mensaje de error al usuario
+                const errorMessage = `El vuelo con número ${flightNumber} tiene reservas y no puede ser eliminado.`;
+                console.error(errorMessage);
+                alert(errorMessage);
+            
         }
-      };
+    };
+    
       
 
       return (

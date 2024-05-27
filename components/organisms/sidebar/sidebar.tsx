@@ -1,15 +1,12 @@
 'use client';
 import React from "react";
-import { BtnConsultar, BtnEliminar, BtnModificar, BtnRegistrar } from "@components/atoms/buttons";
+import { BtnConsultar, BtnRegistrar } from "@components/atoms/buttons";
 import { Title } from "@components/atoms/text";
 
 interface SideBarProps {
   toggleFlightForm: () => void;
   toggleSearchPage: () => void;
 }
-
-
-
 
 function SideBar({ toggleFlightForm, toggleSearchPage }: SideBarProps) {
   return (
@@ -30,14 +27,6 @@ function SideBar({ toggleFlightForm, toggleSearchPage }: SideBarProps) {
       <BtnConsultar toggleSearchPage={toggleSearchPage}/>
     </div>
     </aside>
-
-    <div className="flex justify-end">
-      <BtnModificar/>
-    </div>
-
-    <div className="flex justify-end">
-      <BtnEliminar/>
-    </div>
   
   </div>
 </div>
