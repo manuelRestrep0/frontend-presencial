@@ -1,5 +1,5 @@
 export interface FormData extends Record<string, any> {
-    id: string,
+    cc: string,
     idType: string,
     firstname: string,
     lastname: string,

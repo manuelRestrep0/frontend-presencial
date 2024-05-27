@@ -9,21 +9,10 @@ interface AdditionalInfoProps {
     setFormData: Function
 }
 
-const genderOptions = [
-    { label: 'Hombre', value: 'male' },
-    { label: 'Mujer', value: 'female' },
-    { label: 'Otro', value: 'other' },
-]
 
 const AdditionalInfo = ({ formData, setFormData }: AdditionalInfoProps) => {
     return (
         <div className='form-fields-container gap-4 w-full'>
-            <SelectInput
-                label='Género'
-                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                selectedValue={formData.gender ?? ''}
-                options={genderOptions}
-            />
             <InputWLabel
                 id='phone-number-input'
                 label='Número de Celular'

@@ -14,12 +14,23 @@ import { AdditionalInfo } from '../../../components/UserRegistration/AdditionalI
 import { AddressInfo } from '../../../components/UserRegistration/AddressInfo';
 import { SignupInfo } from '../../../components/UserRegistration/SignupInfo';
 import { FormData } from 'components/UserRegistration/IFormData';
+import useSWRMutation from 'swr/mutation'
 
 
-const registerEndpointUrl = "http://localhost:8080/public/api/auth/register"
+const registerEndpointUrl = "https://codefact.udea.edu.co"
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const Form = () => {
+    async function sendRequest(registerEndpointUrl:string, { arg }: { arg: { infoRegistro: any }}) {
+        return fetch(registerEndpointUrl, {
+          method: 'POST',
+          body: JSON.stringify(arg)
+        }).then(res => res.json())
+    }
+    
+    const { trigger, isMutating } = useSWRMutation(registerEndpointUrl+'/modulo-01/public/api/auth/register', sendRequest, /* options */)
+
+
 
     const { data: session } = useSession()
 
@@ -45,7 +56,7 @@ const Form = () => {
     }, []);
 
     const [formData, setFormData] = useState<FormData>({
-        id: "",
+        cc: "",
         idType: "",
         firstname: "",
         lastname: "",
@@ -57,36 +68,43 @@ const Form = () => {
         residence: "",
         phone: "",
         birthdate: "",
-        confirmPassword: "",
-        username: "",
-        gender: "",
+        role: "user"
     });
+
+    
 
 
     const sendRegisterRequest = async () => {
-        if (!validateSignup())
-            return
-        const requestFormData = {...formData}
-        delete requestFormData.confirmPassword
-        delete requestFormData.gender
-        delete requestFormData.username
-        requestFormData.role = "User"
-        const options = {
-            method: 'POST',
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(requestFormData)
+        const infoRegistro = {
+            cc: formData.cc,
+            idType: formData.idType,
+            firstname: formData.firstname,
+            lastname: formData.lastname,
+            password: formData.password,
+            mail: formData.mail,
+            country: formData.country,
+            province: formData.province,
+            city: formData.city,
+            residence: formData.residence,
+            phone: formData.phone,
+            birthdate: formData.birthdate,
+            role: "user"
         }
-        console.log("Req json",JSON.stringify(requestFormData))
-        const response = await fetch(registerEndpointUrl, options)
-            .then(res => {
-                console.log(res.status)
-                return res.json()
-            })
-            .then(res => console.log(res))
-            .catch(error => console.log(error))
-        console.log(response)
+        console.log("info registro", infoRegistro)
+        try{
+            //const result = await trigger({infoRegistro}, /* options */)
+            //console.log(result)
+            fetch(registerEndpointUrl, {
+                headers: {"Content-Type":"application/json",
+                "Accept":"application/json"
+                },
+                method: 'POST',
+                body: JSON.stringify(infoRegistro)
+              }).then(res => res.json())
+        }
+        catch(e){
+
+        }
     }
 
 
@@ -181,6 +199,7 @@ const Form = () => {
             if (page >= 2) {
                 if (validateSignup()) {
                     console.log(JSON.stringify(formData));
+                    sendRegisterRequest();
                 }
 
             } else {
@@ -192,6 +211,7 @@ const Form = () => {
             if (page === 3) {
                 if (validateSignup()) {
                     console.log(JSON.stringify(formData));
+                    sendRegisterRequest();
                 }
             } else {
                 setPage(page + 1)
@@ -280,7 +300,7 @@ const Form = () => {
     function chooseButtonText2() {
         return page === 3 ? "Registrarse" : "Continuar";
     }
-
+    if (isMutating ) return (<div>Registrando Usuario</div>)
     return (
         <div className='main-container h-screen w-full bg-cover text-black flex justify-center items-center'>
             <div className='form-container bg-white flex flex-col min-h-[65%] max-h-[90%] w-[70%] xl:w-full justify-between items-center rounded-2xl py-5 gap-4'>
@@ -321,3 +341,7 @@ const Form = () => {
 }
 
 export default Form;
+
+function key(key?: IArguments): boolean {
+    throw new Error('Function not implemented.');
+}

@@ -55,8 +55,8 @@ const BasicInfo = ({ formData, setFormData }: BasicInfoProps) => {
                 id='identification-input'
                 placeholder='000000000'
                 type='number'
-                value={formData.id}
-                onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                value={formData.cc}
+                onChange={(e) => setFormData({ ...formData, cc: e.target.value })}
             />
         </div>
     );

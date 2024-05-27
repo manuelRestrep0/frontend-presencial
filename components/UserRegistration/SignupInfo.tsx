@@ -40,13 +40,6 @@ const SignupInfo = ({ formData, setFormData, setValidSignup, thridPartySession }
                 value={thridPartySession?.user ? (thridPartySession.user.email as string) : (formData.mail)}
                 disabled={thridPartySession?.user ? true : false}
             />
-            <InputWLabel
-                id="username-input"
-                label='Nombre de Usuario'
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                type="text"
-                value={formData.username ?? ''}
-            />
             <div className={thridPartySession?.user ? "invisible" : ""}>
                 <InputWLabel
                     id="password-input"
