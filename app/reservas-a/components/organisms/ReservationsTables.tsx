@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import React, { useEffect, useState } from "react"
-import { getBookings } from "app/reservas-a/api/booking/endpoints/read"
+import { getBookings } from "app/reservas-a/api/booking/endpoints/get"
 import Booking from "app/reservas-a/api/booking/interface/booking"
 import TableCellContent from "../atoms/texts/TableCellContent"
 
@@ -26,9 +26,8 @@ const ReservationsTable: React.FC = () => {
           <TableRow>
             <TableCellContent align="center" text="Código Reserva" />
             <TableCellContent align="center" text="Código Vuelo" />
-            <TableCellContent align="center" text="Destinos" />
-            <TableCellContent align="center" text="Salida" />
-            <TableCellContent align="center" text="Llegada" />
+            <TableCellContent align="center" text="Fecha de la reserva" />
+            <TableCellContent align="center" text="Precio" />
             <TableCellContent align="center" text="Estado de la Reserva" />
           </TableRow>
         </TableHead>
@@ -37,9 +36,8 @@ const ReservationsTable: React.FC = () => {
             <TableRow key={booking.bookingId}>
               <TableCell align="center">{booking.bookingId}</TableCell>
               <TableCell align="center">{booking.flightId}</TableCell>
-              <TableCell align="center"></TableCell>
-              <TableCell align="center"></TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell align="center">{new Date(booking.booking_date).toLocaleString()}</TableCell>
+              <TableCell align="center">{booking.total_price}</TableCell>
               <TableCell align="center">{booking.booking_status}</TableCell>
             </TableRow>
           ))}

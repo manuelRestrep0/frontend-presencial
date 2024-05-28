@@ -17,11 +17,19 @@ const SubmitPage: React.FC = () => {
 
   const [passengers, setPassengers] = useState<Person[]>([
     {
-      name: "",
-      lastname: "",
-      email: "",
-      phone: "",
-      address: "",
+      personId: "",
+      identificationType: "",
+      id_number: "",
+      firstName: "",
+      lastName: "",
+      genre: "",
+      birthDate: "",
+      phoneNumber: "",
+      country: "",
+      province: "",
+      city: "",
+      mail: "",
+      password: "",
       contactName: "",
       contactLastname: "",
       contactPhone: "",
@@ -54,11 +62,19 @@ const SubmitPage: React.FC = () => {
 
   const addNewPassenger = () => {
     const newPassenger = {
-      name: "",
-      lastname: "",
-      email: "",
-      phone: "",
-      address: "",
+      personId: "",
+      identificationType: "",
+      id_number: "",
+      firstName: "",
+      lastName: "",
+      genre: "",
+      birthDate: "",
+      phoneNumber: "",
+      country: "",
+      province: "",
+      city: "",
+      mail: "",
+      password: "",
       contactName: "",
       contactLastname: "",
       contactPhone: "",
@@ -70,11 +86,12 @@ const SubmitPage: React.FC = () => {
   const validatePassengers = () => {
     const allPassengersHaveData = passengers.every(
       (passenger) =>
-        passenger.name !== "" &&
-        passenger.lastname !== "" &&
-        passenger.email !== "" &&
-        passenger.phone !== "" &&
-        passenger.address !== ""
+        passenger.identificationType !== "" &&
+        passenger.id_number !== "" &&
+        passenger.firstName !== "" &&
+        passenger.lastName !== "" &&
+        passenger.mail !== "" &&
+        passenger.phoneNumber !== ""
     )
 
     if (!allPassengersHaveData) {

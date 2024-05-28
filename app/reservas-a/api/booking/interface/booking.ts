@@ -1,5 +1,5 @@
 export default interface Booking {
-  bookingId: string
+  bookingId?: string
   flightId: string
   booking_date: string
   booking_status: string

@@ -1,4 +1,4 @@
 export default interface Passenger {
-  passengerId: number
+  passengerId?: number
   personId: number
 }
