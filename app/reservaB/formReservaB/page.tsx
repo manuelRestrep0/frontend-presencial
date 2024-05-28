@@ -11,6 +11,7 @@ import FormSelect from 'components/formSelect';
 import FormTitles from 'components/formTitles';
 import Navbar from 'components/navbar';
 import useFormData from 'hooks/useFormData';
+import { bookingType, loginData, passengerType, personType } from 'types';
 
 const FormReserve = () => {
 
@@ -21,7 +22,6 @@ const FormReserve = () => {
     ];
 
     const documentOptions = [
-        { value: '0', label: 'Seleccione una opción' },
         { value: '1', label: 'Cedula' },
         { value: '2', label: 'Pasaporte' },
         { value: '3', label: 'Tarjeta de identidad' },
@@ -33,30 +33,153 @@ const FormReserve = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         console.log(formData);
+        console.log("Buscar por id number: " + formData.idNumber);
 
-        await fetch('http://localhost:8080/v1/person/person', {
+        let personId;
+        let person: personType;
+        let loginData;
+        let authToken;
+
+        await fetch('https://codefact.udea.edu.co/modulo-09/v1/person/documentId/' + formData.idNumber).then(async (personResponse) => {
+            if (!personResponse.ok) {
+                throw new Error('Hubo un problema con la solicitud fetch: ' + personResponse.status);
+            }
+
+            person = await personResponse.json() as personType;
+
+            if (person) {
+                personId = person.personId;
+                console.log("Person Id: " + personId);
+                console.log("Person: ", person);
+            }else{
+                console.log("No existe la persona");
+            }
+        });
+
+        //Se crea la persona si no existe, se actualiza si ya existe
+        const personResponse = await fetch('https://codefact.udea.edu.co/modulo-09/v1/person/person', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Auth-Token': 'token',
             },
             body: JSON.stringify({
-                personId: formData.personId,
-                idType: formData.idType,
+                personId: personId,
+                identificationType: {
+                  identificationTypeId: 1,
+                  identificationTypeName: "CC"
+                },
                 idNumber: formData.idNumber,
                 firstName: formData.firstName,
                 lastName: formData.lastName,
                 genre: formData.genre,
                 birthDate: formData.birthDate,
-                phoneNumber: formData.phoneNumber,
+                phoneNumber: formData.phone,
                 country: formData.country,
                 province: formData.province,
                 city: formData.city,
-                residence: formData.residence,
+                address: formData.address,
                 email: formData.email,
-                password: formData.password,
             }),
         });
+        if (!personResponse.ok) {
+            throw new Error('Person creation failed');
+        }  
+
+        //Se obtiene el token de autenticación
+        const loginAdminResponse = await fetch('https://codefact.udea.edu.co/modulo-02/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: "admin@default",
+                password: "pass123"
+            }),
+        });
+        if (!loginAdminResponse.ok) {
+            throw new Error('Login failed');
+        }
+        loginData = await loginAdminResponse.json() as loginData;
+        authToken = loginData.token;
+
+        //Se crea el pasajero
+        const passengerResponse = await fetch('https://codefact.udea.edu.co/modulo-09/v1/passenger/passenger', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                passengerId: 0,
+                personId: personId,
+            }),
+        });
+        if (!passengerResponse.ok) {
+            throw new Error('Passenger creation failed');
+        }
+
+        //Se obtiene el token de autenticación
+        const loginResponse = await fetch('https://codefact.udea.edu.co/modulo-02/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: "user@default",
+                password: "pass123"
+            }),
+        });
+        if (!loginResponse.ok) {
+            throw new Error('Login failed');
+        }
+        loginData = await loginResponse.json() as loginData;
+        authToken = loginData.token;
+
+        //Se crea la reserva
+        const bookingResponse = await fetch('https://codefact.udea.edu.co/modulo-09/v1/booking/booking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                bookingId: 0,
+                flightId: 1,
+                bookingDate: new Date().toISOString(),
+                bookingStatus: "Pending",
+                totalPrice: 1000
+            }),
+        });
+        if (!bookingResponse.ok) {
+            throw new Error('Booking creation failed');
+        }
+
+        //Se crea la relación entre la reserva y el pasajero
+        const relationResponse = await fetch('https://codefact.udea.edu.co/modulo-09/v1/bookingPassenger/bookingPassenger', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                booking_passenger_id: 0,
+                booking: {
+                    bookingId: 0,
+                    flightId: 1,
+                    bookingDate: new Date().toISOString(),
+                    bookingStatus: "Pending",
+                    totalPrice: 1000
+                },
+                passenger: {
+                    passengerId: 0,
+                    personId: personId,
+                }
+            }),
+        });
+        if (!relationResponse.ok) {
+            throw new Error('Relation creation failed');
+        }         
     };
     const [viewInfo, setViewInfo] = useState(false);
     const handleViewInfo = () => {
@@ -66,59 +189,10 @@ const FormReserve = () => {
     const handleViewEmerg = () => {
         setViewEmerg(!viewEmerg);
     }
-    const [info, setInfo] = useState([
-        {
-            identificador: "MEM864",
-            tipo: "Internacional",
-            ciudadOrigen: "Medellín",
-            ciudadDestino: "Miami",
-            fechaSalida: "11/10/2024",
-            fechaLlegada: "11/10/2024",
-            horaSalida: "12:10",
-            horaLlegada: "15:30",
-            nombres: "Vladimir",
-            apellidos: "Guitierrez Fernandez",
-            fechaNacimiento: "03/28/1970",
-            telefono: "(+55) 555 555 55 55",
-            email: "vladimirgf@gmail.com",
-            genero: "Masculino",
-            tipoDocumento: "Cedula",
-            documento: "111111111",
-            nombresEmerg: "John Alfredo",
-            apellidosEmerg: "Valderrama Piñuela",
-            todosPasajeros: true,
-            telefonoEmerg: "(+57) 777 777 77 77",
-            direccion: "Cll 44 #44-44",
-            tipoPasajero: "Pasajero principal"
-        }
-    ]);
 
     const handleAddPassenger = () => {
-        setInfo([...info, {
-            identificador: "MEM864",
-            tipo: "Internacional",
-            ciudadOrigen: "Medellín",
-            ciudadDestino: "Miami",
-            fechaSalida: "11/10/2024",
-            fechaLlegada: "11/10/2024",
-            horaSalida: "12:10",
-            horaLlegada: "15:30",
-            nombres: "",
-            apellidos: "",
-            fechaNacimiento: "",
-            telefono: "",
-            email: "",
-            genero: "",
-            tipoDocumento: "",
-            documento: "",
-            nombresEmerg: "",
-            apellidosEmerg: "",
-            todosPasajeros: false,
-            telefonoEmerg: "",
-            direccion: "",
-            tipoPasajero: "Pasajero " + (info.length)
-        }]);
-    };
+    }
+
     return (
 
         <div className="flex flex-col items-center justify-start w-screen h-auto">
@@ -131,30 +205,28 @@ const FormReserve = () => {
                 onSubmit={handleSubmit}
                 className='w-full h-auto flex flex-col justify-center items-center'
                 autoComplete='off'
-            >
-                {info.map((item, index) => (
-                    <><section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 mb-5 pb-5'>
-                        <FormTitles viewInfo={viewEmerg} handleViewInfo={handleViewInfo} name={'Información'} passanger={item.tipoPasajero} />
-                        {viewInfo && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información básica</h1>}
-                        {viewInfo && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                            <FormInput label={'Nombres'} type={'text'} identity={'tuNombre'} name={'firstName'} placeholder={'Tu nombre'} />
-                            <FormInput label={'Apellidos'} type={'text'} identity={'tuApellido'} name={'lastName'} placeholder={'Tu apellido'} />
-                            <FormInput label={'Fecha de nacimiento'} type={'date'} identity={'tuNacimiento'} name={'birthDate'} placeholder={'Tu fecha de nacimiento'} />
-                            <FormInput label={'Telefono'} type={'text'} identity={'tuTelefono'} name={'phoneNumber'} placeholder={'Tu telefono'} />
-                            <FormInput label={'Email'} type={'email'} identity={'tuEmail'} name={'email'} placeholder={'Tu email'} />
-                            <FormSelect label={'Género'} identity={'tuGenero'} name={'genre'} options={genreOptions} />
-                            <FormSelect label={'Tipo de documento'} identity={'tuTipoDocumento'} name={'idType'} options={documentOptions} />
-                            <FormInput label={'Documento'} type={'text'} identity={'tuDocumento'} name={'idNumber'} placeholder={'Tu documento'} />
-                            <FormInput label={'Pais'} type={'text'} identity={'tuPais'} name={'country'} placeholder={'Tu pais'} />
-                            <FormInput label={'Departamento'} type={'text'} identity={'tuDepartamento'} name={'province'} placeholder={'Tu departamento'} />
-                            <FormInput label={'Ciudad'} type={'text'} identity={'tuCiudad'} name={'city'} placeholder={'Tu ciudad'} />
-                            <FormInput label={'Dirección'} type={'text'} identity={'tuDireccion'} name={'residence'} placeholder={'Tu direccion'} />
-                            <FormInput label={'Contraseña'} type={'password'} identity={'tuContraseña'} name={'password'} placeholder={'Tu contraseña'} />
-                        </ul>}
-                    </section>
-                        <div className='w-full h-auto flex flex-col justify-center items-center' key={index}>
+            >      
+                        <><section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 mb-5 pb-5'>
+                            <FormTitles viewInfo={viewEmerg} handleViewInfo={handleViewInfo} name={'Información'} passanger="Pasajero"  />
+                            {viewInfo && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información básica</h1>}
+                            {viewInfo && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
+                                <FormInput label={'Nombres'} type={'text'} identity={'firstName'} name={'firstName'} placeholder={'Tu nombre'} />
+                                <FormInput label={'Apellidos'} type={'text'} identity={'lastName'} name={'lastName'} placeholder={'Tu apellido'} />
+                                <FormInput label={'Fecha de nacimiento'} type={'date'} identity={'birthDate'} name={'birthDate'} placeholder={'Tu fecha de nacimiento'} />
+                                <FormInput label={'Telefono'} type={'text'} identity={'phone'} name={'phone'} placeholder={'Tu telefono'} />
+                                <FormInput label={'Email'} type={'email'} identity={'email'} name={'email'} placeholder={'Tu email'} />
+                                <FormSelect label={'Género'} identity={'genre'} name={'genre'} options={genreOptions} />
+                                <FormSelect label={'Tipo de documento'} identity={'idType'} name={'idType'} options={documentOptions} />
+                                <FormInput label={'Documento'} type={'text'} identity={'idNumber'} name={'idNumber'} placeholder={'Tu documento'} />
+                                <FormInput label={'Pais'} type={'text'} identity={'country'} name={'country'} placeholder={'Tu pais'} />
+                                <FormInput label={'Departamento'} type={'text'} identity={'province'} name={'province'} placeholder={'Tu departamento'} />
+                                <FormInput label={'Ciudad'} type={'text'} identity={'city'} name={'city'} placeholder={'Tu ciudad'} />
+                                <FormInput label={'Dirección'} type={'text'} identity={'address'} name={'address'} placeholder={'Tu direccion'} />
+                            </ul>}
+                        </section>
+                        <div className='w-full h-auto flex flex-col justify-center items-center' key="1">
                             <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 mb-5 pb-5'>
-                                <FormTitles viewInfo={viewEmerg} handleViewInfo={handleViewEmerg} name={'Información de emergencia'} passanger={item.tipoPasajero} />
+                                <FormTitles viewInfo={viewEmerg} handleViewInfo={handleViewEmerg} name={'Información de emergencia'} passanger="Pasajero" />
                                 {viewEmerg && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Contacto de emergencia</h1>}
                                 {viewEmerg && <p className='flex flex-row justify-start items-center h-10 w-full px-5'>Este se usará si ocurre alguna emergencia con el pasajero principal.</p>}
                                 {viewEmerg && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
@@ -171,7 +243,7 @@ const FormReserve = () => {
                                             type="checkbox"
                                             role="switch"
                                             id="flexSwitchCheckDefault02"
-                                            checked={item.todosPasajeros} readOnly />
+                                            checked={true} readOnly />
                                     </li>
                                 </ul>}
                                 {viewEmerg && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Perdida de maletas</h1>}
@@ -181,7 +253,6 @@ const FormReserve = () => {
                                 </ul>}
                             </section>
                         </div></>
-                ))}
 
                 <section className='flex flex-row w-10/12 h-auto items-center justify-start p-3 mb-3'>
                     <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-auto mr-5'> Agregar pasajero </h1>

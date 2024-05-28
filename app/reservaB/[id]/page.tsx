@@ -1,189 +1,213 @@
-'use client'
-import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded';
-import EditIcon from '@mui/icons-material/Edit';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+/* eslint-disable array-callback-return */
+'use client';
 
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
-import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import PlaceIcon from '@mui/icons-material/Place';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import FormFly from 'components/formFly';
 import Navbar from 'components/navbar';
-import ReservaIdButton from 'components/reservaIdButton';
-import ReservaIdInfo from 'components/ReservaIdInfo';
-import ReservaState from 'components/ReservaStatus';
-import { passengerType, personType } from 'types';
-import ReservaStatus from 'components/ReservaStatus';
+import { bookingType, loginData } from 'types';
 
 const Page = ({ params }: { params: { id: string } }) => {
-    console.log(params.id);
+    const [bookings, setBookings] = useState<bookingType[]>([]);
 
-    const [passengers, setPassengers] = useState<passengerType[]>([]);
-    const [persons, setPersons] = useState<personType[]>([]);
-
-    const getPassengers = async () => {
-        await fetch('http://localhost:8080/v1/passenger/booking/' + params.id).then(async (passengersResponse) => {
-            if (!passengersResponse.ok) {
-                throw new Error('Hubo un problema con la solicitud fetch: ' + passengersResponse.status);
+    const getBookings = async () => {
+        await fetch('https://codefact.udea.edu.co/modulo-09/v1/bookingPassenger/findBookingsByPassenger/' + params.id).then(async (bookingsResponse) => {
+            if (!bookingsResponse.ok) {
+                throw new Error('Hubo un problema con la solicitud fetch: ' + bookingsResponse.status);
             }
-            setPassengers(await passengersResponse.json() as passengerType[]);
+            setBookings(await bookingsResponse.json() as bookingType[]);
         });
     };
 
-    const getPersons = async () => {
-        const personsPromises = passengers.map(async (passenger) => {
-            const personResponse = await fetch('http://localhost:8080/v1/person/' + passenger.personId);
-            if (!personResponse.ok) {
-                throw new Error('Hubo un problema con la solicitud fetch: ' + personResponse.status);
-            }
-            return personResponse.json() as Promise<personType>;
-        });
+    useEffect(() => {
+        getBookings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-        const newPersons = await Promise.all(personsPromises);
-        setPersons(newPersons);
+    if (Array.isArray(bookings)) {
+        bookings.map((bookingsItem, index) => {
+            console.log(`bookings ${index}:`, bookingsItem);
+        });
+    } else {
+        console.log('bookings is not an array');
+    }
+
+    //Manejo de la barra de búsqueda
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filter, setFilter] = useState('estado');
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+    const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setFilter(e.target.value);
+    };
+    const filteredBookings = bookings.filter(bookings => {
+        if (filter === 'estado') {
+          return bookings.bookingStatus.toLowerCase().includes(searchTerm.toLowerCase());
+        } else if (filter === 'fecha') {
+          return bookings.bookingDate.toLowerCase().includes(searchTerm.toLowerCase());
+        }
+        return true;
+    });
+
+    const getBackgroundColor = (status: string) => {
+        switch (status) {
+            case "Payed":
+                return "green";
+            case "Pending":
+                return "orange";
+            case "Canceled":
+                return "red";
+            case "CheckIn":
+                return "#2196F3";
+            default:
+                return "green";
+        }
     };
 
-    useEffect(() => {
-        getPassengers();
-    }, []);
+    const handleCancelBooking = async (bookingId: number, flightId: number, bookingDate: string, totalPrice: number ) => {
 
-    useEffect(() => {
-        getPersons();
-    }, []);
-
-    if (Array.isArray(passengers)) {
-        passengers.map((passengerItem, index) => {
-            console.log(`passenger ${index}:`, passengerItem);
+        const loginResponse = await fetch('https://codefact.udea.edu.co/modulo-02/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: "user@default",
+                password: "pass123"
+            }),
         });
-    } else {
-        console.log('passengers is not an array');
-    }
+        if (!loginResponse.ok) {
+            throw new Error('Login failed');
+        }
+        const loginData = await loginResponse.json() as loginData;
+        const authToken = loginData.token;
 
-    if (Array.isArray(persons)) {
-        persons.map((personsItem, index) => {
-            console.log(`persons ${index}:`, personsItem);
+        const response = await fetch('https://codefact.udea.edu.co/modulo-09/v1/booking/booking', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                bookingId: bookingId,
+                flightId: flightId,
+                bookingDate: bookingDate,
+                bookingStatus: "Canceled",
+                totalPrice: totalPrice
+            }),
         });
-    } else {
-        console.log('persons is not an array');
-    }
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [viewInfo, setViewInfo] = useState(false);
-    const handleViewInfo = () => {
-        setViewInfo(!viewInfo);
-    }
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [viewEmerg, setViewEmerg] = useState(false);
-    const handleViewEmerg = () => {
-        setViewEmerg(!viewEmerg);
-    }
+        if (!response.ok) {
+            throw new Error('Hubo un problema con la solicitud fetch: ' + response.status);
+        }
+    
+        // Refrescar las reservas después de cancelar una
+        getBookings();
+    };
 
     return (
-        <div className="flex flex-col items-center justify-start w-screen h-auto">
+        <div className="flex flex-col justify-start items-center w-screen h-screen max-h-screen">
             <Navbar />
-            <section className='flex flex-row justify-between items-center h-auto w-10/12 p-3 mt-20 '>
-                <ReservaIdButton
-                    className="flex flex-row justify-center items-center w-auto h-12 bg-[#2196F3] rounded-full shadow-lg px-5 text-white font-semibold"
-                    icon={<EditIcon className="text-white" />}
-                    link='/reservaB/formReservaB'
-                >
-                    Editar
-                </ReservaIdButton>
-                <ReservaIdButton
-                    className="flex flex-row justify-center items-center w-auto h-12 bg-[#ffac38] rounded-xl shadow-lg px-5 text-white font-semibold"
-                    icon={<WorkRoundedIcon className="text-white ml-2" />}
-                    link='/ModuloEquipaje'
-                >
-                    Equipaje
-                </ReservaIdButton>
-                <ReservaIdButton className="flex flex-row justify-center items-center w-auto h-12 bg-[#2196F3] rounded-xl shadow-lg px-5 text-white font-semibold"
-                    icon={<CreditCardRoundedIcon className="text-white ml-2" />}
-                    link='/ModuloPago '
-                >
-                    Pagar
-                </ReservaIdButton>
-                <ReservaIdButton
-                    className="flex flex-row justify-center items-center w-auto h-12 bg-[#248d37] rounded-xl shadow-lg px-5 text-white font-semibold"
-                    icon={<PeopleRoundedIcon className="text-white ml-2" />}
-                    link='/ModuloAsientos'
-                >
-                    Asientos
-                </ReservaIdButton>
-
-                <ReservaStatus estado='Pendiente' />
-            </section>
-            <FormFly />
-            {persons.map((p) => (
-                <section key={p.personId} className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10'>
-                    <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
-                        <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información</label>
-                        <label className='flex flex-row w-1/3 justify-start text-base font-thin '>Pasajero</label>
-                        {viewInfo ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} onChange={handleViewInfo} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewInfo} onChange={handleViewInfo} />}
-                    </div>
-                    {viewInfo && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Información básica</h1>}
-                    {viewInfo && <ReservaIdInfo p={{
-                        firstName: p.firstName,
-                        lastName: p.lastName,
-                        birthDate: p.birthDate,
-                        phoneNumber: p.phoneNumber,
-                        email: p.email,
-                        genre: p.genre,
-                        idType: p.idType,
-                        idNumber: p.idNumber,
-                    }} />}
+            <div className='flex flex-col justify-center items-center w-screen h-full'>
+                <section className='flex flex-col justify-center items-start w-3/4 h-auto border rounded-2xl p-10'>
+                    <section className="flex flex-col justify-center items-start w-full h-auto mb-3">
+                        <h1 className='font-bold text-2xl mb-3'>Tus reservas</h1>
+                        <p className='text-xl'>Aquí podrá ver las reservas realizadas y sus estados.</p>
+                    </section>
+                    <section className='flex flex-row justify-start items-center w-full h-auto mb-3'>
+                        <input type="text" placeholder={`Buscar por ${filter}`} value={searchTerm} onChange={handleSearch} className='flex flex-row h-12 w-80 px-3 border mr-6 rounded-xl' />
+                        <select name="column" id="column" value={filter} onChange={handleFilterChange} className='flex flex-row h-12 w-52 px-3 border mr-6 rounded-xl'>
+                            <option value="estado">Estado</option>
+                            <option value="fecha">Fecha</option>
+                        </select>
+                        <FilterAltIcon className='w-10 h-10 cursor-pointer' />
+                        <Link href="/reservaB/formReservaB" className='flex flex-row justify-center items-center w-52 h-12 bg-[#2196F3] font-bold text-xl text-white rounded-xl ml-80'>Reservar +</Link>
+                    </section>
+                    <section className="flex flex-col justify-center items-start w-full">
+                        <table className='flex flex-col w-full h-auto justify-start items-center'>
+                            <thead className='flex flex-row w-full justify-center items-center h-16'>
+                                <tr className='flex flex-row w-full justify-between items-center h-full border-b'>
+                                    {columns.map((c) => (
+                                        <th key={c.field} className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                            {c.headerName}
+                                            <ArrowDownwardIcon className='pl-1' />
+                                        </th>
+                                    ))}
+                                    <th className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                        Modificar
+                                    </th>
+                                    <th className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                        Cancelar
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="flex flex-col w-full justify-between items-start overflow-auto max-h-52">
+                                {filteredBookings.map((r) => {
+                                    const bookingDate = new Date(r.bookingDate);
+                                    return (
+                                        <tr key={r.bookingId} className='flex flex-row w-full justify-between items-start p-4 border-b hover:bg-gray-200'>
+                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                {r.bookingId}
+                                            </td>
+                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                {r.flightId}
+                                            </td>
+                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                {bookingDate.getFullYear()}-{String(bookingDate.getMonth() + 1).padStart(2, '0')}-{String(bookingDate.getDate()).padStart(2, '0')}
+                                            </td>
+                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                {r.totalPrice}
+                                            </td>
+                                            <td className='flex flex-row justify-center items-center h-2/3 rounded-3xl w-1/8 text-white font-semibold' style={{ width: '12.5%', height: '120%', backgroundColor: getBackgroundColor(r.bookingStatus) }}>
+                                                {r.bookingStatus === "Payed" && <CheckCircleIcon className='mr-1' />}
+                                                {r.bookingStatus === "Pending" && <AccessTimeIcon className='mr-1' />}
+                                                {r.bookingStatus === "Canceled" && <CancelIcon className='mr-1' />}
+                                                {r.bookingStatus === "CheckIn" && <PlaceIcon className='mr-1' />}
+                                                {r.bookingStatus}
+                                            </td>
+                                            <td key={r.bookingId} className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                                <Link href={`/reservaB/reserva/${r.bookingId}`} className='flex flex-row justify-center items-center w-full h-full'>
+                                                    <EditIcon />
+                                                </Link>
+                                            </td>
+                                            <td className='flex flex-row justify-center items-center h-full' style={{ width: '12.5%' }}>
+                                            <DeleteIcon className='cursor-pointer' onClick={() => handleCancelBooking(r.bookingId, r.flightId, r.bookingDate, r.totalPrice)} />
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </section>
                 </section>
-            ))}
-            <section className='flex flex-col w-10/12 h-auto items-center justify-center p-3 border rounded-xl mt-10 mb-5'>
-                <div className='flex flex-row justify-between items-center w-full h-16 px-5'>
-                    <label className='flex flex-row w-1/3 justify-start text-xl font-semibold '>Información de emergencia</label>
-                    <label className='flex flex-row w-1/3 justify-start text-base font-thin '>Pasajero principal</label>
-                    {viewEmerg ? <KeyboardArrowUpIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewEmerg} onChange={handleViewEmerg} /> : <KeyboardArrowDownIcon className='rounded-full hover:bg-gray-200 w-10 h-10 cursor-pointer' onClick={handleViewEmerg} onChange={handleViewEmerg} />}
-                </div>
-                {viewEmerg && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Contacto de emergencia</h1>}
-                {viewEmerg && <p className='flex flex-row justify-start items-center h-10 w-full px-5'>Este se usará si ocurre alguna emergencia con el pasajero principal.</p>}
-                {viewEmerg && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-auto text-gray-400' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Nombres </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="John Alfredo" readOnly />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto text-gray-400' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Apellidos </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="Valderrama Piñuela" readOnly />
-                    </li>
-                    <li className='flex flex-col justify-start items-start h-auto text-gray-400' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4'> Telefono </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400' value="(+57) 777 777 77 77" readOnly />
-                    </li>
-                    <li className='flex flex-row justify-start items-center h-20 ' style={{ width: "49%" }}>
-                        <p className='w-auto text-gray-400 mt-7'>
-                            Para todos los pasajeros
-                        </p>
-                        <input
-                            // eslint-disable-next-line tailwindcss/enforces-negative-arbitrary-values
-                            className="mt-7 ml-5 h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-gray-200 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-gray-400 after:shadow-switch-2 after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ms-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-switch-1 checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-switch-3 focus:before:shadow-black/60 focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ms-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-switch-3 checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-white/25 dark:after:bg-surface-dark dark:checked:bg-primary dark:checked:after:bg-primary"
-                            type="checkbox"
-                            role="switch"
-                            id="flexSwitchCheckDefault02"
-                            checked readOnly />
-                    </li>
-                </ul>}
-                {viewEmerg && <h1 className='flex flex-row justify-start items-center h-16 text-xl font-bold w-full px-5'>Perdida de maletas</h1>}
-                {viewEmerg && <p className='flex flex-row justify-start items-center h-10 w-full px-5'>Se llevará el equipaje a la dirección que ingrese en caso de perdida.</p>}
-                {viewEmerg && <ul className='flex flex-row justify-between items-center w-full h-auto flex-wrap px-5'>
-                    <li className='flex flex-col justify-start items-start h-auto' style={{ width: "49%" }}>
-                        <label className='flex flex-row w-full my-2 justify-start items-center h-4 text-gray-400'> Dirección </label>
-                        <input type="text" className='flex flex-col w-full h-16 rounded-xl border p-3 text-gray-400 ' value="Cll 44 #44-44" readOnly />
-                    </li>
-                </ul>}
-            </section>
-            <section className='flex flex-row w-10/12 h-auto items-center justify-center p-3 mb-20'>
-                <button className='w-40 h-12 flex flex-row p-3 justify-center items-center bg-gray-400 rounded-xl text-white font-bold'>Guardar <SaveAltIcon className='text-white ml-2' /></button>
-            </section>
-        </div >
-    );
-};
+            </div>
+        </div>
+    )
+
+}
 
 export default Page;
+
+const columns = [
+    { field: 'id', headerName: 'ID' },
+    { field: 'vueloId', headerName: 'Vuelo ID' },
+    { field: 'fecha', headerName: 'Fecha' },
+    { field: 'precio', headerName: 'Precio' },
+    { field: 'estado', headerName: 'Estado' }
+];
+
+// const rows = [
+//     { id: 1, origen: 'BOG', destino: 'EDH', salida: '12/30/2024', pasajeros: 2, estado: 'Pagado', color: 'green' },
+//     { id: 2, origen: 'MAD', destino: 'BOG', salida: '11/30/2024', pasajeros: 3, estado: 'Pendiente', color: 'blue' },
+//     { id: 3, origen: 'JFK', destino: 'LHR', salida: '12/29/2024', pasajeros: 2, estado: 'Cancelado', color: 'red' },
+//     { id: 4, origen: 'LAX', destino: 'LTN', salida: '11/25/2024', pasajeros: 5, estado: 'CheckIn', color: 'orange' },
+//     { id: 5, origen: 'MED', destino: 'MIA', salida: '11/10/2024', pasajeros: 1, estado: 'Pendiente', color: 'blue' }
+// ]

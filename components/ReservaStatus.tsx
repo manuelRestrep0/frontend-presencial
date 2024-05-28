@@ -1,33 +1,33 @@
 import React from 'react';
 
-type ReservaStateProps = {
-    estado: 'Pendiente' | 'Check-in' | 'Pagado' | 'Cancelado';
+type ReservaStatusProps = {
+    status: 'Payed' | 'Pending' | 'Canceled' | 'CheckIn';
 };
 
-const ReservaStatus: React.FC<ReservaStateProps> = ({ estado }) => {
+const ReservaStatus = ({ status }: { status: string }) => {
     let color = '';
 
-    switch (estado) {
-        case 'Pendiente':
-            color = 'blue';
-            break;
-        case 'Check-in':
+    switch (status) {
+        case "Payed":
             color = 'green';
             break;
-        case 'Pagado':
-            color = 'purple';
+        case "Pending":
+            color = 'orange';
             break;
-        case 'Cancelado':
+        case "Canceled":
             color = 'red';
             break;
+        case "CheckIn":
+            color = '#2196F3';
+            break;
         default:
-            color = 'black';
+            color = 'green';
             break;
     }
 
     return (
-        <label style={{ color }}>
-            {estado}
+        <label style={{ backgroundColor: color }} className="flex flex-row justify-center items-center w-auto h-12 rounded-xl shadow-lg px-5 text-white font-semibold">
+            {status}
         </label>
     );
 };
