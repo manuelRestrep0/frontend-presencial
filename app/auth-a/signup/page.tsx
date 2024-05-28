@@ -92,6 +92,7 @@ const Form = () => {
               })
               console.log(respuesta.status)
               if(respuesta.status === 201){
+                alert('Registro exitoso');
                 router.push('/auth-a/Login')
               }
         }
