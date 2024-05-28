@@ -75,14 +75,23 @@ const Form = () => {
                 method: 'POST',
                 body: JSON.stringify(infoLogin)             
               })
+              const body:any = await respuesta.json()
+              console.log(body.token)
               console.log(respuesta.status)
               if(respuesta.status === 200){
                 alert('Inicio de sesion exitoso');
-                router.push('/auth-a')
+                router.push('Main-menu')
+              }else if (respuesta.status === 401) {
+                console.log("else if")
+                alert('Error: Credenciales incorrectas');
+              } else {
+                alert('Error: Ocurrió un problema inesperado');
               }
+              
         }
         catch (e) {
-
+            console.log("error",e)
+            alert('Error: Credenciales incorrectas');
         }
     }
 
