@@ -10,9 +10,13 @@ import { BsChevronLeft, BsFacebook } from "react-icons/bs";
 import Link from 'next/link';
 import { IconAirplane } from 'components/components-Auth-a/IconAirplane';
 import { InputField } from 'components/components-Auth-a/InputField';
+import { useRouter } from 'next/navigation';
+import { PassThrough } from 'stream';
 
+const registerEndpointUrl = "https://codefact.udea.edu.co/modulo-01/public/api/auth/login"
 
 const Form = () => {
+    const router = useRouter()
 
     const [page, setPage] = useState(0);
     const [windowWidth, setWindowWidth] = useState(0);
@@ -37,13 +41,13 @@ const Form = () => {
     }, []);
 
     interface FormData {
-        email: string;
+        username: string;
         password: string;
         rememberMe: boolean;
     }
 
     const [formData, setFormData] = useState({
-        email: "",
+        username: "",
         password: "",
         rememberMe: false,
     });
@@ -52,12 +56,35 @@ const Form = () => {
         if (session?.user) {
             setFormData(prevState => ({
                 ...prevState,
-                email: session.user ? session.user.email as string: ""
+                username: session.user ? session.user.email as string: ""
             }));
         }
     }, [session]);
 
+    const sendLoginRequest = async () => {
+        const infoLogin = {
+            username: formData.username,
+            password: formData.password
+        }
+        try {
+            console.log(infoLogin)
+            const respuesta = await fetch(registerEndpointUrl, {
+                headers: {
+                "Content-Type":"application/json"
+                },
+                method: 'POST',
+                body: JSON.stringify(infoLogin)             
+              })
+              console.log(respuesta.status)
+              if(respuesta.status === 200){
+                alert('Inicio de sesion exitoso');
+                router.push('/auth-a')
+              }
+        }
+        catch (e) {
 
+        }
+    }
 
     if (session) {
         login(formData)
@@ -102,7 +129,7 @@ const Form = () => {
     }
 
     function validateLogin() {
-        if (formData.email && formData.password) {
+        if (formData.username && formData.password) {
             try {
                 login(formData)
             } catch(e) {
@@ -114,7 +141,7 @@ const Form = () => {
     }
 
     function login(data : FormData) {
-        console.log(JSON.stringify(data))
+        sendLoginRequest()
     }
 
 
@@ -141,7 +168,7 @@ const Form = () => {
 
                     <div className=' w-full bg-white flex flex-col'>
                         <form onSubmit={handleSubmit} className=' bg-white flex-col flex gap-4 mt-3'>
-                            <InputField id="email" placeholder="Usuario" onChange={handleChange} type='email' value={formData.email} disabled={session?.user ? true : false}/>
+                            <InputField id="username" placeholder="Usuario" onChange={handleChange} type='email' value={formData.username} disabled={session?.user ? true : false}/>
                             <InputField id="password" placeholder="Contraseña" onChange={handleChange} type='password' value={formData.password} disabled={session?.user ? true : false}/>
                             <button className=' text-xs text-gray-600'>¿Ha olvidado su contraseña?</button>
                             <div className=" flex justify-between items-center">
