@@ -6,6 +6,7 @@ on:
       - main
       - master
       - develop
+      - auth-B
   pull_request:
   workflow_dispatch:
 
