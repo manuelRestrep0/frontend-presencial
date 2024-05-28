@@ -14,24 +14,15 @@ import { AdditionalInfo } from '../../../components/UserRegistration/AdditionalI
 import { AddressInfo } from '../../../components/UserRegistration/AddressInfo';
 import { SignupInfo } from '../../../components/UserRegistration/SignupInfo';
 import { FormData } from 'components/UserRegistration/IFormData';
-import useSWRMutation from 'swr/mutation'
+import { useRouter } from 'next/navigation';
 
 
-const registerEndpointUrl = "https://codefact.udea.edu.co"
+const registerEndpointUrl = "https://codefact.udea.edu.co/modulo-01/public/api/auth/register"
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const Form = () => {
-    async function sendRequest(registerEndpointUrl:string, { arg }: { arg: { infoRegistro: any }}) {
-        return fetch(registerEndpointUrl, {
-          method: 'POST',
-          body: JSON.stringify(arg)
-        }).then(res => res.json())
-    }
-    
-    const { trigger, isMutating } = useSWRMutation(registerEndpointUrl+'/modulo-01/public/api/auth/register', sendRequest, /* options */)
 
-
-
+    const router =useRouter()
     const { data: session } = useSession()
 
     const [isPasswordValid, setValidSignup] = useState(true)
@@ -71,7 +62,7 @@ const Form = () => {
         role: "user"
     });
 
-    
+
 
 
     const sendRegisterRequest = async () => {
@@ -91,18 +82,20 @@ const Form = () => {
             role: "user"
         }
         console.log("info registro", infoRegistro)
-        try{
-            //const result = await trigger({infoRegistro}, /* options */)
-            //console.log(result)
-            fetch(registerEndpointUrl, {
-                headers: {"Content-Type":"application/json",
-                "Accept":"application/json"
+        try {
+            const respuesta = await fetch(registerEndpointUrl, {
+                headers: {
+                "Content-Type":"application/json"
                 },
                 method: 'POST',
-                body: JSON.stringify(infoRegistro)
-              }).then(res => res.json())
+                body: JSON.stringify(infoRegistro)             
+              })
+              console.log(respuesta.status)
+              if(respuesta.status === 201){
+                router.push('/auth-a/Login')
+              }
         }
-        catch(e){
+        catch (e) {
 
         }
     }
@@ -300,7 +293,6 @@ const Form = () => {
     function chooseButtonText2() {
         return page === 3 ? "Registrarse" : "Continuar";
     }
-    if (isMutating ) return (<div>Registrando Usuario</div>)
     return (
         <div className='main-container h-screen w-full bg-cover text-black flex justify-center items-center'>
             <div className='form-container bg-white flex flex-col min-h-[65%] max-h-[90%] w-[70%] xl:w-full justify-between items-center rounded-2xl py-5 gap-4'>
